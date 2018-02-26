@@ -8,7 +8,7 @@ function PanelDialogCtrl(mdPanelRef,$scope,item,$http,$interval,tickerSrv) {
 
    tickerSrv.subscribe(item.Symbol);
    tickerSrv.on(item.Symbol,function (data) {
-     //console.log(data.PRICE +" "+ data.FROMSYMBOL);
+     console.log(data.PRICE +" "+ data.FROMSYMBOL);
      $scope.price = data.PRICE;
    })
 
