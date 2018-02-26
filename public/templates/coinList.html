@@ -1,0 +1,29 @@
+<div ng-cloak="">
+        <md-autocomplete
+              md-selected-item-change="showDialog(selectedCoin)"
+              ng-disabled="false"
+              md-search-text="searchCoin"
+              md-selected-item="selectedCoin"
+              md-items="coin in searchText(searchCoin)"
+              md-item-text="coin.FullName"
+              md-min-length="1"
+              placeholder="Search for coin" style="width: 35%;margin: auto; margin-bottom: 2%;margin-top: 2%">
+            <md-item-template>
+              <span md-highlight-text="searchCoin" md-highlight-flags="^i">{{coin.FullName}}</span>
+            </md-item-template>
+            <md-not-found>
+              <a ng-click="">No coin found!</a>
+            </md-not-found>
+        </md-autocomplete>
+
+        <md-content layout="row" layout-align="center">
+            <md-list flex="50">
+                <md-list-item class="md-2-line" ng-repeat="item in coins" ng-click="showDialog(item)" style="margin-bottom: 5px" >
+                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="5%"  style="margin-right: 1.5%">
+                    <div class="md-list-item-text" layout="column">
+                        <h3 class="md-display-1">{{item.FullName}}</h3>
+                    </div>
+                </md-list-item>      
+            </md-list>
+        </md-content> 
+</div>
