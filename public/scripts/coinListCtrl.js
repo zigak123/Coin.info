@@ -32,10 +32,8 @@ controller:
             position: position,
             trapFocus: true,
             zIndex: 150,
-            clickOutsideToClose: true,
-            escapeToClose: true,
             focusOnOpen: true,
-            onRemoving: function(){tickerSrv.unsub(item.Symbol)},
+            onRemoving: function(){tickerSrv.unsub(item.Symbol);},
             locals: {
             item: item
             }

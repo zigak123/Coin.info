@@ -6,18 +6,14 @@ function PanelDialogCtrl(mdPanelRef,$scope,item,$http,$interval,tickerSrv) {
    $scope.item= item;
    $scope.isLoading = true;
 
-   tickerSrv.subscribe(item.Symbol);
-   tickerSrv.on(item.Symbol,function (data) {
-     console.log(data.PRICE +" "+ data.FROMSYMBOL);
-     $scope.price = data.PRICE;
-   })
-
     $scope.closeDialog = function(){
       panelRef && panelRef.close().then(function() {
         angular.element(document.querySelector('.demo-dialog-open-button')).focus();
+        panelRef.close()
         panelRef.destroy();
       });
     }
+
 
      function timeConverter(UNIX_timestamp){
       var a = new Date(UNIX_timestamp * 1000);
@@ -69,10 +65,20 @@ function PanelDialogCtrl(mdPanelRef,$scope,item,$http,$interval,tickerSrv) {
       };
 
       $scope.isLoading = false;
-      temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
-      $scope.change = (Math.round(((Math.round(temp*1000)/1000)*100)*100)/100)+"%";
-      $scope.price_color = $scope.change >= 0 ? {"color":"green","display":"inline-block"} : {"color":"red"};
-      
+
+      var panelCall =  function (data) {
+           console.log(data.PRICE +" "+ data.FROMSYMBOL);
+           $scope.price = data.PRICE;
+
+            temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
+            $scope.change = (Math.round(((Math.round(temp*1000)/1000)*100)*100)/100);
+            $scope.price_color = $scope.change >= 0.0 ? {"color":"green","display":"inline-block"} : {"color":"red"};
+            $scope.change += "%"
+            $scope.price += " USD"
+         }
+
+
+      tickerSrv.subscribe(item.Symbol,panelCall);
     }, function myError(response) {
       console.log(response);
   });

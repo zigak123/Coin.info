@@ -47,12 +47,11 @@ md-tabs.md-no-animation md-ink-bar {
 
 }
 
-.marketTicker{
+.ticker{
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
 	padding: 1%;
-	width: auto;
+  width: 160px;
 }
 
 .autocomplete-custom-template li {

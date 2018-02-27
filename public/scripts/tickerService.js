@@ -1,36 +1,50 @@
 app.factory('tickerSrv',function($http,$rootScope){
 	var socket = io.connect('https://streamer.cryptocompare.com/');
+  var callbackArray = [];
+  var coins = [];
 
-	var on = function (coinSymbol, callback) {
-	    socket.on('m', function (message) {  
 
-	    var messageType = message.substring(0, message.indexOf("~"));
-		var res = {};
+  socket.on('m', function (message) {  
+  var messageType = message.substring(0, message.indexOf("~"));
+  var res = {};
 
-		if (messageType == CCC.STATIC.TYPE.CURRENTAGG) {
-			res = CCC.CURRENT.unpack(message);
-			//console.log(res)
-			if (!isNaN(res.PRICE) && (res.FROMSYMBOL === coinSymbol || coinSymbol.indexOf(res.FROMSYMBOL) !== -1)) {
-				$rootScope.$apply(function () {
-          			callback.call(socket,res);
-        		});
-			}		
-		}
+	if (messageType == CCC.STATIC.TYPE.CURRENTAGG) {
+		res = CCC.CURRENT.unpack(message);
+		if (!isNaN(res.PRICE)) {
+			$rootScope.$apply(function () {
+        for (var i = 0; i < callbackArray.length; i++) {
+          if (coins[i] === res.FROMSYMBOL) {
+          callbackArray[i].call(socket, res);;
+        }
+        }
+        
+        
       });
-    }
+		}		
+	}
 
-    var subscribe = function (coinSymbol) {
+  });
+    
+
+    var subscribe = function (coinSymbol,callback) {
+      callbackArray.push(callback);
+      coins.push(coinSymbol);
       socket.emit('SubAdd',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
     }
 
-    var unsubscribe = function (coinSymbol) {
+    var unsubscribe = function (coinSymbol,callback) {
+      console.log(callbackArray)
+      console.log(callback)
+      callbackArray.pop()
+      coins.pop();
+      console.log(callbackArray)
     	if (coinSymbol !== 'ETH' && coinSymbol !== 'BTC'){
     		socket.emit('SubRemove',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
     	}
     }
 
   return {
-    on: on,
+   // on: on,
     unsub: unsubscribe,
     subscribe: subscribe
   };
