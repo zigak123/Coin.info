@@ -1,4 +1,4 @@
-app.component("coinList", {
+app.component("coinlist", {
 controller:
     function($scope, $http, $interval, $mdPanel, tickerSrv) {
 

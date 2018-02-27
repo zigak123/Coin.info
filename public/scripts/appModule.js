@@ -32,9 +32,9 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
   }
 
   var coinListState = {
-    name: 'coinList',
+    name: 'coinlist',
     url: '/',
-    component: 'coinList'
+    component: 'coinlist'
   }
 
   var readArticleState = {

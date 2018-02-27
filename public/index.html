@@ -8,6 +8,27 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
     <script src="/socket.io/socket.io.js"></script>
 
+    <script src='public/scripts/jquery-3.3.1.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="/public/scripts/angular-ui-router.min.js"></script>
+
+
+    <script src="public/scripts/appModule.js"></script>
+    <script src="public/scripts/newsCtrl.js"></script>
+    <script src="public/scripts/panelCtrl.js"></script>
+    <script src="public/scripts/coinListCtrl.js"></script>
+    <script src="public/scripts/priceTicker.js"></script>
+    <script src="public/chart/Chart.min.js"></script>
+    <script src="public/chart/angular-chart.min.js"></script>
+    <script src="public/scripts/ng-infinite-scroll.min.js"></script>
+    <script src="public/scripts/tickerService.js"></script>
+    <script src="public/scripts/ccc-streamer-utilities.js"></script>
+    <script src="public/scripts/articleComponent.js"></script>
+
 </head>
 
 
@@ -25,12 +46,12 @@
             <div style="display: flex; flex-direction: row;">
               <span class="md-title">฿</span>
               <span class="md-title" style="flex: 2; text-align: right;" ng-style="btcColor">{{btcPrice}}</span>
-              <span class="md-title" style="flex: 1; margin-left: auto;text-align: right;">USD</span>
+              <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">USD</span>
             </div>
             <div style="display: flex; flex-direction: row; justify-content: flex-start;">
                 <span class="md-title">Ξ</span>
                 <span class="md-title" style="flex: 2;text-align: right;" ng-style="ethColor">{{ethPrice}}</span>
-                <span class="md-title" style="flex: 1; margin-left: auto;text-align: right;">USD</span>
+                <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">USD</span>
             </div>
         </div>
     </div>
@@ -38,7 +59,7 @@
 
     <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
 
-      <md-nav-item md-nav-sref="coinList" name="page1">
+      <md-nav-item md-nav-sref="coinlist" name="page1">
         Coin list
       </md-nav-item>
       <md-nav-item md-nav-sref="news" name="page2">
@@ -51,32 +72,11 @@
         Profile
       </md-nav-item>
     </md-nav-bar>
-
+</div>
     
  <div class="ext-content">
-    <ui-view></ui-view>
+    <ui-view/>
 </div>  
-</div>
 
-<script src='public/scripts/jquery-3.3.1.min.js'></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-<script src="/public/scripts/angular-ui-router.min.js"></script>
-
-
-<script src="public/scripts/appModule.js"></script>
-<script src="public/scripts/newsCtrl.js"></script>
-<script src="public/scripts/panelCtrl.js"></script>
-<script src="public/scripts/coinListCtrl.js"></script>
-<script src="public/scripts/priceTicker.js"></script>
-<script src="public/chart/Chart.min.js"></script>
-<script src="public/chart/angular-chart.min.js"></script>
-<script src="public/scripts/ng-infinite-scroll.min.js"></script>
-<script src="public/scripts/tickerService.js"></script>
-<script src="public/scripts/ccc-streamer-utilities.js"></script>
-<script src="public/scripts/articleComponent.js"></script>
 </body>
 </html>
