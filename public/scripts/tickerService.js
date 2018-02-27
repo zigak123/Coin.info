@@ -17,15 +17,12 @@ app.factory('tickerSrv',function($http,$rootScope){
           callbackArray[i].call(socket, res);;
         }
         }
-        
-        
       });
 		}		
 	}
 
   });
     
-
     var subscribe = function (coinSymbol,callback) {
       callbackArray.push(callback);
       coins.push(coinSymbol);
