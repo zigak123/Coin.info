@@ -21,9 +21,17 @@
     <div class="header" ng-controller="priceTickerCtrl">  
         <img src="/public/images/chart-line.png"> 
         <a style="margin-top: 0px;margin-bottom: 0px" class="md-display-4">Coin.info</a> 
-        <div class="ticker" style="margin-left: auto; align-self: flex-start;">
-            <p style="text-align: left; margin: 0px" class="md-title">฿ {{btcPrice}} USD</p> 
-            <p style="text-align: left; margin: 0px" class="md-title">Ξ {{ethPrice}} USD</p>
+        <div class="ticker" style="margin-left: auto; align-self: flex-start;justify-content: flex-start;">
+            <div style="display: flex; flex-direction: row;">
+              <span class="md-title">฿</span>
+              <span class="md-title" style="flex: 2; text-align: right;" ng-style="btcColor">{{btcPrice}}</span>
+              <span class="md-title" style="flex: 1; margin-left: auto;text-align: right;">USD</span>
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+                <span class="md-title">Ξ</span>
+                <span class="md-title" style="flex: 2;text-align: right;" ng-style="ethColor">{{ethPrice}}</span>
+                <span class="md-title" style="flex: 1; margin-left: auto;text-align: right;">USD</span>
+            </div>
         </div>
     </div>
 
