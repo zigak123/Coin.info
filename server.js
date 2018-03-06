@@ -5,10 +5,24 @@ var http = require('http').Server(app);
 const path = require('path')
 const mongodbHelper = require('./mongo_helper.js')
 const coinApiHelper = require('./coinApi.js')
+const mongoose = require('mongoose');
 var coinlist = {};
 var price = {};
 var latest_news = {};
 var mongoh = new mongodbHelper('mongodb://localhost:27017/','data');
+mongoose.connect('mongodb://localhost:27017/data')
+var Schema = mongoose.Schema;
+var myschema = new Schema({name: String});
+var Model = mongoose.model('testmodel', myschema)
+
+
+
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("done")
+});
 
 
 function getCurrentPrice(){
