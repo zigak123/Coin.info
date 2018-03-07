@@ -11,7 +11,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
     .accentPalette('purple').dark()
 
 
-     var profileState = {
+  var profileState = {
     name: 'profile',
     url: '/profile',
     templateUrl: '/public/templates/profile.html'

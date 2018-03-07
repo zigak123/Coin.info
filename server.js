@@ -5,10 +5,24 @@ var http = require('http').Server(app);
 const path = require('path')
 const mongodbHelper = require('./mongo_helper.js')
 const coinApiHelper = require('./coinApi.js')
+const mongoose = require('mongoose');
 var coinlist = {};
 var price = {};
 var latest_news = {};
 var mongoh = new mongodbHelper('mongodb://localhost:27017/','data');
+mongoose.connect('mongodb://localhost:27017/data')
+var Schema = mongoose.Schema;
+var myschema = new Schema({name: String});
+var Model = mongoose.model('testmodel', myschema)
+var User = require('./userSchema.js')
+
+console.log(User)
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("done")
+});
 
 
 function getCurrentPrice(){
@@ -36,7 +50,8 @@ mongoh.MongoFind('coins',function(result){
 })
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
-//-------------routing-----------------------
+
+//-------------routing----------------------------------------------------------
 app.get('/news', function(req, resp){
 	if (req.query) {
 		console.log(req.query)
@@ -69,9 +84,13 @@ app.get('/price', function(req, resp){
 	else{resp.send(price);}
 })
 
+app.post('/createUser')
+
 app.get('*', function(req, res){
 	res.sendFile(__dirname +'/public/index.html');
 })
+
+//------------------------------------------------------------------------------
 
 var io = require('socket.io')(http);
 
