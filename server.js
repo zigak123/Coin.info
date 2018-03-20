@@ -15,25 +15,16 @@ var Schema = mongoose.Schema;
 var myschema = new Schema({name: String});
 var Model = mongoose.model('testmodel', myschema)
 var User = require('./userSchema.js')
+var session = require('express-session')
+var bodyParser = require('body-parser')
 
-console.log(User)
+
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log("done")
 });
-
-
-function getCurrentPrice(){
-	coinApiHelper.getPrice(function(res){
-		price['BTC'] = res;
-	},'BTC')
-
-	coinApiHelper.getPrice(function(res){
-			price['ETH'] = res;
-		},'ETH')
-}
 
 
 function getCryptoNews(page){
@@ -43,13 +34,22 @@ function getCryptoNews(page){
 }
 
 getCryptoNews("1");
-setInterval(getCurrentPrice,10000);
 
 mongoh.MongoFind('coins',function(result){
 	coinlist = result;
 })
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false
+}));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 //-------------routing----------------------------------------------------------
 app.get('/news', function(req, resp){
@@ -84,7 +84,10 @@ app.get('/price', function(req, resp){
 	else{resp.send(price);}
 })
 
-app.post('/createUser')
+app.post('/createUser',function(req,res){
+	console.log(req.body.username);
+	res.send('got it')
+})
 
 app.get('*', function(req, res){
 	res.sendFile(__dirname +'/public/index.html');
