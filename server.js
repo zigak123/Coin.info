@@ -5,21 +5,26 @@ var http = require('http').Server(app);
 const path = require('path')
 const mongodbHelper = require('./mongo_helper.js')
 const coinApiHelper = require('./coinApi.js')
+const mongoose = require('mongoose');
 var coinlist = {};
 var price = {};
 var latest_news = {};
 var mongoh = new mongodbHelper('mongodb://localhost:27017/','data');
+mongoose.connect('mongodb://localhost:27017/data')
+var Schema = mongoose.Schema;
+var myschema = new Schema({name: String});
+var Model = mongoose.model('testmodel', myschema)
+var User = require('./userSchema.js')
+var session = require('express-session')
+var bodyParser = require('body-parser')
 
 
-function getCurrentPrice(){
-	coinApiHelper.getPrice(function(res){
-		price['BTC'] = res;
-	},'BTC')
 
-	coinApiHelper.getPrice(function(res){
-			price['ETH'] = res;
-		},'ETH')
-}
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("done")
+});
 
 
 function getCryptoNews(page){
@@ -29,14 +34,24 @@ function getCryptoNews(page){
 }
 
 getCryptoNews("1");
-setInterval(getCurrentPrice,10000);
 
 mongoh.MongoFind('coins',function(result){
 	coinlist = result;
 })
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
-//-------------routing-----------------------
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false
+}));
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+
+//-------------routing----------------------------------------------------------
 app.get('/news', function(req, resp){
 	if (req.query) {
 		console.log(req.query)
@@ -69,9 +84,16 @@ app.get('/price', function(req, resp){
 	else{resp.send(price);}
 })
 
+app.post('/createUser',function(req,res){
+	console.log(req.body.username);
+	res.send('got it')
+})
+
 app.get('*', function(req, res){
 	res.sendFile(__dirname +'/public/index.html');
 })
+
+//------------------------------------------------------------------------------
 
 var io = require('socket.io')(http);
 
