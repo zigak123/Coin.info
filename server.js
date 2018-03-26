@@ -54,7 +54,6 @@ app.use(bodyParser.json())
 //-------------routing----------------------------------------------------------
 app.get('/news', function(req, resp){
 	if (req.query) {
-		console.log(req.query)
 		coinApiHelper.getNews(function(result){
 			resp.send(result);
 		},req.query.page)

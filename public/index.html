@@ -35,6 +35,8 @@
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/dark.js"></script>
+    <!-- numeral js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 </head>
 
 
@@ -50,14 +52,14 @@
         <a style="margin-top: 0px;margin-bottom: 0px" class="md-display-4">Coin.info</a> 
         <div class="ticker" style="margin-left: auto; align-self: flex-start;justify-content: flex-start;">
             <div style="display: flex; flex-direction: row;">
-              <span class="md-title">฿</span>
+              <span class="md-title">BTC:</span>
               <span class="md-title" style="flex: 2; text-align: right;" ng-style="btcColor">{{btcPrice}}</span>
-              <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">USD</span>
+              <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">$</span>
             </div>
             <div style="display: flex; flex-direction: row; justify-content: flex-start;">
-                <span class="md-title">Ξ</span>
+                <span class="md-title">ETH:</span>
                 <span class="md-title" style="flex: 2;text-align: right;" ng-style="ethColor">{{ethPrice}}</span>
-                <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">USD</span>
+                <span class="md-title" style="flex: 1; margin-left: auto;text-align: center;">$</span>
             </div>
         </div>
     </div>

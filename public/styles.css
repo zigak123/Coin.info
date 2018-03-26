@@ -9,6 +9,7 @@ body, html{
   padding: 1%;
   margin-bottom: 0px;
   padding-bottom: 0px;
+  padding-top: 0px
 }
 
 .articleCard:{
@@ -131,3 +132,9 @@ md-tabs.md-no-animation md-ink-bar {
 .radioButtondemoBasicUsage .ipsum {
   color: saddlebrown;
   font-size: 0.9em; }
+
+  #chartdiv {
+  width : 800px;
+  height  : 425px;
+  margin-left: auto;
+} 
