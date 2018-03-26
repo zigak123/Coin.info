@@ -1,0 +1,104 @@
+app.component('coinDetails',{
+    bindings: { coin_data: '<'},
+templateUrl: '/public/templates/coinDetails.html',
+controller: function ($scope, $stateParams, $http, tickerSrv) {
+
+function timeConverter(UNIX_timestamp){
+      var a = new Date(UNIX_timestamp * 1000);
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var year = a.getFullYear();
+      var month = a.getMonth()+1 < 10 ? '0'+(a.getMonth()+1) : a.getMonth()+1;
+      var date = a.getDate();
+      var time = year + "-" + month + '-' + date;
+      return time;
+    }
+
+
+
+
+    var chartData = null;
+
+   $http({
+    method : "GET",
+    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$stateParams.coin_data.Symbol+"&tsym=USD&limit=200"
+  }).then(function(response) {
+     chartData = response.data.Data;
+     for (var i = 0; i < chartData.length; i++) {
+     	chartData[i].time = timeConverter(chartData[i].time);
+     	console.log(chartData[i].time)
+     }
+     console.log(chartData.length)
+     var panelCall =  function (data) {
+           console.log("haha")
+     }
+
+
+    var chart = AmCharts.makeChart( "chartdiv", {
+  "type": "serial",
+  "theme": "dark",
+  "dataDateFormat":"YYYY-MM-DD",
+  "valueAxes": [ {
+    "position": "left"
+  } ],
+  "graphs": [ {
+    "id": "g1",
+    "balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
+    "closeField": "close",
+    "fillColors": "green",
+    "highField": "high",
+    "lineColor": "green",
+    "lineAlpha": 1,
+    "lowField": "low",
+    "fillAlphas": 0.9,
+    "negativeFillColors": "#db4c3c",
+    "negativeLineColor": "#db4c3c",
+    "openField": "open",
+    "title": "Price:",
+    "type": "candlestick",
+    "valueField": "close"
+  } ],
+  "chartScrollbar": {
+    "graph": "g1",
+    "graphType": "line",
+    "scrollbarHeight": 30
+  },
+  "chartCursor": {
+    "valueLineEnabled": false,
+    "valueLineBalloonEnabled": false
+  },
+  "categoryField": "time",
+  "categoryAxis": {
+    "parseDates": true
+  },
+  "dataProvider": chartData,
+
+  "export": {
+    "enabled": false
+  }
+} );
+
+chart.addListener( "rendered", zoomChart );
+zoomChart();
+
+// this method is called when chart is first inited as we listen for "dataUpdated" event
+function zoomChart() {
+  // different zoom methods can be used - zoomToIndexes, zoomToDates, zoomToCategoryValues
+  chart.zoomToIndexes( chart.dataProvider.length - 10, chart.dataProvider.length - 1 );
+}
+
+
+
+
+
+
+
+
+
+
+
+      tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
+    }, function myError(response) {
+      console.log(response);
+  });
+}
+});

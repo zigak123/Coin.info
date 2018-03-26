@@ -3,8 +3,6 @@ var app = angular.module("coinTicker", ['ngMaterial','chart.js','infinite-scroll
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
 
-
-
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
@@ -23,7 +21,6 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
     url: '/about',
     templateUrl: '/public/templates/about.html'
   }
-
 
   var newsState = {
     name: 'news',
@@ -46,6 +43,16 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
     }
   }
 
+   var coinDetailsState = {
+    name: 'coinDetails',
+    url: '/coinDetails/{coinName}',
+    component:'coinDetails',
+    params:{
+      coin_data: null
+    }
+  }
+
+  $stateProvider.state(coinDetailsState);
   $stateProvider.state(profileState);
   $stateProvider.state(aboutState);
   $stateProvider.state(newsState);
