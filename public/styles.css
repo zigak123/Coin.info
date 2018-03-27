@@ -1,6 +1,3 @@
-body, html{
-  height: auto !important;
-}
 
 .header{
   display: flex;
@@ -134,7 +131,9 @@ md-tabs.md-no-animation md-ink-bar {
   font-size: 0.9em; }
 
   #chartdiv {
-  width : 800px;
+  width : 850px;
   height  : 425px;
   margin-left: auto;
 } 
+/* fixes bug in md-autocomplete(selecting item) */
+/*.md-scroll-mask { position: initial !important;} */

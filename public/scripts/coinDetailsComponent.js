@@ -1,7 +1,7 @@
 app.component('coinDetails',{
     bindings: { coin_data: '<'},
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope, $stateParams, $http, tickerSrv, $timeout) {
+controller: function ($scope,$state, $stateParams, $http, tickerSrv, $timeout) {
 
 	function timeConverter(UNIX_timestamp){
 	      var a = new Date(UNIX_timestamp * 1000);
@@ -17,7 +17,7 @@ controller: function ($scope, $stateParams, $http, tickerSrv, $timeout) {
 
    $http({
     method : "GET",
-    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$stateParams.coin_data.Symbol+"&tsym=USD&limit=180"
+    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=180"
   }).then(function(response) {
      chartData = response.data.Data;
      for (var i = 0; i < chartData.length; i++) {
@@ -32,7 +32,7 @@ controller: function ($scope, $stateParams, $http, tickerSrv, $timeout) {
 
             temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
             $scope.change = (Math.round(((Math.round(temp*1000)/1000)*100)*100)/100);
-            $scope.price_color = $scope.change >= 0.0 ? {"color":"green","display":"inline-block"} : {"color":"red"};
+            $scope.price_color = $scope.change >= 0.0 ? {"color":"green","display":"inline-block"} : {"color":"red", "class":"md-body-2"};
             $scope.change += "%"
             $scope.price += " USD"
      }
@@ -81,10 +81,10 @@ controller: function ($scope, $stateParams, $http, tickerSrv, $timeout) {
 	  }
 	} );
 
-	
+	angular.element('.md-scroll-mask').hide();
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
-    $timeout(function() { $scope.isLoading = false;}, 400);
+    $timeout(function() { $scope.isLoading = false;}, 500);
 
     }, function myError(response) {
       console.log(response);
