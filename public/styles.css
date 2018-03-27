@@ -131,8 +131,8 @@ md-tabs.md-no-animation md-ink-bar {
   font-size: 0.9em; }
 
   #chartdiv {
-  width : 850px;
-  height  : 425px;
+  width : 725px;
+  height  : 400px;
   margin-left: auto;
 } 
 /* fixes bug in md-autocomplete(selecting item) */

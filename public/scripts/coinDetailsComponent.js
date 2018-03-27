@@ -29,11 +29,11 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv, $timeout) {
 
      var panelCall =  function (data) {
            $scope.price = data.PRICE;
-
             temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
             $scope.change = (Math.round(((Math.round(temp*1000)/1000)*100)*100)/100);
             $scope.price_color = $scope.change >= 0.0 ? {"color":"green","display":"inline-block"} : {"color":"red", "class":"md-body-2"};
             $scope.change += "%"
+            $scope.price = numeral($scope.price).format('0,0.00');
             $scope.price += " USD"
      }
 
@@ -84,8 +84,7 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv, $timeout) {
 	angular.element('.md-scroll-mask').hide();
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
-    $timeout(function() { $scope.isLoading = false;}, 500);
-
+	$scope.isLoading = false;
     }, function myError(response) {
       console.log(response);
   });
