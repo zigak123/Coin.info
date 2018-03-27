@@ -1,4 +1,4 @@
-var app = angular.module("coinTicker", ['ngMaterial','chart.js','infinite-scroll','ui.router']);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
@@ -14,7 +14,6 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
     url: '/profile',
     templateUrl: '/public/templates/profile.html'
   }
-
 
   var aboutState = {
     name: 'about',
