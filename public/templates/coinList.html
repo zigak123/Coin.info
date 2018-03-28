@@ -7,7 +7,7 @@
               md-items="coin in searchText(searchCoin)"
               md-item-text="coin.FullName"
               md-min-length="1"
-              placeholder="Search for coin" style="width: 35%;margin: auto; margin-bottom: 2%;margin-top: 2%">
+              placeholder="Search for coin" style="width: 250px;margin: auto; margin-bottom: 2%;margin-top: 2%">
             <md-item-template>
               <span md-highlight-text="searchCoin" md-highlight-flags="^i">{{coin.FullName}}</span>
             </md-item-template>
@@ -15,16 +15,8 @@
               <a ng-click="">No coin found!</a>
             </md-not-found>
         </md-autocomplete>
-
-    <md-radio-group ng-model="data.group1" class="md-primary" layout="row" layout-align="center" style="margin-bottom: 2%">
-
-      <md-radio-button value="Apple"> market Cap </md-radio-button>
-      <md-radio-button value="Banana"> price </md-radio-button>
-      <md-radio-button value="Mango"> name </md-radio-button>
-
-    </md-radio-group>
     
-    <div infinite-scroll="loadStuff()">
+    <div infinite-scroll="loadStuff()" infinite-scroll-immediate-check='false'>
         <md-content layout="row" layout-align="center">
             <md-list flex="50">
                 <md-list-item class="md-2-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})" style="margin-bottom: 5px" >
