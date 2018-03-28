@@ -23,7 +23,8 @@
       <md-radio-button value="Mango"> name </md-radio-button>
 
     </md-radio-group>
-
+    
+    <div infinite-scroll="loadStuff()">
         <md-content layout="row" layout-align="center">
             <md-list flex="50">
                 <md-list-item class="md-2-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})" style="margin-bottom: 5px" >
@@ -34,4 +35,5 @@
                 </md-list-item>      
             </md-list>
         </md-content> 
+    </div>
 </div>

@@ -18,6 +18,10 @@ controller:
             $state.go('coinDetails', {coin_data: item, coinName: item.FullName})
         }
 
+        $scope.loadStuff = function(){
+            console.log('test dela')
+        }
+
         
 
 }, templateUrl: '/public/templates/coinList.html'})

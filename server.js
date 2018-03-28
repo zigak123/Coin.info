@@ -97,9 +97,9 @@ app.get('*', function(req, res){
 var io = require('socket.io')(http);
 
 //------------listening on 'connection' for incoming sockets---------------------
-io.on('connection', function(socket){
+/*io.on('connection', function(socket){
   console.log('a user connected');
-});
+});*/
 
 
 //-----------start server......................

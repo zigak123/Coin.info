@@ -41,7 +41,6 @@ app.factory('tickerSrv',function($http,$rootScope){
     }
 
   return {
-   // on: on,
     unsub: unsubscribe,
     subscribe: subscribe
   };
