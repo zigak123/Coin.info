@@ -39,52 +39,48 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 </head>
 
-
 <script>
   var socket = io();
 </script>
 
 <body ng-app="coinTicker">
 
-<div ng-cloak="" class="navBardemoBasicUsage" ng-controller="priceTickerCtrl">
-    <div class="header">  
-        <img src="/public/images/chart-line.png" style="width: 52px"> 
-        <a style="margin-top: 0px;margin-bottom: 0px" class="md-display-3">Coin.info</a> 
-        <div class="ticker" style="margin-left: auto; align-self: flex-start;justify-content: flex-start;">
-            <div style="display: flex; flex-direction: row;">
-              <span style="margin-right: 12px;" class="md-title">BTC:</span>
-              <span class="md-title" ng-style="btcColor">{{btcPrice}}</span>
-              <span class="md-title" style="margin-left: 4px;">$</span>
-            </div>
-            <div style="display: flex; flex-direction: row; justify-content: flex-start;">
-                <span style="margin-right: auto;" class="md-title">ETH:</span>
-                <span class="md-title" ng-style="ethColor">{{ethPrice}}</span>
-                <span class="md-title" style="margin-left: 4px;">$</span>
-            </div>
-        </div>
-    </div>
+  <div ng-cloak="" class="navBardemoBasicUsage" ng-controller="priceTickerCtrl">
+      <div class="header">  
+          <img src="/public/images/chart-line.png" style="width: 52px"> 
+          <a style="margin-top: 0px;margin-bottom: 0px" class="md-display-3">Coin.info</a> 
+          <div class="ticker" style="margin-left: auto; align-self: flex-start;justify-content: flex-start;">
+              <div style="display: flex; flex-direction: row;">
+                <span style="margin-right: 12px;" class="md-body-1">BTC</span>
+                <span class="md-body-1" ng-style="btcColor">{{btcPrice}}</span>
+                <span class="md-body-1" style="margin-left: 4px;">$</span>
+              </div>
+              <div style="display: flex; flex-direction: row; justify-content: flex-start;">
+                  <span style="margin-right: auto;" class="md-body-1">ETH</span>
+                  <span class="md-body-1" ng-style="ethColor">{{ethPrice}}</span>
+                  <span class="md-body-1" style="margin-left: 4px;">$</span>
+              </div>
+          </div>
+      </div>
 
 
-    <md-nav-bar md-selected-nav-item="selectedItem" nav-bar-aria-label="navigation links">
-
-      <md-nav-item md-nav-sref="coinlist" name="coinlist">
-        Coin list
-      </md-nav-item>
-      <md-nav-item md-nav-sref="news" name="news">
-        News
-      </md-nav-item>
-      <md-nav-item md-nav-sref="about" name="about">
-        About
-      </md-nav-item>
-     <md-nav-item md-nav-sref="profile" name="profile">
-        Profile
-      </md-nav-item>
-    </md-nav-bar>
-</div>
+      <md-nav-bar md-selected-nav-item="selectedItem" nav-bar-aria-label="navigation links">
+        <md-nav-item md-nav-sref="coinlist" name="coinlist">
+          Coin list
+        </md-nav-item>
+        <md-nav-item md-nav-sref="news" name="news">
+          News
+        </md-nav-item>
+        <md-nav-item md-nav-sref="about" name="about">
+          About
+        </md-nav-item>
+       <md-nav-item md-nav-sref="profile" name="profile">
+          Profile
+        </md-nav-item>
+      </md-nav-bar>
+  </div>
     
- <div class="ext-content">
-    <ui-view/>
-</div>  
+  <ui-view/>
 
 </body>
 </html>

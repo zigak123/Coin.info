@@ -16,13 +16,14 @@
             </md-not-found>
         </md-autocomplete>
     
-    <div infinite-scroll="loadStuff()" infinite-scroll-immediate-check='false'>
+    <div infinite-scroll="loadStuff()" infinite-scroll-immediate-check='true'>
         <md-content layout="row" layout-align="center">
-            <md-list flex="50">
-                <md-list-item class="md-2-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})" style="margin-bottom: 5px" >
+            <md-list flex="50" style="border-style: solid; border-color: gray; border-radius: 4px; border-width: 1px">
+                <md-list-item class="md-2-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
+                  <md-divider ></md-divider>
                     <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="60px"  style="margin-right: 1.5%">
                     <div class="md-list-item-text" layout="column">
-                        <h3 class="md-display-1">{{item.FullName}}</h3>
+                        <a class="md-title">{{item.FullName}}</a>
                     </div>
                 </md-list-item>      
             </md-list>
