@@ -1,6 +1,6 @@
 <div layout="column" ng-hide="isLoading" layout-padding style="padding: 25px">
 	<div style="display: flex;flex-direction: row;">
-	<div style="display: flex;flex-direction: column" layout-padding>
+	<div style="display: flex;flex-direction: column; margin-left: auto;" layout-padding>
  			<div style="display: flex;flex-direction: row; align-items: center">
  				<img style="width: 52px; height: 52px;" src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
  				<a style="margin-left: 16px" class="md-display-1">{{coin_data.FullName}}</a>
@@ -19,8 +19,8 @@
 
  			<a ui-sref="coinlist" style="color: white; width: fit-content; margin-top: auto;">
  				<svg style="width:48px;height:48px" viewBox="0 0 24 24">
-    <path fill="#FFFFFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-</svg>
+				    <path fill="#FFFFFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+				</svg>
  			</a>
 	</div>
 	<div id="chartdiv"></div>

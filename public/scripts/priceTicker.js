@@ -1,4 +1,7 @@
-app.controller('priceTickerCtrl', function($scope,tickerSrv) {
+app.controller('priceTickerCtrl', function($scope,tickerSrv, $state, $timeout) {
+
+	
+	$timeout(function(){$scope.selectedItem = $state.current.name},0)
 
 	var ethCall = function(data){
 		$scope.ethPrice = numeral(data.PRICE).format('0,0.00');

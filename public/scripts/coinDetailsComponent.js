@@ -89,5 +89,6 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv, $timeout) {
     }, function myError(response) {
       console.log(response);
   });
+  
 }
 });
