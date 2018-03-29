@@ -24,13 +24,13 @@
 .articleCard:hover{
   cursor: pointer;
   -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1.05); 
+    -webkit-transform: scale(1.02); 
     -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1.05); 
+    -ms-transform: scale(1.02); 
     -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1.05);
+    -moz-transform: scale(1.02);
     transition: all 200ms ease-in;
-    transform: scale(1.05);   
+    transform: scale(1.02);   
 }
 
 md-tabs.md-no-animation md-ink-bar {

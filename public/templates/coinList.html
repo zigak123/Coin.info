@@ -19,11 +19,11 @@
     <div infinite-scroll="loadStuff()" infinite-scroll-immediate-check='false'>
         <md-content layout="row" layout-align="center">
             <md-list flex="50">
-                <md-list-item class="md-2-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
+                <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
                   <md-divider ></md-divider>
-                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="60px" style="margin-right: 12px">
+                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
                     <div class="md-list-item-text" layout="column">
-                        <a class="md-title">{{item.FullName}}</a>
+                        <a class="md-body-2">{{item.FullName}}</a>
                     </div>
                 </md-list-item>      
             </md-list>
