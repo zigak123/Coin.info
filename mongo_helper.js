@@ -16,7 +16,7 @@ module.exports = class MongoHelper {
 	 	this.MongoClient.connect(this.url, function(err, db) {
 		  if (err) throw err;
 		  var dbo = db.db(that.dbname);
-		  dbo.collection(input_collection).find().limit(15).toArray(function(err, result) {
+		  dbo.collection(input_collection).find({}, {FullName: 0}).toArray(function(err, result) {
 		    if (err) throw err;
 		    return callback(result)
 		    db.close();
