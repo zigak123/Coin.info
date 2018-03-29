@@ -1,15 +1,18 @@
-<div infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy"> 
+<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" scroll="console.log('haha')"> 
+        <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()">
+            <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
+        </md-button>  
     <div layout="row" layout-align="center" layout-fill layout-wrap> 
-        <md-card class="articleCard" flex="20" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
+        <md-card class="articleCard" flex="25" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
             <img src="{{article.urlToImage}}">
             <md-card-title>
               <md-card-title-text>
-                <span class="md-title">{{article.title}}</span>
+                <span class="md-headline">{{article.title}}</span>
               </md-card-title-text>
             </md-card-title>
         </md-card>
-    </div>      
+    </div>    
     <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center" md-card-title-text" style="height: 100px;">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-</div>
+</md-content>

@@ -22,6 +22,4 @@ controller:
             console.log('test dela')
         }
 
-        
-
 }, templateUrl: '/public/templates/coinList.html'})

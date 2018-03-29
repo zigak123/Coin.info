@@ -1,7 +1,7 @@
 app.component('coinDetails',{
     bindings: { coin_data: '<'},
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope,$state, $stateParams, $http, tickerSrv, $timeout) {
+controller: function ($scope,$state, $stateParams, $http, tickerSrv) {
 
 	function timeConverter(UNIX_timestamp){
 	      var a = new Date(UNIX_timestamp * 1000);

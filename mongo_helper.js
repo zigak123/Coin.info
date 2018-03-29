@@ -16,7 +16,7 @@ module.exports = class MongoHelper {
 	 	this.MongoClient.connect(this.url, function(err, db) {
 		  if (err) throw err;
 		  var dbo = db.db(that.dbname);
-		  dbo.collection(input_collection).find({"CoinName":{$in:["Bitcoin","Litecoin","Ethereum","DigitalCash","Ripple","Monero","Bitcoin Diamond","IOTA"]}}).toArray(function(err, result) {
+		  dbo.collection(input_collection).find().limit(10).toArray(function(err, result) {
 		    if (err) throw err;
 		    return callback(result)
 		    db.close();

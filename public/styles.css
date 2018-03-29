@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  padding: 12px;
+  padding: 9px;
   margin-bottom: 0px;
   padding-bottom: 0px;
   padding-top: 0px
@@ -33,22 +33,18 @@
     transform: scale(1.05);   
 }
 
-.navBardemoBasicUsage md-content .ext-content {
-  padding: 15px;
-}
-
 md-tabs.md-no-animation md-ink-bar {
     transition: none;
 }
 
   md-nav-bar .md-nav-bar {
-
+      padding: 0px;
+      margin: 0px
 }
 
 .ticker{
 	display: flex;
 	flex-direction: column;
-	padding: 1%;
 }
 
 .autocomplete-custom-template li {
@@ -71,13 +67,6 @@ md-tabs.md-no-animation md-ink-bar {
   width: 18px;
 }
 
-
-.demo-md-panel {
-  
-
-}
-
-
 .demo-dialog-example {
   background: white;
   border-radius: 4px;
@@ -97,43 +86,26 @@ md-tabs.md-no-animation md-ink-bar {
   width: 100%;
 }
 
-
-.radioButtondemoBasicUsage body {
-  padding: 20px; }
-
-.radioButtondemoBasicUsage hr {
-  margin-left: -20px;
-  opacity: 0.3; }
-
-.radioButtondemoBasicUsage md-radio-group {
-  width: 150px; }
-
-.radioButtondemoBasicUsage p:last-child {
-  padding-bottom: 50px; }
-
-.radioButtondemoBasicUsage [ng-controller] {
-  padding: 0 20px; }
-
-.radioButtondemoBasicUsage .radioValue {
-  margin-left: 5px;
-  color: #0f9d58;
-  font-weight: bold;
-  padding: 5px; }
-
-.radioButtondemoBasicUsage md-icon {
-  margin: 0 20px 20px;
-  width: 128px;
-  height: 128px; }
-
-.radioButtondemoBasicUsage .ipsum {
-  color: saddlebrown;
-  font-size: 0.9em; }
-
-  #chartdiv {
+#chartdiv {
   width : 680px;
   height  : 400px;
   margin-right: auto;
   align-self: flex-start;
 } 
+
+.md-button {
+  padding: 0 6px 0 6px;
+  margin: 6px 8px 6px 8px;
+  min-width: 88px;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration:none;
+  border: none;
+  outline: none;
+}
+
+
 /* fixes bug in md-autocomplete(selecting item) */
 /*.md-scroll-mask { position: initial !important;} */

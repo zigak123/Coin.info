@@ -1,5 +1,5 @@
 <div layout="column" ng-hide="isLoading" layout-padding style="padding: 25px">
-	<div style="display: flex;flex-direction: row;">
+	<div style="display: flex;flex-direction: row;" class = "md-whiteframe-1dp" md-colors="{background: 'default-background-800-0.85'}">
 	<div style="display: flex;flex-direction: column; margin-left: auto;" layout-padding>
  			<div style="display: flex;flex-direction: row; align-items: center">
  				<img style="width: 52px; height: 52px;" src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
@@ -16,15 +16,15 @@
 	              <a ng-style="price_color"> {{change}} </a> 
 	            </div>
  			</div>     
-
- 			<a ui-sref="coinlist" style="color: white; width: fit-content; margin-top: auto;">
- 				<svg style="width:48px;height:48px" viewBox="0 0 24 24">
-				    <path fill="#FFFFFF" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-				</svg>
- 			</a>
 	</div>
 	<div id="chartdiv"></div>
 	</div>
+	<a ui-sref="coinlist" style="color: white; width: fit-content; margin-top: auto;">
+	    <md-button class="md-fab md-primary md-fab-bottom-left" aria-label="Go back">
+    		<md-icon md-svg-src="public/images/back_arrow.svg"></md-icon>
+		</md-button>
+	</a>
+
 </div>
 
 <div layout="row" ng-show="isLoading" layout-padding layout-align="center center" style="padding: 15px">

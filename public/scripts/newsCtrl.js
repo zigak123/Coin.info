@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv){
+    controller: function($scope, $http, tickerSrv, $window){
         $scope.page = 1;
         $scope.isbusy = true;
   
@@ -17,6 +17,10 @@ app.component('news',{
         $scope.articles = $scope.articles.concat(res.data.articles);
         $scope.isbusy = false;
     });   
+    }
+
+    $scope.scrollTop = function(){
+        $window.scrollTo(0, 0);
     }
 },
 templateUrl: '/public/templates/coinNews.html'
