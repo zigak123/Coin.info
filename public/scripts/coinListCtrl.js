@@ -23,13 +23,13 @@ controller:
 
         $scope.loadMore = function(){
             $scope.isbusy = true;
-            skip += 15;
+            skip += 54;
             $http.get("coinlist?b="+skip)
                 .then(function(response) {
-                    $scope.coins = $scope.coins.concat(response.data)
+                    $scope.coins = $scope.coins.slice(36).concat(response.data)
                     //console.log($scope.coins.length)
-                    console.log(skip)
-                    console.log($scope.coins[0])
+                    //console.log(skip)
+                    //console.log($scope.coins[0])
                     $scope.isbusy = false;
                 }); 
         }
