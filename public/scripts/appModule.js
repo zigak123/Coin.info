@@ -1,8 +1,8 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1200);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
 
-app.directive("scroll", function () {
+app.directive("scroll", function ($window) {
   return function(scope, element, attrs) {
-    element.bind("scroll", function(e) {
+    angular.element($window).bind("scroll", function(e) {
       console.log(e);
       console.log(element)
       console.log(this.pageYOffset);
