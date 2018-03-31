@@ -1,7 +1,8 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
 
-
-app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider) {
+app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
+  // disable ripple UI effect globally
+  $mdInkRippleProvider.disableInkRipple();
 
   $mdThemingProvider
     .theme('default')
