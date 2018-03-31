@@ -1,7 +1,7 @@
 app.component('coinDetails',{
     bindings: { coin_data: '<'},
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope,$state, $stateParams, $http, tickerSrv, $transitions) {
+controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions) {
 
 	function timeConverter(UNIX_timestamp){
 	      var a = new Date(UNIX_timestamp * 1000);
@@ -15,7 +15,7 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv, $transition
 	$scope.isLoading = true;
     $scope.coin_data = $stateParams.coin_data;
     $scope.coin_data.TotalCoinSupply = numeral($scope.coin_data.TotalCoinSupply).format('0,0');
-
+    
    $http({
     method : "GET",
     url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
@@ -36,6 +36,12 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv, $transition
             $scope.change += "%"
             $scope.price = numeral($scope.price).format('0,0.00');
      }
+
+     $scope.$on('$destroy', function iVeBeenDismissed() {
+  // say goodbye to your controller here
+  // release resources, cancel request...
+  console.log('goodbye')
+})
 
     var chart = AmCharts.makeChart( "chartdiv", {
 	  "type": "serial",

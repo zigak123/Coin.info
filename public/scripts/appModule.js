@@ -1,4 +1,4 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1200);
 
 app.directive("scroll", function ($window) {
   return function(scope, element, attrs) {
