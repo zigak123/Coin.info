@@ -1,7 +1,7 @@
 app.component('coinDetails',{
     bindings: { coin_data: '<'},
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope,$state, $stateParams, $http, tickerSrv) {
+controller: function ($scope,$state, $stateParams, $http, tickerSrv, $transitions) {
 
 	function timeConverter(UNIX_timestamp){
 	      var a = new Date(UNIX_timestamp * 1000);
@@ -85,6 +85,9 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv) {
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;
+	 $transitions.onSuccess({from: "coinDetails"}, function(transition) {
+  		tickerSrv.unsub($scope.coin_data.Symbol, panelCall)
+	});
     }, function myError(response) {
       console.log(response);
   });
