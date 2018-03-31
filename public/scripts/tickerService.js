@@ -1,4 +1,4 @@
-app.factory('tickerSrv',function($http,$rootScope){
+app.factory('tickerSrv',function($http, $rootScope){
 	var socket = io.connect('https://streamer.cryptocompare.com/');
   var callbackArray = [];
   var coins = [];
@@ -23,22 +23,22 @@ app.factory('tickerSrv',function($http,$rootScope){
 
   });
     
-    var subscribe = function (coinSymbol,callback) {
-      callbackArray.push(callback);
-      coins.push(coinSymbol);
-      socket.emit('SubAdd',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
-    }
+  var subscribe = function (coinSymbol,callback) {
+    callbackArray.push(callback);
+    coins.push(coinSymbol);
+    socket.emit('SubAdd',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
+  }
 
-    var unsubscribe = function (coinSymbol,callback) {
-      console.log(callbackArray)
-      console.log(callback)
-      callbackArray.pop()
-      coins.pop();
-      console.log(callbackArray)
-    	if (coinSymbol !== 'ETH' && coinSymbol !== 'BTC'){
-    		socket.emit('SubRemove',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
-    	}
-    }
+  var unsubscribe = function (coinSymbol,callback) {
+    console.log(callbackArray)
+    console.log(callback)
+    callbackArray.pop()
+    coins.pop();
+    console.log(callbackArray)
+  	if (coinSymbol !== 'ETH' && coinSymbol !== 'BTC'){
+  		socket.emit('SubRemove',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
+  	}
+  }
 
   return {
     unsub: unsubscribe,
