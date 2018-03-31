@@ -32,10 +32,9 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv) {
            $scope.price = data.PRICE;
             temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
             $scope.change = numeral(temp*100).format('0,0.00');
-            $scope.price_color = $scope.change >= 0.0 ? {"color":"green","display":"inline-block"} : {"color":"red", "class":"md-body-2"};
+            $scope.price_color = $scope.change >= 0.0 ? {"color":"green"} : {"color":"red"};
             $scope.change += "%"
             $scope.price = numeral($scope.price).format('0,0.00');
-            $scope.price += " USD"
      }
 
     var chart = AmCharts.makeChart( "chartdiv", {

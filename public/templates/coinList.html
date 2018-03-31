@@ -7,7 +7,7 @@
               md-items="coin in searchText(searchCoin)"
               md-item-text="coin.FullName"
               md-min-length="1"
-              placeholder="Search for coin" style="width: 320px;margin: auto; margin-bottom: 2%;margin-top: 2%">
+              placeholder="Search for coin" style="width: 320px;margin: auto; margin-bottom: 16px;margin-top: 16px">
             <md-item-template>
               <span md-highlight-text="searchCoin" md-highlight-flags="^i">{{coin.FullName}}</span>
             </md-item-template>
@@ -16,22 +16,21 @@
             </md-not-found>
         </md-autocomplete>
     
-    <div class="md-whiteframe-1dp" md-colors="{background: 'default-background-800-0.85'}" infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="2">
+    
         <md-content layout="row" layout-align="center">
-            <md-list flex="50">
+            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0" flex="50">
                 <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
                   <md-divider ></md-divider>
                     <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
                     <div class="md-list-item-text" layout="column">
-                        <a class="md-body-2">{{item.FullName}}</a>
+                        {{item.FullName}}
                     </div>
                 </md-list-item>      
             </md-list>
         </md-content> 
-    </div>
-
-     <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()">     
-            <md-tooltip md-direction="top">scroll to top</md-tooltip>
+        <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()">     
+            <md-tooltip md-colors="{color: 'default-background-900'}" md-direction="top">scroll to top</md-tooltip>
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
-        </md-button>  
+      </md-button> 
+    
 </md-content>
