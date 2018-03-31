@@ -18,7 +18,7 @@ controller: function ($scope,$state, $stateParams, $http, tickerSrv) {
 
    $http({
     method : "GET",
-    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=180"
+    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
   }).then(function(response) {
      chartData = response.data.Data;
      for (var i = 0; i < chartData.length; i++) {
