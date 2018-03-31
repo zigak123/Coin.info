@@ -1,4 +1,15 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1200);
+
+app.directive("scroll", function () {
+  return function(scope, element, attrs) {
+    element.bind("scroll", function(e) {
+      console.log(e);
+      console.log(element)
+      console.log(this.pageYOffset);
+      scope.$apply();
+    });
+  };
+});
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
   // disable ripple UI effect globally

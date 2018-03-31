@@ -1,5 +1,5 @@
-<div layout="column" ng-hide="isLoading" layout-padding style="padding: 25px">
-	<div style="display: flex;flex-direction: row;margin: auto;" class = "md-whiteframe-1dp" md-colors="{background: 'default-background-800-0.85'}">
+<div layout="column" ng-hide="isLoading" layout-padding>
+	<div style="display: flex;flex-direction: row;margin: auto;height: 100%" class = "md-whiteframe-1dp" md-colors="{background: 'default-background-700-1'}">
 		<div style="display: flex;flex-direction: column;" layout-padding>
 	 			<div style="display: flex;flex-direction: row; align-items: center">
 	 				<img style="width: 52px; height: 52px;" src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
@@ -21,7 +21,7 @@
 		            </div>
 	 			</div>     
 		</div>
-		<div id="chartdiv"></div>
+		<div hide-xs id="chartdiv"></div>
 	</div>
 
     <md-button ui-sref="coinlist" class="md-fab md-primary md-fab-bottom-left" aria-label="Go back">
