@@ -36,4 +36,8 @@ controller:
             $window.scrollTo(0, 0);
         }
 
+        $scope.myFunction = function(){
+            console.log('dela!')
+        }
+
 }, templateUrl: '/public/templates/coinList.html'})

@@ -1,4 +1,4 @@
-<md-content ng-cloak="">
+<md-content ng-cloak="" onscroll="myFunction()">
         <md-autocomplete
               md-selected-item-change="showDetails(selectedCoin)"
               ng-disabled="false"
@@ -17,8 +17,8 @@
         </md-autocomplete>
     
     
-        <md-content layout="row" layout-align="center">
-            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0" flex="50">
+        <md-content layout="row" layout-align="center" onscroll="myFunction()">
+            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1" flex="50">
                 <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
                   <md-divider ></md-divider>
                     <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
