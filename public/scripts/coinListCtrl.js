@@ -3,6 +3,7 @@ controller:
     function($scope, $http, $interval, tickerSrv,$state,$mdUtil,$window) {
         var skip = 0;
         $scope.isbusy = false;
+        $scope.showshit = false;
         $mdUtil.enableScrolling();
         $http.get("coinlist?b="+skip)
         .then(function(response) {

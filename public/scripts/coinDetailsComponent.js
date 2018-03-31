@@ -29,6 +29,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
      oldprice = (response.data.Data[n-1].open);
 
      var panelCall =  function (data) {
+     	console.log(data.LASTMARKET)
            $scope.price = data.PRICE;
             temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
             $scope.change = numeral(temp*100).format('0,0.00');
@@ -37,11 +38,9 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
             $scope.price = numeral($scope.price).format('0,0.00');
      }
 
-     $scope.$on('$destroy', function iVeBeenDismissed() {
-  // say goodbye to your controller here
-  // release resources, cancel request...
-  console.log('goodbye')
-})
+     $scope.$on('$destroy', function() {
+	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
+	})
 
     var chart = AmCharts.makeChart( "chartdiv", {
 	  "type": "serial",
@@ -91,9 +90,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;
-	 $transitions.onSuccess({from: "coinDetails"}, function(transition) {
-  		tickerSrv.unsub($scope.coin_data.Symbol, panelCall)
-	});
+
     }, function myError(response) {
       console.log(response);
   });

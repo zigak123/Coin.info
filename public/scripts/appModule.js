@@ -1,26 +1,29 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1200);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
 
-app.directive("scroll", function ($window) {
+app.directive("scroll", function ($window, $state) {
   return function(scope, element, attrs) {
     angular.element($window).bind("scroll", function(e) {
-      console.log(e);
-      console.log(element)
+      if ($state.current.name === "coinlist") {
       console.log(this.pageYOffset);
-      scope.$apply();
+      console.log($state.current)
+      scope.$root.$apply();
+      }
     });
   };
 });
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
+
   // disable ripple UI effect globally
   $mdInkRippleProvider.disableInkRipple();
 
+  // registering default theme
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
     .accentPalette('purple').dark()
 
-
+  // initialize ui-router states
   var profileState = {
     name: 'profile',
     url: '/profile',
