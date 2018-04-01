@@ -1,4 +1,13 @@
 
+.dropArrow{
+  fill: "red";
+}
+
+.upArrow{
+  fill: "green";
+}
+
+
 .header{
   display: flex;
   flex-direction: row;

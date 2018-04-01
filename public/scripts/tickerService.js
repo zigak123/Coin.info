@@ -30,11 +30,8 @@ app.factory('tickerSrv',function($http, $rootScope){
   }
 
   var unsubscribe = function (coinSymbol,callback) {
-    console.log(callbackArray)
-    console.log(callback)
-    callbackArray.pop()
+    callbackArray.pop();
     coins.pop();
-    console.log(callbackArray)
   	if (coinSymbol !== 'ETH' && coinSymbol !== 'BTC'){
   		socket.emit('SubRemove',{subs: ['5~CCCAGG~'+coinSymbol+'~USD']})
   	}

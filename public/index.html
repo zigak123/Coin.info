@@ -41,7 +41,7 @@
   var socket = io();
 </script>
 
-<body ng-app="coinTicker">
+<body ng-app="coinTicker" scroll>
 
   <div ng-cloak="" ng-controller="priceTickerCtrl">
       <div class="header"> 
@@ -49,18 +49,20 @@
           <img src="/public/images/chart-line.png" style="width: 54px"> 
           <a class="md-display-3">Coin.info</a> 
         
-          <div hide-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start;">
+          <div hide-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start">
               <div style="display: flex; flex-direction: row;">
-                <span style="margin-right: 12px;" class="md-body-1">BTC</span>
-                <span class="md-title" ng-style="btcColor">{{btcPrice}}</span>
+                <span style="align-self: flex-end;" class="md-body-1">BTC-USD</span>
+                <md-icon style="margin: 0px" md-svg-src="{{btcArrow}}"></md-icon>
+                <span class="md-title">{{btcPrice}}</span>
               </div>
               <div style="display: flex; flex-direction: row; justify-content: flex-start;">
-                  <span style="margin-right: auto;" class="md-body-1">ETH</span>
-                  <span class="md-title" ng-style="ethColor">{{ethPrice}}</span>
+                  <span style="align-self: flex-end;" class="md-body-1">ETH-USD</span>
+                  <md-icon style="margin: 0px;margin-right: auto;" md-svg-src="{{ethArrow}}"></md-icon>
+                  <span class="md-title">{{ethPrice}}</span>
               </div>
           </div>
       </div>
-
+      <md-divider ></md-divider>
       <md-nav-bar md-selected-nav-item="selectedItem" nav-bar-aria-label="navigation links">
         <md-nav-item md-nav-sref="coinlist" name="coinlist">
           Coin info
