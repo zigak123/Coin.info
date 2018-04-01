@@ -5,8 +5,10 @@ app.directive("scroll", function ($window, $state) {
     angular.element($window).bind("scroll", function(e) {
       if ($state.current.name === "coinlist") {
       console.log(this.pageYOffset);
-      console.log($state.current)
-      scope.$root.$apply();
+      //console.log($state.current)
+      scope.$apply(function(drek){
+        console.log(drek)
+      });
       }
     });
   };

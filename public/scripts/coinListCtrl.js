@@ -5,6 +5,7 @@ controller:
         $scope.isbusy = false;
         $scope.showshit = false;
         $mdUtil.enableScrolling();
+        $scope.showFAB = false;
         $http.get("coinlist?b="+skip)
         .then(function(response) {
             $scope.coins = response.data
