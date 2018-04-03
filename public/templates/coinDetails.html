@@ -9,18 +9,18 @@
 	 			<div layout="column" style="height: 100%">			
 		 			<a class="md-body-1">Algorithm:  {{coin_data.Algorithm}}</a>
 		            <a class="md-body-1">Proof type: {{coin_data.ProofType}}</a>
-		            <a class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</a>
+		            <a class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</a> 
+		            <a class="md-body-1">24H volume: {{volume}}</a>
 		            <a style="display: block;width: fit-content;color: white" class="md-body-1" ng-href="https://www.cryptocompare.com{{coin_data.Url}}">more info</a>
 		            <div style="margin-top: auto;">
-
-		              <a style="margin-right: 5px" class="md-display-1">{{price}}<span class="md-body-2"> USD</span> </a>
 		              <div layout="row" align="start center">
-		              	<a ng-style="price_color" class="md-title"> 
-		              	{{change}}
-						<md-tooltip md-colors="{color:'default-background-900'}" md-direction="bottom">compared to today's open price</md-tooltip>
-		              </a> 
-		              <md-icon style="height: 24px; margin: 0px" md-svg-src="{{coinArrow}}"></md-icon>
+		            		<md-icon style="height: 24px; margin: 0px" md-svg-src="{{coinArrow}}"></md-icon>
+			              	<a ng-style="price_color" class="md-title"> 
+			              	{{change}}
+							<md-tooltip md-colors="{color:'default-background-900'}" md-direction="top">compared to today's open price</md-tooltip>
+			              	</a> 
 		              </div>
+		              <a style="margin-right: 5px" class="md-display-1">{{price}}<span class="md-body-2"> USD</span> </a>
 		            </div>
 	 			</div>     
 		</div>

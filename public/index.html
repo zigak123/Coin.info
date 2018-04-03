@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" href="public/images/ic_equalizer_black_48dp_1x.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
     <link rel="stylesheet" type="text/css" href="public/styles.css">
     <script src="/socket.io/socket.io.js"></script>
 
@@ -13,7 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
     <script src="/public/scripts/angular-ui-router.min.js"></script>
 
     <!-- imports -->
@@ -41,14 +41,12 @@
   var socket = io();
 </script>
 
-<body ng-app="coinTicker" scroll>
+<body ng-app="coinTicker">
 
   <div ng-cloak="" ng-controller="priceTickerCtrl">
       <div class="header"> 
-          
           <img src="/public/images/chart-line.png" style="width: 54px"> 
-          <a class="md-display-3">Coin.info</a> 
-        
+          <a class="md-display-3">Coin.info</a>   
           <div hide-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start">
               <div style="display: flex; flex-direction: row;">
                 <span style="align-self: flex-end;" class="md-body-1">BTC-USD</span>
@@ -73,7 +71,7 @@
         <md-nav-item md-nav-sref="about" name="about" hide-xs>
           About
         </md-nav-item>
-       <md-nav-item md-nav-sref="profile" name="profile">
+       <md-nav-item md-nav-sref="profile" name="profile" style="margin-left: auto;">
           Sign in
         </md-nav-item>
       </md-nav-bar>

@@ -1,4 +1,4 @@
-<md-content ng-cloak="">
+<md-content ng-cloak="" scroll>
         <md-autocomplete
               md-selected-item-change="showDetails(selectedCoin)"
               ng-disabled="false"
@@ -18,7 +18,7 @@
     
     
         <md-content layout="row" layout-align="center">
-            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1" flex="50" flex-xs="100">
+            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="2" flex="50" flex-xs="100">
                 <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
                     <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
                     <div class="md-list-item-text" layout="column">
@@ -28,9 +28,12 @@
                 </md-list-item>      
             </md-list>
         </md-content> 
-        <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()">     
+        <md-button class="md-fab md-primary md-fab-bottom-right faba" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">     
             <md-tooltip md-colors="{color: 'default-background-900'}" md-direction="top">scroll to top</md-tooltip>
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
       </md-button> 
+       <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center" md-card-title-text" style="height: 100px;">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
     
 </md-content>

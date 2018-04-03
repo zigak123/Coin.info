@@ -2,6 +2,7 @@ app.component('news',{
     controller: function($scope, $http, tickerSrv, $window){
         $scope.page = 1;
         $scope.isbusy = true;
+        $scope.showFAB = false;
   
        $http.get('news').then(function(res){
         $scope.articles = res.data.articles;

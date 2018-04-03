@@ -29,7 +29,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
      oldprice = (response.data.Data[n-1].open);
 
      var panelCall =  function (data) {
-     		console.log(data.LASTMARKET)
+     		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
             $scope.price = data.PRICE;
             temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
             $scope.change = numeral(temp*100).format('0,0.00');
@@ -94,6 +94,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
 
     }, function myError(response) {
       console.log(response);
+      console.log('error')
   });
   
 }

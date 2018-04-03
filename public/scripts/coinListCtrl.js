@@ -1,14 +1,13 @@
 app.component("coinlist", {
 controller:
-    function($scope, $http, $interval, tickerSrv,$state,$mdUtil,$window) {
+    function($scope, $http, $interval, tickerSrv,$state,$window,$timeout) {
         var skip = 0;
-        $scope.isbusy = false;
-        $scope.showshit = false;
-        $mdUtil.enableScrolling();
+        $scope.isbusy = true;
         $scope.showFAB = false;
         $http.get("coinlist?b="+skip)
         .then(function(response) {
             $scope.coins = response.data
+            $scope.isbusy = false;
         });  
 
         $scope.searchText = function(query){
@@ -29,17 +28,13 @@ controller:
             console.log('firing'+skip)
             $http.get("coinlist?b="+skip)
                 .then(function(response) {
-                    $scope.coins = $scope.coins.slice(0).concat(response.data);
+                    $scope.coins = $scope.coins.concat(response.data);
                     $scope.isbusy = false;
                 }); 
         }
 
         $scope.scrollTop = function(){
             $window.scrollTo(0, 0);
-        }
-
-        $scope.myFunction = function(){
-            console.log('dela!')
         }
 
 }, templateUrl: '/public/templates/coinList.html'})
