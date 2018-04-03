@@ -87,7 +87,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
 	  }
 	} );
 
-	angular.element('.md-scroll-mask').hide();
+	//angular.element('.md-scroll-mask').hide();
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;

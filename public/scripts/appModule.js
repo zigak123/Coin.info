@@ -1,15 +1,14 @@
-var app = angular.module("coinTicker", ['ngAnimate','ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 2000);
-
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate']).value('THROTTLE_MILLISECONDS', 1500);
+var scrollWatcher = null;
 
 
 app.directive("scroll", function ($window, $state, $location) {
 
-  return function(scope, element, attrs) {
+
+  var scrollFunction = function(scope, element, attrs) {
       
       angular.element($window).on("scroll", function(e) {
-      if ($window.pageYOffset > 32 && scope.showFAB == false) {
-        //console.log($location);
-        //console.log($state);
+      if ($window.pageYOffset > 64 && scope.showFAB == false) {
         scope.showFAB = true;
         scope.$apply();
       }
@@ -19,7 +18,11 @@ app.directive("scroll", function ($window, $state, $location) {
         scope.$apply();
       }
     });
-  }
+  };
+
+  scrollWatcher = scrollFunction;
+
+  return scrollFunction;
   
 
 

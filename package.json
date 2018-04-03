@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.15",
+    "angular-animate": "^1.6.9",
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "connect-mongo": "^2.0.1",

@@ -37,4 +37,8 @@ controller:
             $window.scrollTo(0, 0);
         }
 
+        $scope.$on('$destroy', function() {
+            angular.element($window).off('scroll', scrollWatcher);
+        })
+
 }, templateUrl: '/public/templates/coinList.html'})
