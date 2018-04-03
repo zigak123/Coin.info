@@ -1,10 +1,6 @@
-<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy"> 
-        <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()">     
-            <md-tooltip md-colors="{color: 'default-background-900'}" md-direction="top">scroll to top</md-tooltip>
-            <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
-        </md-button>  
+<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" scroll> 
     <div layout="row" layout-align="center" layout-fill layout-wrap> 
-        <md-card class="articleCard" flex-xs="100" flex-sm="40" flex="25" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
+        <md-card class="articleCard" flex-xs="100" flex-sm="33" flex="25" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
             <img src="{{article.urlToImage}}" style="height: 256px">
             <md-card-title>
               <md-card-title-text>
@@ -16,4 +12,8 @@
     <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center" md-card-title-text" style="height: 100px;">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
+     <md-button class="md-fab md-primary md-fab-bottom-right" style="position: fixed;" aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">     
+            <md-tooltip md-colors="{color: 'default-background-900'}" md-direction="top">scroll to top</md-tooltip>
+            <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
+        </md-button>  
 </md-content>

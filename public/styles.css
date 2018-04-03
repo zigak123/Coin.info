@@ -1,13 +1,4 @@
 
-.dropArrow{
-  fill: "red";
-}
-
-.upArrow{
-  fill: "green";
-}
-
-
 .header{
   display: flex;
   flex-direction: row;
@@ -29,7 +20,6 @@
     transform: scale(1);   
 }
 
-
 .articleCard:hover{
   cursor: pointer;
   -webkit-transition: all 200ms ease-in;
@@ -42,8 +32,22 @@
     transform: scale(1.02);   
 }
 
+
+
+
+.faba.ng-show{
+   -webkit-transition: all 200ms ease-in;
+    -webkit-transform: scale(1); 
+    -ms-transition: all 200ms ease-in;
+    -ms-transform: scale(1); 
+    -moz-transition: all 200ms ease-in;
+    -moz-transform: scale(1);
+    transition: all 1200ms ease-in;
+    transform: scale(2);   
+}
+
 md-tabs.md-no-animation md-ink-bar {
-    transition: none;
+    
 }
 
   md-nav-bar .md-nav-bar {
@@ -96,7 +100,7 @@ md-tabs.md-no-animation md-ink-bar {
 }
 
 #chartdiv {
-  width : 680px;
+  width : 520px;
   height  : 400px;
   margin-right: auto;
   align-self: flex-start;

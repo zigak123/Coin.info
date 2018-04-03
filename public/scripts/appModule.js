@@ -1,17 +1,32 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 1000);
+var app = angular.module("coinTicker", ['ngAnimate','ngMaterial','infinite-scroll','ui.router']).value('THROTTLE_MILLISECONDS', 2000);
 
-app.directive("scroll", function ($window, $state) {
+
+
+app.directive("scroll", function ($window, $state, $location) {
+
   return function(scope, element, attrs) {
-    angular.element($window).bind("scroll", function(e) {
-      if ($state.current.name === "coinlist") {
-      console.log(this.pageYOffset);
-      //console.log($state.current)
-      scope.$apply(function(drek){
-        console.log(drek)
-      });
+      
+      angular.element($window).on("scroll", function(e) {
+      if ($window.pageYOffset > 32 && scope.showFAB == false) {
+        //console.log($location);
+        //console.log($state);
+        scope.showFAB = true;
+        scope.$apply();
+      }
+
+      else if($window.pageYOffset == 0 && scope.showFAB == true){
+        scope.showFAB = false;
+        scope.$apply();
       }
     });
-  };
+  }
+  
+
+
+
+
+
+
 });
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
