@@ -19,17 +19,16 @@
     transform: scale(1);   
 }
 
-
 .articleCard:hover{
   cursor: pointer;
   -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1); 
+    -webkit-transform: scale(1.02); 
     -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1); 
+    -ms-transform: scale(1.02); 
     -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1);
+    -moz-transform: scale(1.02);
     transition: all 200ms ease-in;
-    transform: scale(1);   
+    transform: scale(1.02);   
 }
 
 .md-button.md-fab.animatestuff.ng-hide{
@@ -44,6 +43,7 @@
 }
 
 .md-button.md-fab.animatestuff{
+  position: fixed;
    -webkit-transition: all 200ms ease-in;
     -webkit-transform: scale(1); 
     -ms-transition: all 200ms ease-in;

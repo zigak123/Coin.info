@@ -1,13 +1,16 @@
 app.component("coinlist", {
 controller:
-    function($scope, $http, $interval, tickerSrv,$state,$window,$timeout) {
+    function($scope, $http, $interval, tickerSrv,$state,$window, scrollSrv) {
         var skip = 0;
-        $scope.isbusy = true;
+        //$scope.isbusy = true;
+        $scope.iswusy = true;
         $scope.showFAB = false;
+
         $http.get("coinlist?b="+skip)
         .then(function(response) {
             $scope.coins = response.data
             $scope.isbusy = false;
+            $scope.iswusy = false;
         });  
 
         $scope.searchText = function(query){
@@ -22,10 +25,8 @@ controller:
         }
 
         $scope.loadMore = function(){
-            if ($scope.isbusy) {return;}
             $scope.isbusy = true;
-            skip += 10;
-            console.log('firing'+skip)
+            skip += 5;
             $http.get("coinlist?b="+skip)
                 .then(function(response) {
                     $scope.coins = $scope.coins.concat(response.data);
@@ -37,8 +38,9 @@ controller:
             $window.scrollTo(0, 0);
         }
 
+        scrollSrv.on($scope);
         $scope.$on('$destroy', function() {
-            angular.element($window).off('scroll', scrollWatcher);
+            scrollSrv.off();
         })
 
 }, templateUrl: '/public/templates/coinList.html'})

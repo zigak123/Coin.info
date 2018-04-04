@@ -35,7 +35,8 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
             $scope.change = numeral(temp*100).format('0,0.00');
             $scope.price_color = $scope.change >= 0.0 ? {"color":"limegreen"} : {"color":"red"};
             $scope.coinArrow = $scope.change >= 0.0 ? "public/images/arrow_up.svg":"public/images/arrow_drop.svg"
-            $scope.change += "%"
+            $scope.change += "%";
+            $scope.last_market = data.LASTMARKET;
             $scope.price = numeral($scope.price).format('0,0.00');
      }
 
