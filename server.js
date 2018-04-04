@@ -23,7 +23,7 @@ var bodyParser = require('body-parser')
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("done")
+  console.log("mongoose connected!")
 });
 
 
@@ -87,7 +87,7 @@ app.get('/price', function(req, resp){
 
 app.post('/createUser',function(req,res){
 	console.log(req.body.username);
-	res.send('got it')
+	res.send(coinlist[0])
 })
 
 app.get('*', function(req, res){
