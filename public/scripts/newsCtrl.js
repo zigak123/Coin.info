@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv, $window){
+    controller: function($scope, $http, tickerSrv, $window, scrollSrv){
         $scope.page = 1;
         $scope.isbusy = true;
         $scope.showFAB = false;
@@ -23,6 +23,11 @@ app.component('news',{
     $scope.scrollTop = function(){
         $window.scrollTo(0, 0);
     }
+
+        scrollSrv.on($scope);
+        $scope.$on('$destroy', function() {
+            scrollSrv.off();
+        })
 },
 templateUrl: '/public/templates/coinNews.html'
 

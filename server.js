@@ -72,7 +72,7 @@ app.get('/search', function(req, resp){
 
 app.get('/coinlist', function(req, resp){
 	if ("b" in req.query) {
-		resp.send(coinlist.slice(req.query.b, parseInt(req.query.b)+10));
+		resp.send(coinlist.slice(req.query.b, parseInt(req.query.b)+5));
 	}
 })
 
