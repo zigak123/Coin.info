@@ -20,7 +20,7 @@
         <md-content layout="row" layout-align="center">
             <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1" flex="33" flex-xs="100">
                 <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
-                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
+                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px" onerror="this.style.display='none';">
                     <div class="md-list-item-text" layout="column">
                         {{item.FullName}}
                     </div>
@@ -28,10 +28,6 @@
                 </md-list-item>      
             </md-list>
         </md-content> 
-
-        <div layout="column" ng-show="iswusy" layout-sm="row" layout-align="center center" md-card-title-text" style="height: 100px;">
-          <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-        </div>
 
         <md-button class="md-fab md-primary md-fab-bottom-right animatestuff" aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">
             <md-tooltip md-direction="top">back to top</md-tooltip>

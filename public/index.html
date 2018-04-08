@@ -27,7 +27,10 @@
     <script src="public/scripts/ccc-streamer-utilities.js"></script>
     <script src="public/scripts/articleComponent.js"></script>
     <script src="public/scripts/coinDetailsComponent.js"></script>
-    <script src="public/scripts/scrollSrv.js"></script>
+    <script src="public/scripts/profileComponent.js"></script>
+    <script src="public/scripts/scrollService.js"></script>
+    <script src="public/scripts/userService.js"></script>
+
     <!-- amCharts lib imports -->
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
@@ -46,8 +49,8 @@
 
   <div ng-cloak="" ng-controller="priceTickerCtrl">
       <div class="header"> 
-          <img src="/public/images/chart-line.png" style="width: 54px"> 
-          <a class="md-display-3">Coin.info</a>   
+          <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 54px; cursor: pointer;"> 
+          <span ui-sref="coinlist" class="md-display-3" style="text-decoration: none; cursor: pointer;">Coin.info</span>   
           <div hide-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start">
               <div style="display: flex; flex-direction: row;">
                 <span style="align-self: flex-end;" class="md-body-1">BTC-USD</span>
@@ -69,7 +72,7 @@
         <md-nav-item md-nav-sref="news" name="news">
           News
         </md-nav-item>
-        <md-nav-item md-nav-sref="about" name="about" hide-xs>
+        <md-nav-item hide-xs md-nav-sref="about" name="about">
           About
         </md-nav-item>
        <md-nav-item md-nav-sref="profile" name="profile" style="margin-left: auto;" md-no-ink-bar="false">
