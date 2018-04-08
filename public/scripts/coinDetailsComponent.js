@@ -1,5 +1,4 @@
 app.component('coinDetails',{
-    bindings: { coin_data: '<'},
 templateUrl: '/public/templates/coinDetails.html',
 controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions) {
 
@@ -11,7 +10,9 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
 	      var time = year + "-" + month + '-' + date;
 	      return time;
 	}
-
+	console.log($scope)
+	console.log(this)
+	console.log($state)
 	$scope.isLoading = true;
     $scope.coin_data = $stateParams.coin_data;
     $scope.coin_data.TotalCoinSupply = numeral($scope.coin_data.TotalCoinSupply).format('0,0');
@@ -46,7 +47,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
 
     var chart = AmCharts.makeChart( "chartdiv", {
 	  "type": "serial",
-	  "theme": "dark",
+	  "theme": "default",
 	  "dataDateFormat":"YYYY-MM-DD",
 	  "valueAxes": [ {
 	    "position": "left"

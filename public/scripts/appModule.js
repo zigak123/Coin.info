@@ -1,30 +1,6 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate']).value('THROTTLE_MILLISECONDS', 1000);
-var scrollWatcher = null;
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate']);
+app.value('THROTTLE_MILLISECONDS', 1000);
 
-
-app.directive("scroll", function ($window, $state, $location, $rootScope) {
-
-
-  var scrollFunction = function(scope, element, attrs) {
-      
-      angular.element($window).on("scroll", function(e) {
-      if ($window.pageYOffset > 0 && scope.showFAB == false) {
-        scope.showFAB = true;
-        scope.$apply();
-      }
-
-      else if($window.pageYOffset == 0 && scope.showFAB == true){
-        scope.showFAB = false;
-        scope.$apply();
-      }
-
-    });
-  };
-
-  scrollWatcher = scrollFunction;
-
-  return scrollFunction;
-});
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
 
@@ -35,14 +11,34 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
-    .accentPalette('purple').dark()
+    .accentPalette('green')
 
   // initialize ui-router states
   var profileState = {
     name: 'profile',
     url: '/profile',
-    templateUrl: '/public/templates/profile.html'
+    component: 'profile',
+    resolve: {
+      testingthis: function(userSrv,$q){
+        userSrv.authenticated();
+        return $q.reject('not gonna happen');
+      }
+    }
   }
+
+
+  var signUpState = {
+    name: 'signup',
+    url: '/signUp',
+    component: 'profile'
+  }
+
+  var signedInState = {
+    name: 'signedin',
+    url: '/user/{userId}',
+    component: 'profile'
+  }
+
 
   var aboutState = {
     name: 'about',

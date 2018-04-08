@@ -1,10 +1,11 @@
 <md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy"> 
     <div layout="row" layout-align="center" layout-fill layout-wrap> 
-        <md-card class="articleCard" flex-xs="100" flex-sm="33" flex="25" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
-            <img src="{{article.urlToImage}}" style="height: 256px">
+        <md-card class="articleCard" flex-xs="100" flex-sm="33" flex="20" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
+            <img src="{{article.urlToImage}}" class="md-card-image" style="height: 192px">
             <md-card-title>
-              <md-card-title-text>
-                <span class="md-headline">{{article.title}}</span>
+              <md-card-title-text layout="column" layout-wrap>
+                <span class="md-caption">{{article.author}}</span>
+                <span class="md-title">{{article.title}}</span>
               </md-card-title-text>
             </md-card-title>
         </md-card>

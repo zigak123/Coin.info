@@ -24,10 +24,10 @@ app.component('news',{
         $window.scrollTo(0, 0);
     }
 
-        scrollSrv.on($scope);
-        $scope.$on('$destroy', function() {
-            scrollSrv.off();
-        })
+    scrollSrv.on($scope);
+    $scope.$on('$destroy', function() {
+        scrollSrv.off();
+    })
 },
 templateUrl: '/public/templates/coinNews.html'
 
