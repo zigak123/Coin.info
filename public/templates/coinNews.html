@@ -1,6 +1,6 @@
-<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy"> 
+<md-content layout-margin infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy"> 
     <div layout="row" layout-align="center" layout-fill layout-wrap> 
-        <md-card class="articleCard" flex-xs="100" flex-sm="33" flex="20" ng-repeat="article in articles" style="margin: 12px" ui-sref="article({articleName: article.title, article: article})">
+        <md-card class="articleCard" flex-xs="100" flex-sm="33" flex="20" ng-repeat="article in articles" ui-sref="article({articleName: article.title, article: article})">
             <img src="{{article.urlToImage}}" class="md-card-image" style="height: 192px">
             <md-card-title>
               <md-card-title-text layout="column" layout-wrap>

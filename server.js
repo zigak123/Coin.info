@@ -83,20 +83,20 @@ app.get('/price', function(req, resp){
 	else{resp.send(price);}
 })
 
-app.post('/user',function(req,res,next){
+app.post('/user',function(req,res){
 	console.log(req.body);
-	if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
+	if (req.body.email && req.body.username && req.body.password) {
 
 	  var userData = {
 	    email: req.body.email,
 	    username: req.body.username,
-	    password: req.body.password,
-	    passwordConf: req.body.passwordConf,
+	    password: req.body.password
 	  }
-	  //use schema.create to insert data into the db
+	  //insert user into Mongodb
 	  User.create(userData, function (err, user) {
 	    if (err) {
-	      return next(err)
+	    	console.log(err)
+	      return res.send(err.message)
 	    } else {
 	      return res.send(user);
 	    }
@@ -107,23 +107,24 @@ app.post('/user',function(req,res,next){
 	      if (error || !user) {
 	        var err = new Error('Wrong email or password.');
 	        err.status = 401;
-	        return next(err);
+	        return res.send(err);
 	      } else {
 	        req.session.userId = user._id;
-	        return res.send('you did it, you signed in!'+' '+req.session.userId+" real id:"+req.session.id+" "+user);
+	        return res.send(user);
 	      }
 	    });
-  }
-  else{
-  	User.find({_id: req.session.userId}).exec(function(err, res){
-  		console.log(res)
-  	})
-  	return res.send('it really is empty!'+' '+req.session.userId)
-  }
+	  }
+	  else if(req.session.userId){
+	  	User.find({_id: req.session.userId}).exec(function(err, rez){
+	  		res.send(rez);
+	  	})
+	  }
+	  else if(!req.session.userId){
+	  	res.send('NOT authenticated!');
+	  }
 })
 
 app.get('/', function(req, res){
-	/*
 	if (req.session.views) {
 		req.session.views++;
 	}
@@ -131,7 +132,7 @@ app.get('/', function(req, res){
 		req.session.views = 1;
 	}
 	console.log(req.session.id+" views:"+req.session.views)
-	*/
+	
 	res.sendFile(__dirname +'/public/index.html');
 })
 

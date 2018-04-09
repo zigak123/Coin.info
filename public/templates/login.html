@@ -1,16 +1,6 @@
-<md-content layout="column" layout-padding style="width: 50%; margin: auto;">
-	<h1 class="md-display-1"> Fill form to register your account</h1>
-	<form name="signUpForm" ng-submit="signUpForm.$valid && sendForm()" novalidate>
-		<md-input-container class="md-block" flex-gt-sm>
-		    <label>Username</label>
-		    <input name="userName" ng-model="userName" type="text" required ng-pattern='/^[a-zA-Z0-9._-]+$/'>
-		    <div ng-messages="signUpForm.userName.$error" role="alert">
-		      <div ng-message-exp="['required', 'pattern']">
-		        This field is required.
-		      </div>
-		    </div>
-		</md-input-container>
-
+<md-content layout-padding>
+	<h1 class="md-display-1">Sign in</h1>
+	<form name="signUpForm" ng-submit="signUpForm.$valid && signIn()" novalidate>
 		<md-input-container class="md-block" flex-gt-sm>
 		    <label>Email</label>
 		    <input required type="email" name="clientEmail" ng-model="clientEmail"
@@ -34,22 +24,8 @@
 		      </div>
 		    </div>
 		</md-input-container>
-
-		<md-input-container class="md-block" flex-gt-sm>
-		    <label>Repeat password</label>
-		    <input required type="password" title="must match" name="passwordConf" ng-model="passwordConf" ng-pattern="{{password}}">
-		    <div ng-messages="signUpForm.passwordConf.$error" role="alert">
-		      <div ng-message-exp="'required'">
-		        This field is required
-		      </div>
-		      <div ng-message-exp="['required','pattern']">
-		        Password fields must match!
-		      </div>
-		    </div>
-		</md-input-container>
 	 	<div>
         	<md-button class="md-primary md-raised" type="submit">Submit</md-button>
 	    </div>
 	</form>
-
 </md-content>
