@@ -1,4 +1,4 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate']);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages']);
 app.value('THROTTLE_MILLISECONDS', 1000);
 
 
@@ -11,7 +11,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
-    .accentPalette('green')
+    .accentPalette('purple')
 
   // initialize ui-router states
   var profileState = {
@@ -19,18 +19,18 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     url: '/profile',
     component: 'profile',
     resolve: {
-      testingthis: function(userSrv,$q){
-        userSrv.authenticated();
-        return $q.reject('not gonna happen');
+      testingthis: function(userSrv){
+        return userSrv.authenticated();
       }
-    }
+    },
+    data: {isProtected: true}
   }
 
 
-  var signUpState = {
-    name: 'signup',
-    url: '/signUp',
-    component: 'profile'
+  var loginState = {
+    name: 'login',
+    url: '/login',
+    component: 'login'
   }
 
   var signedInState = {
@@ -76,6 +76,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     }
   }
 
+  $stateProvider.state(loginState);
   $stateProvider.state(coinDetailsState);
   $stateProvider.state(profileState);
   $stateProvider.state(aboutState);

@@ -8,27 +8,8 @@
   padding-top: 0px
 }
 
-.articleCard:{
-   -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1); 
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1); 
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1);
-    transition: all 200ms ease-in;
-    transform: scale(1);   
-}
-
-.articleCard:hover{
+.articleCard{
   cursor: pointer;
-  -webkit-transition: all 200ms ease-in;
-    -webkit-transform: scale(1.02); 
-    -ms-transition: all 200ms ease-in;
-    -ms-transform: scale(1.02); 
-    -moz-transition: all 200ms ease-in;
-    -moz-transform: scale(1.02);
-    transition: all 200ms ease-in;
-    transform: scale(1.02);   
 }
 
 .md-button.md-fab.animatestuff.ng-hide{
@@ -127,6 +108,14 @@ md-tabs.md-no-animation md-ink-bar {
   outline: none;
 }
 
+
+.inputdemoErrors .inputErrorsApp {
+  min-height: 48px; }
+
+.inputdemoErrors md-input-container > p {
+  font-size: 0.8em;
+  text-align: left;
+  width: 100%; }
 
 /* fixes bug in md-autocomplete(selecting item) */
 /*.md-scroll-mask { position: initial !important;} */

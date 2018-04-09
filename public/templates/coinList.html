@@ -1,4 +1,4 @@
-<md-content ng-cloak="">
+<md-content ng-cloak="" layout="column" layout-align="center center" layout-margin>
         <md-autocomplete
               md-selected-item-change="showDetails(selectedCoin)"
               ng-disabled="false"
@@ -7,7 +7,7 @@
               md-items="coin in searchText(searchCoin)"
               md-item-text="coin.FullName"
               md-min-length="1"
-              placeholder="Search for coin" style="width: 320px;margin: auto; margin-bottom: 16px;margin-top: 16px" ng-hide="iswusy">
+              placeholder="Search for coin" style="width: 320px">
             <md-item-template>
               <span md-highlight-text="searchCoin" md-highlight-flags="^i">{{coin.FullName}}</span>
             </md-item-template>
@@ -17,17 +17,17 @@
         </md-autocomplete>
     
     
-        <md-content layout="row" layout-align="center">
-            <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1" flex="33" flex-xs="100">
-                <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
-                    <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px" onerror="this.style.display='none';">
-                    <div class="md-list-item-text" layout="column">
-                        {{item.FullName}}
-                    </div>
-                    <md-divider ></md-divider>
-                </md-list-item>      
-            </md-list>
-        </md-content> 
+        <md-content layout="row" style="width: 100%" layout-align="center">
+          <md-list infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1" flex="50" flex-xs="100" md-whiteframe="1" style="padding: 0px">
+              <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.FullName})">
+                  <img src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
+                  <div class="md-list-item-text" layout="column">
+                      {{item.FullName}}
+                  </div>
+                  <md-divider ></md-divider>
+              </md-list-item>      
+          </md-list>
+        </md-content>
 
         <md-button class="md-fab md-primary md-fab-bottom-right animatestuff" aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">
             <md-tooltip md-direction="top">back to top</md-tooltip>
