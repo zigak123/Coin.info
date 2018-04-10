@@ -1,6 +1,10 @@
 var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
 var UserSchema = new mongoose.Schema({
+  avatarImage: {
+    type: Buffer,
+    contentType: String
+  },
   email: {
     type: String,
     unique: true,
@@ -16,6 +20,7 @@ var UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    trim: true
   }
 });
 
