@@ -1,4 +1,4 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages']);
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
 app.value('THROTTLE_MILLISECONDS', 1000);
 
 

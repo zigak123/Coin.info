@@ -47,6 +47,18 @@
 		      </div>
 		    </div>
 		</md-input-container>
+
+		<md-input-container>
+			<md-button class="md-primary" ngf-select ng-model="picFile" accept="image/*">
+            Upload image</md-button>
+	        <div ngf-drop ng-model="picFile" ngf-pattern="image/*"
+	             class="cropArea">
+	            <img-crop image="picFile  | ngfDataUrl"                 
+	            result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+	            </img-crop>
+	        </div>
+		</md-input-container>
+
 	 	<div>
         	<md-button class="md-primary md-raised" type="submit">Submit</md-button>
 	    </div>
