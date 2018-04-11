@@ -1,8 +1,8 @@
 app.component('news',{
     controller: function($scope, $http, tickerSrv, $window, scrollSrv){
-        $scope.page = 1;
-        $scope.isbusy = true;
         $scope.showFAB = false;
+        $scope.isbusy = true;
+        $scope.page = 1;
   
        $http.get('news').then(function(res){
         $scope.articles = res.data.articles;

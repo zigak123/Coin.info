@@ -1,5 +1,5 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 1000);
+app.value('THROTTLE_MILLISECONDS', 1500);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
@@ -11,7 +11,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
-    .accentPalette('purple')
+    .accentPalette('purple').dark()
 
   // initialize ui-router states
   var profileState = {
@@ -19,11 +19,10 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     url: '/profile',
     component: 'profile',
     resolve: {
-      testingthis: function(userSrv){
+      userStatus: function(userSrv){
         return userSrv.authenticated();
       }
-    },
-    data: {isProtected: true}
+    }
   }
 
 
@@ -67,9 +66,9 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     }
   }
 
-   var coinDetailsState = {
+  var coinDetailsState = {
     name: 'coinDetails',
-    url: '/coinDetails/{coinName}',
+    url: '/{coinName}',
     component:'coinDetails',
     params:{
       coin_data: null

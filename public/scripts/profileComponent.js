@@ -1,11 +1,9 @@
 app.component('profile',{
-	bindings: {testingthis: '<'},
+	bindings: {userStatus: '<'},
 	controller: function ($scope,$state,$http) {
-		
+		console.log(this)
 		$scope.sendForm = function(){
-			console.log($scope.croppedDataUrl)
-			console.log(this)
-			console.log($scope)
+			
 			var submitData = {
 			'avatarImage': $scope.croppedDataUrl,
 			'username':$scope.userName,
@@ -17,8 +15,8 @@ app.component('profile',{
 			    method: 'POST',
 			    url: '/user',
 			    data: submitData
-			}).then(function(res,err){
-				console.log('done: '+res.data)
+			}).then(function(res){
+				console.log(res.data)
 			})
 		}
 	
