@@ -1,18 +1,16 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions) {
+controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions) {
 
 	function timeConverter(UNIX_timestamp){
-	      var a = new Date(UNIX_timestamp * 1000);
-	      var year = a.getFullYear();
-	      var month = a.getMonth()+1 < 10 ? '0'+(a.getMonth()+1) : a.getMonth()+1;
-	      var date = a.getDate();
-	      var time = year + "-" + month + '-' + date;
-	      return time;
+      var a = new Date(UNIX_timestamp * 1000);
+      var year = a.getFullYear();
+      var month = a.getMonth()+1 < 10 ? '0'+(a.getMonth()+1) : a.getMonth()+1;
+      var date = a.getDate();
+      var time = year + '-' + month + '-' + date;
+      return time;
 	}
-	console.log($scope)
-	console.log(this)
-	console.log($state)
+
 	$scope.isLoading = true;
     $scope.coin_data = $stateParams.coin_data;
     $scope.coin_data.TotalCoinSupply = numeral($scope.coin_data.TotalCoinSupply).format('0,0');
@@ -20,7 +18,7 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
    $http({
     method : "GET",
     url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
-  }).then(function(response) {
+	}).then(function(response) {
      chartData = response.data.Data;
      for (var i = 0; i < chartData.length; i++) {
      	chartData[i].time = timeConverter(chartData[i].time);
@@ -29,19 +27,19 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
      n = response.data.Data.length;
      oldprice = (response.data.Data[n-1].open);
 
-     var panelCall =  function (data) {
-     		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
-            $scope.price = data.PRICE;
-            temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
-            $scope.change = numeral(temp*100).format('0,0.00');
-            $scope.price_color = $scope.change >= 0.0 ? {"color":"limegreen"} : {"color":"red"};
-            $scope.coinArrow = $scope.change >= 0.0 ? "public/images/arrow_up.svg":"public/images/arrow_drop.svg"
-            $scope.change += "%";
-            $scope.last_market = data.LASTMARKET;
-            $scope.price = numeral($scope.price).format('0,0.00');
-     }
+    var panelCall =  function (data) {
+ 		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
+        $scope.price = data.PRICE;
+        temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
+        $scope.change = numeral(temp*100).format('0,0.00');
+        $scope.price_color = $scope.change >= 0.0 ? {"color":"limegreen"} : {"color":"red"};
+        $scope.coinArrow = $scope.change >= 0.0 ? "public/images/arrow_up.svg":"public/images/arrow_drop.svg"
+        $scope.change += "%";
+        $scope.last_market = data.LASTMARKET;
+        $scope.price = numeral($scope.price).format('0,0.00');
+    }
 
-     $scope.$on('$destroy', function() {
+    $scope.$on('$destroy', function() {
 	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
 	})
 
@@ -94,9 +92,8 @@ controller: function ($scope,$state, $stateParams, $http,tickerSrv,$transitions)
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;
 
-    }, function myError(response) {
-      console.log(response);
-      console.log('error')
+    }, function (err) {
+      console.log(err);
   });
   
 }

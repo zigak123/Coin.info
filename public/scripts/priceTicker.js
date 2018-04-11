@@ -1,10 +1,15 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions,userSrv) {
+app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
 
 	$transitions.onSuccess({}, function(transition) {
 		console.log(transition.from().name+" to: "+transition.to().name)
+		userStatus = userSrv.authenticated();
+		console.log(userStatus.$$state)
+		if (userStatus == 200) {
+			console.log('dela') 
+		}
 		$scope.selectedItem = transition.to().name;
 	});
 /*
@@ -27,11 +32,8 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	var btcCall = function(data){
 		$scope.btcPrice = numeral(data.PRICE).format('0,0.00');
 		$scope.btcArrow = data.FLAGS === '1' ? up : drop;
-		$scope.btcArrow = data.FLAGS === '4' ? same: $scope.btcArrow;	
-
+		$scope.btcArrow = data.FLAGS === '4' ? same: $scope.btcArrow;
 	}
-
-	
 
 	tickerSrv.subscribe('BTC',btcCall);
 	tickerSrv.subscribe('ETH',ethCall);

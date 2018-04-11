@@ -1,5 +1,5 @@
-<md-content layout-padding>
-	<h1 class="md-display-1">Sign in</h1>
+<md-content layout="column" layout-padding layout-align="center center">
+	<h1 class="md-display-1" md-colors="{color: 'default-primary'}">Sign in</h1>
 	<form name="signUpForm" ng-submit="signUpForm.$valid && signIn()" novalidate>
 		<md-input-container class="md-block" flex-gt-sm>
 		    <label>Email</label>
@@ -7,7 +7,7 @@
 		               minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
 		    <div ng-messages="signUpForm.clientEmail.$error" role="alert">
 		      <div ng-message-exp="['required', 'minlength', 'maxlength', 'ng-pattern']">
-		        Your email must be at least 10 characters long and look like an e-mail address.
+		        This field is required
 		      </div>
 		    </div>
 		</md-input-container>
@@ -20,12 +20,15 @@
 		        This field is required
 		      </div>
 		      <div ng-message-exp="'minlength'">
-		        Must contain atleast 8 characters and include 1 uppercase and 1 digit
+		        This field is required
 		      </div>
 		    </div>
 		</md-input-container>
-	 	<div>
+
+	 	<div layout="column">
         	<md-button class="md-primary md-raised" type="submit">Submit</md-button>
 	    </div>
+
 	</form>
+	<div class="md-body-1">Forgot password? <a class="md-primary" ui-sref='coinlist'>Click here</a></div>
 </md-content>

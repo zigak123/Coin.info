@@ -7,11 +7,11 @@
 	 			</div>
 
 	 			<div layout="column" style="height: 100%">			
-		 			<a class="md-body-1">Algorithm:  {{coin_data.Algorithm}}</a>
-		            <a class="md-body-1">Proof type: {{coin_data.ProofType}}</a>
-		            <a class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</a> 
-		            <a class="md-body-1">24H volume: {{volume}}</a>
-		            <a style="display: block;width: fit-content" ng-href="https://www.cryptocompare.com{{coin_data.Url}}"> <span class="md-body-1">more info</span></a>
+		 			<span class="md-body-1">Algorithm:  {{coin_data.Algorithm}}</span>
+		            <span class="md-body-1">Proof type: {{coin_data.ProofType}}</span>
+		            <span class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</span> 
+		            <span class="md-body-1">24H volume: {{volume}} {{coin_data.Symbol}}</span>
+		            <a ng-href="https://www.cryptocompare.com{{coin_data.Url}}"> <span class="md-body-1">more info</span></a>
 		            <div style="margin-top: auto;">
 		              <div layout="row" align="start center">
 		            		<md-icon style="height: 24px; margin: 0px" md-svg-src="{{coinArrow}}"></md-icon>

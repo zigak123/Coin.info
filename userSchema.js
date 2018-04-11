@@ -8,7 +8,7 @@ var UserSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    required: true,
+    required: false,
     trim: true
   },
   username: {
@@ -24,6 +24,7 @@ var UserSchema = new mongoose.Schema({
   }
 });
 
+// lookup user in mongoDB
 UserSchema.statics.authenticate = function (email, password, callback) {
   User.findOne({ email: email })
     .exec(function (err, user) {
@@ -37,7 +38,8 @@ UserSchema.statics.authenticate = function (email, password, callback) {
       bcrypt.compare(password, user.password, function (err, result) {
         if (result === true) {
           return callback(null, user);
-        } else {
+        } 
+        else {
           return callback();
         }
       })
@@ -55,7 +57,6 @@ UserSchema.pre('save', function (next) {
     next();
   })
 });
-
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;

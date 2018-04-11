@@ -2,7 +2,6 @@ app.component("coinlist", {
 
 controller:
     function($scope, $http, $interval, tickerSrv,$state,$window, scrollSrv) {
-
         var skip = 0;
         $scope.isbusy = false;
         $scope.showFAB = false;
