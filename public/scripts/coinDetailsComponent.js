@@ -30,13 +30,15 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     var panelCall =  function (data) {
  		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
         $scope.price = data.PRICE;
+
         temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
         $scope.change = numeral(temp*100).format('0,0.00');
         $scope.price_color = $scope.change >= 0.0 ? {"color":"limegreen"} : {"color":"red"};
-        $scope.coinArrow = $scope.change >= 0.0 ? "public/images/arrow_up.svg":"public/images/arrow_drop.svg"
-        $scope.change += "%";
+        $scope.priceArrow = $scope.change >= 0.0 ? "public/images/arrow_up.svg":"public/images/arrow_drop.svg"
+       
         $scope.last_market = data.LASTMARKET;
-        $scope.price = numeral($scope.price).format('0,0.00');
+        var num_format = $scope.price >= 0.1 ? '0,0.00':'0,0.000';
+        $scope.price = numeral($scope.price).format(num_format);
     }
 
     $scope.$on('$destroy', function() {
@@ -45,7 +47,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 
     var chart = AmCharts.makeChart( "chartdiv", {
 	  "type": "serial",
-	  "theme": "default",
+	  "theme": "dark",
 	  "dataDateFormat":"YYYY-MM-DD",
 	  "valueAxes": [ {
 	    "position": "left"

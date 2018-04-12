@@ -35,7 +35,7 @@ coinApiHelper.LoadCoinList(function(res){
 mongoh.MongoFind('coins',function(result){coinlist = result;})
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
-app.use(bodyParser({limit: '5mb'}));
+app.use(bodyParser({limit: '15mb'}));
 app.set('trust proxy', 1)
 
 
@@ -123,7 +123,16 @@ app.post('/user',function(req,res){
 	    });
 	  }
 	  else if(req.session.userId){
-	  	User.find({_id: req.session.userId},{"_id":0,"username":1, "avatarImage":1}).exec(function(err, rez){
+	  	User.find({_id: req.session.userId},{"_id":0, "username":1, "avatarImage":1}).exec(function(err, rez){
+	  		//console.log(rez[0].avatarImage.length)
+	  		//var base64String = btoa(String.fromCharCode.apply(null, rez[0].avatarImage));
+	  		//var encodedString = String.fromCharCode.apply(null, rez[0].avatarImage.data)
+	  		//console.log(encodedString)
+	  		//console.log('decoding to base64 done')
+	  		//console.log(base64String[0])
+	  		//var thumb = new Buffer(rez[0].avatarImage.data).toString('base64');
+	  		//rez[0].avatarImage.data = encodedString;
+	  		//console.log(thumb);
 	  		res.send(rez);
 	  	})
 	  }

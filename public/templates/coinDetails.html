@@ -1,8 +1,8 @@
 <div layout="column" ng-hide="isLoading" layout-padding>
-	<div style="display: flex;flex-direction: row;margin: auto;height: 100%">
+	<div style="display: flex;flex-direction: row;margin: auto">
 		<div style="display: flex;flex-direction: column;" layout-padding>
 	 			<div style="display: flex;flex-direction: row; align-items: center">
-	 				<img style="width: 52px; height: 52px;" src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
+	 				<img style="width: 52px; height: 52px;" ng-src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
 	 				<a style="margin-left: 16px" class="md-display-1">{{coin_data.FullName}}</a>
 	 			</div>
 
@@ -10,15 +10,19 @@
 		 			<span class="md-body-1">Algorithm:  {{coin_data.Algorithm}}</span>
 		            <span class="md-body-1">Proof type: {{coin_data.ProofType}}</span>
 		            <span class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</span> 
-		            <span class="md-body-1">24H volume: {{volume}} {{coin_data.Symbol}}</span>
-		            <a ng-href="https://www.cryptocompare.com{{coin_data.Url}}"> <span class="md-body-1">more info</span></a>
+		            <span class="md-body-1">24H volume: {{volume}} <span ng-show="volume">{{coin_data.Symbol}}</span></span>
+		            <div>
+		            	<a style="text-decoration: none;" ng-href="https://www.cryptocompare.com{{coin_data.Url}}">
+		            		<span class="md-body-1" md-colors="{color: 'default-primary'}">more info</span>
+		            	</a>
+		            </div>
 		            <div style="margin-top: auto;">
-		              <div layout="row" align="start center">
-		            		<md-icon style="height: 24px; margin: 0px" md-svg-src="{{coinArrow}}"></md-icon>
-			              	<a ng-style="price_color" class="md-title"> 
-			              	{{change}}
-							<md-tooltip md-direction="top">compared to today's open price</md-tooltip>
-			              	</a> 
+		              <div style="position: relative;left: -5px" layout="row" align="start center">
+		            		<md-icon style="height: 24px; margin: 0px" md-svg-src="{{priceArrow}}"></md-icon>
+			              	<span ng-style="price_color" class="md-title"> 
+			              		{{change}} <span ng-show="change">%</span>
+								<md-tooltip md-direction="top">compared to today's open price</md-tooltip>
+			              	</span> 
 		              </div>
 		              <a style="margin-right: 5px" class="md-display-1">{{price}}<span class="md-body-2" ng-show="price"> USD</span> </a>
 		            </div>
