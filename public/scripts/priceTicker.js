@@ -2,8 +2,7 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
-	//$scope.tabName = 'SIGN IN';
-	//$scope.imgSrc = "/public/images/ic_account_circle_white_24dp_1x.png"
+	$scope.showFAB = true;
 
 	$transitions.onSuccess({}, function(transition) {
 		console.log(transition.from().name+" to: "+transition.to().name)
@@ -23,17 +22,14 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 			console.log('dela') 
 		}
 		$scope.selectedItem = transition.to().name;
+
 	});
-/*
-	$transitions.onError({}, function(transition) {
-		console.log('error')
-		console.log(transition.from().name+" to"+transition.to().name+" on error")
-		$scope.selectedItem = transition.from().name;
-		if ($state.current.name != 'coinlist') {
-			$state.go('coinlist')}
-		
-	});
-*/
+
+
+	$scope.profileClick = function(){
+		console.log('profile click dela!')
+	}
+
 	var ethCall = function(data){
 		$scope.ethPrice = numeral(data.PRICE).format('0,0.00');
 		$scope.ethArrow = data.FLAGS === '1' ? up : drop;

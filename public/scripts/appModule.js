@@ -1,17 +1,22 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 1500);
+app.value('THROTTLE_MILLISECONDS', 1000);
 
 
-app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider) {
+app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
+
+  $mdProgressCircularProvider.configure({
+    progressSize: 50,
+    duration: 800
+  });
 
   // disable ripple UI effect globally
-  $mdInkRippleProvider.disableInkRipple();
+  //$mdInkRippleProvider.disableInkRipple();
 
   // registering default theme
   $mdThemingProvider
     .theme('default')
     .primaryPalette('green')
-    .accentPalette('purple').dark()
+    .accentPalette('purple')
 
   // initialize ui-router states
   var profileState = {

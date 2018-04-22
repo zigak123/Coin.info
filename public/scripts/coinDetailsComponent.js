@@ -30,7 +30,9 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     var panelCall =  function (data) {
  		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
         $scope.price = data.PRICE;
-
+        $scope.data = data;
+        $scope.high24hour = data.HIGH24HOUR ? data.HIGH24HOUR: $scope.high24hour;
+        $scope.low24hour = data.LOW24HOUR ? data.LOW24HOUR: $scope.low24hour;
         temp = ($scope.price / oldprice) > 1 ? ($scope.price / oldprice) - 1 : -1*(1 - ($scope.price / oldprice));
         $scope.change = numeral(temp*100).format('0,0.00');
         $scope.price_color = $scope.change >= 0.0 ? {"color":"limegreen"} : {"color":"red"};
@@ -45,49 +47,68 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
 	})
 
-    var chart = AmCharts.makeChart( "chartdiv", {
-	  "type": "serial",
-	  "theme": "dark",
-	  "dataDateFormat":"YYYY-MM-DD",
-	  "valueAxes": [ {
-	    "position": "left"
-	  } ],
-	  "graphs": [ {
-	    "id": "g1",
-	    "balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
-	    "closeField": "close",
-	    "fillColors": "green",
-	    "highField": "high",
-	    "lineColor": "green",
-	    "lineAlpha": 1,
-	    "lowField": "low",
-	    "fillAlphas": 0.9,
-	    "negativeFillColors": "#db4c3c",
-	    "negativeLineColor": "#db4c3c",
-	    "openField": "open",
-	    "title": "Price:",
-	    "type": "candlestick",
-	    "valueField": "close"
-	  } ],
-	  "chartScrollbar": {
-	    "graph": "g1",
-	    "graphType": "line",
-	    "scrollbarHeight": 30
-	  },
-	  "chartCursor": {
-	    "valueLineEnabled": false,
-	    "valueLineBalloonEnabled": false
-	  },
-	  "categoryField": "time",
-	  "categoryAxis": {
-	    "parseDates": true
-	  },
-	  "dataProvider": chartData,
-
-	  "export": {
-	    "enabled": false
-	  }
-	} );
+    var chart = AmCharts.makeChart("chartdiv",
+				{
+					"type": "serial",
+					"theme": "default",
+					"categoryField": "time",
+					"dataDateFormat": "YYYY-MM-DD",
+					"mouseWheelZoomEnabled": true,
+					"autoMarginOffset": 0,
+					"marginBottom": 0,
+					"marginLeft": 8,
+					"marginRight": 0,
+					"marginTop": 8,
+					"plotAreaBorderAlpha": 0,
+					"zoomOutButtonTabIndex": 0,
+					"startDuration": 0.35,
+					"fontFamily": "Roboto",
+					"categoryAxis": {
+						"parseDates": true
+					},
+					"chartCursor": {
+						"enabled": true
+					},
+					"chartScrollbar": {
+						"enabled": false,
+						"graph": "g1",
+						"graphType": "line",
+						"scrollbarHeight": 30
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
+							"closeField": "close",
+							"fillAlphas": 0.9,
+							"fillColors": "green",
+							"highField": "high",
+							"id": "g1",
+							"lineColor": "green",
+							"lowField": "low",
+							"negativeFillColors": "red",
+							"negativeLineColor": "red",
+							"openField": "open",
+							"title": "Price:",
+							"type": "candlestick",
+							"valueField": "close"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"titles": [],
+					"dataProvider": chartData,
+					"export": {
+					   "enabled": false
+					}
+				}
+			);
 
 	//angular.element('.md-scroll-mask').hide();
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );

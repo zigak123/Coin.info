@@ -1,4 +1,4 @@
-app.factory('scrollSrv',function($window){
+app.factory('scrollSrv',function($window,$rootScope){
 
   var scope = null;
 
@@ -9,15 +9,16 @@ app.factory('scrollSrv',function($window){
 
   var off = function() {
     angular.element($window).off("scroll",scrollFunction);
+    scope = null;
   };
 	
   var scrollFunction = function() {
-     if ($window.pageYOffset > 0 && scope.showFAB == false) {
+     if (scope.showFAB == false && $window.pageYOffset != 0) {
         scope.showFAB = true;
         scope.$apply();
       }
 
-      else if($window.pageYOffset == 0 && scope.showFAB == true){
+      else if(scope.showFAB == true && $window.pageYOffset == 0){
         scope.showFAB = false;
         scope.$apply();
       } 

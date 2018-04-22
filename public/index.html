@@ -33,6 +33,7 @@
     <script src="public/scripts/loginComponent.js"></script>
     <script src="public/scripts/ng-img-crop.js"></script>
     <script src="public/scripts/ng-file-upload.js"></script>
+    <script src="public/scripts/scrollDirective.js"></script>
 
     <!-- amCharts lib imports -->
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
@@ -48,9 +49,9 @@
   var socket = io();
 </script>
 
-<body ng-app="coinTicker">
+<body ng-app="coinTicker" ng-cloak>
 
-  <div ng-cloak="" ng-controller="priceTickerCtrl">
+  <div ng-cloak ng-controller="priceTickerCtrl">
       <div class="header"> 
           <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 54px; cursor: pointer;"> 
           <span ui-sref="coinlist" class="md-display-3" style="cursor: pointer;">Coin.info</span>   
@@ -67,7 +68,7 @@
               </div>
           </div>
       </div>
-      <md-divider ></md-divider>
+      
       <md-nav-bar md-selected-nav-item="selectedItem" class="md-primary" nav-bar-aria-label="navigation links" md-no-ink-bar="true" >
         <md-nav-item md-nav-sref="coinlist" name="coinlist">
           Coin info
@@ -78,11 +79,14 @@
         <md-nav-item hide-xs md-nav-sref="about" name="about">
           About
         </md-nav-item>
-       <md-nav-item md-nav-sref="profile" name="profile" style="margin-left: auto" layout="row">
-            <div layout="row" layout-align="center center">
-              <img ng-src="{{imgSrc}}" style="margin: 0px;height: 24px;margin-right: 6px;border-radius: 50%">
-              <span layout-align="center" style="text-transform: none;">{{tabName}}</span>
+       <md-nav-item md-nav-sref="login" name="login" style="margin-left: auto" layout="row">
+        
+            <div layout="row" layout-align="center center" md-ink-ripple="false">
+              <span style="text-transform: none; margin-right: 6px">{{tabName}}</span>
+              <img ng-src="{{imgSrc}}" style="margin: 0px;height: 24px;border-radius: 50%">
             </div>
+        
+        
         </md-nav-item>
       </md-nav-bar>
   </div>

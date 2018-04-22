@@ -1,7 +1,7 @@
 <md-content layout="column" layout-padding style="width: 100%; margin: auto;" layout-align="center center">
 	<h1 class="md-display-1" md-colors="{color: 'default-primary'}"> Fill form to register your account</h1>
 
-	<form name="signUpForm" ng-submit="signUpForm.$valid && sendForm()" novalidate layout="row" layout-padding>
+	<form name="signUpForm" ng-submit="signUpForm.$valid && sendForm()" novalidate layout="row" layout-padding layout-wrap>
 		<md-input-container style="width: auto">
 	        <div ngf-drop ng-model="picFile" ngf-pattern="image/*"
 	             class="cropArea">
