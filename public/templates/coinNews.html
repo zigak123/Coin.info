@@ -1,13 +1,13 @@
-<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0" infinite-scroll-parent="true"> 
+<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1"> 
     <div layout="row" layout-wrap layout-align="center"> 
 
-        <md-card flex="40" flex-sm="100" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
+        <md-card flex-gt-sm="40" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
             <md-card-title>
               <md-card-title-text style="padding-right: 8px">
                 <span class="md-title">{{article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
-                <img ng-src="{{article.urlToImage}}" style="border-radius: 6px" class="md-media-sm card-media">
+                <img ng-src="{{article.urlToImage}}" style="border-radius: 6px" class="md-media-md card-media">
               </md-card-title-media>
             </md-card-title>
             <md-card-content layout-align="start">
@@ -15,12 +15,12 @@
             </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
 
-                  <md-button class="md-icon-button" aria-label="Read story" ui-sref="article({article: article, articleName: article.title})">
+                  <md-button class="md-icon-button" aria-label="Read story" ng-click="readArticle(article)">
                       <md-icon md-svg-icon="public/images/ic_library_books_black_24px.svg"></md-icon>
                   </md-button>
 
-                  <md-button class="md-icon-button" aria-label="Like story">
-                      <md-icon md-svg-icon="public/images/ic_favorite_border_black_24px.svg"></md-icon>
+                  <md-button class="md-icon-button" aria-label="Like story" ng-click="likeArticle(article)">
+                      <md-icon ng-style="isLiked" md-svg-icon="{{favoriteIcon}}"></md-icon>
                   </md-button>
 
                      <md-button class="md-icon-button" aria-label="Share story">

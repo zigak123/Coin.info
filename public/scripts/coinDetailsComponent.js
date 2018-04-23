@@ -1,31 +1,20 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
 controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions) {
+	$scope.candleSizes = [{label: '15min', timeUnit: 'minute', timeSize: 15},{label: '1h', timeUnit: 'hour', timeSize: 1},
+	{label: '2h', timeUnit: 'hour', timeSize: 2},{label: '6h', timeUnit: 'hour', timeSize: 6},{label: '1d', timeUnit: 'day', timeSize: 1}]
+	$scope.zoomSizes = [{label: '1d', timeUnit: 'day', timeSize: 1},{label: '2d', timeUnit: 'day', timeSize: 2},
+	{label: '1w', timeUnit: 'day', timeSize: 7},{label: '1M', timeUnit: 'day', timeSize: 30},{label: 'All', timeUnit: 'day', timeSize: 2000}]
 
-	function timeConverter(UNIX_timestamp){
-      var a = new Date(UNIX_timestamp * 1000);
-      var year = a.getFullYear();
-      var month = a.getMonth()+1 < 10 ? '0'+(a.getMonth()+1) : a.getMonth()+1;
-      var date = a.getDate();
-      var time = year + '-' + month + '-' + date;
-      return time;
-	}
+	conversions = {'minute': 1,'hour': 60,'day':1440};
 
+	$scope.selectedZ = $scope.zoomSizes[0];
+	$scope.selectedC = $scope.candleSizes[0];
+	var chart = undefined;
 	$scope.isLoading = true;
     $scope.coin_data = $stateParams.coin_data;
     $scope.coin_data.TotalCoinSupply = numeral($scope.coin_data.TotalCoinSupply).format('0,0');
-    
-   $http({
-    method : "GET",
-    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
-	}).then(function(response) {
-     chartData = response.data.Data;
-     for (var i = 0; i < chartData.length; i++) {
-     	chartData[i].time = timeConverter(chartData[i].time);
-     }
 
-     n = response.data.Data.length;
-     oldprice = (response.data.Data[n-1].open);
 
     var panelCall =  function (data) {
  		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
@@ -43,73 +32,130 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         $scope.price = numeral($scope.price).format(num_format);
     }
 
+var drek = {
+				"type": "serial",
+				"theme": "default",
+				"categoryField": "time",
+				"dataDateFormat": "YYYY-MM-DD",
+				"mouseWheelZoomEnabled": true,
+				"autoMarginOffset": 0,
+				"marginBottom": 0,
+				"marginLeft": 8,
+				"marginRight": 0,
+				"marginTop": 8,
+				"plotAreaBorderAlpha": 0,
+				"zoomOutButtonTabIndex": 0,
+				"startDuration": 0.35,
+				"fontFamily": "Roboto",
+				"categoryAxis": {
+					"parseDates": true
+				},
+				"chartCursor": {
+					"enabled": true
+				},
+				"chartScrollbar": {
+					"enabled": false,
+					"graph": "g1",
+					"graphType": "line",
+					"scrollbarHeight": 30
+				},
+				"trendLines": [],
+				"graphs": [
+					{
+						"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
+						"closeField": "close",
+						"fillAlphas": 0.9,
+						"fillColors": "green",
+						"highField": "high",
+						"id": "g1",
+						"lineColor": "green",
+						"lowField": "low",
+						"negativeFillColors": "red",
+						"negativeLineColor": "red",
+						"openField": "open",
+						"title": "Price:",
+						"type": "candlestick",
+						"valueField": "close"
+					}
+				],
+				"guides": [],
+				"valueAxes": [
+					{
+						"id": "ValueAxis-1"
+					}
+				],
+				"allLabels": [],
+				"balloon": {},
+				"titles": [],
+				"dataProvider": undefined,
+				"export": {
+				   "enabled": false
+				}
+			}
+
+	   var chart = AmCharts.makeChart("chartdiv", drek);
+
+
+       var loadPriceData = function(){
+       		cc = $scope.selectedC.timeSize*conversions[$scope.selectedC.timeUnit];
+       		dd = $scope.selectedZ.timeSize*conversions[$scope.selectedZ.timeUnit];
+       		//console.log(cc);
+       		//console.log(dd);
+       		//console.log(dd/cc)
+       		//console.log($scope.selectedC.timeUnit)
+
+
+			$http({
+			    method : "GET",
+			    url : "https://min-api.cryptocompare.com/data/histo"+$scope.selectedC.timeUnit+"?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit="+(dd/cc)+"&aggregate="+$scope.selectedC.timeSize}).then(function(res){
+				//console.log(res.data)
+				chartData = res.data.Data;
+			    for (var i = 0; i < chartData.length; i++) {
+			    	chartData[i].time = timeConverter(chartData[i].time);
+			    }
+
+			    chart.dataProvider = chartData;
+			    console.log(chart);
+			    chart.validateData();
+			})
+
+    	}
+
+    $scope.changeZoom = function(newZoom){
+    	$scope.selectedZ = newZoom;
+    	loadPriceData();
+    };
+
+    $scope.changeCandle = function(newCandle){
+    	$scope.selectedC = newCandle;
+    	loadPriceData();
+    };
+
     $scope.$on('$destroy', function() {
 	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
 	})
 
-    var chart = AmCharts.makeChart("chartdiv",
-				{
-					"type": "serial",
-					"theme": "default",
-					"categoryField": "time",
-					"dataDateFormat": "YYYY-MM-DD",
-					"mouseWheelZoomEnabled": true,
-					"autoMarginOffset": 0,
-					"marginBottom": 0,
-					"marginLeft": 8,
-					"marginRight": 0,
-					"marginTop": 8,
-					"plotAreaBorderAlpha": 0,
-					"zoomOutButtonTabIndex": 0,
-					"startDuration": 0.35,
-					"fontFamily": "Roboto",
-					"categoryAxis": {
-						"parseDates": true
-					},
-					"chartCursor": {
-						"enabled": true
-					},
-					"chartScrollbar": {
-						"enabled": false,
-						"graph": "g1",
-						"graphType": "line",
-						"scrollbarHeight": 30
-					},
-					"trendLines": [],
-					"graphs": [
-						{
-							"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
-							"closeField": "close",
-							"fillAlphas": 0.9,
-							"fillColors": "green",
-							"highField": "high",
-							"id": "g1",
-							"lineColor": "green",
-							"lowField": "low",
-							"negativeFillColors": "red",
-							"negativeLineColor": "red",
-							"openField": "open",
-							"title": "Price:",
-							"type": "candlestick",
-							"valueField": "close"
-						}
-					],
-					"guides": [],
-					"valueAxes": [
-						{
-							"id": "ValueAxis-1"
-						}
-					],
-					"allLabels": [],
-					"balloon": {},
-					"titles": [],
-					"dataProvider": chartData,
-					"export": {
-					   "enabled": false
-					}
-				}
-			);
+	
 
+
+  
+
+
+   $http({
+    method : "GET",
+    url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
+	}).then(function(response) {
+     chartData = response.data.Data;
+     for (var i = 0; i < chartData.length; i++) {
+     	chartData[i].time = timeConverter(chartData[i].time);
+     }
+
+     n = response.data.Data.length;
+     oldprice = (response.data.Data[n-1].open);
+     chartConfig.dataProvider = chartData;
+     chart.dataProvider = chartData;
+     
+     chart.validateData()
 	//angular.element('.md-scroll-mask').hide();
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);

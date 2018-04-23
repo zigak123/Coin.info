@@ -129,8 +129,8 @@ img-crop {
 }
 /* line 7, ../../source/scss/ng-img-crop.scss */
 img-crop canvas {
- 
-    height:192px;
+  left: 50%;
+  top: 50%;
   display: block;
   position: absolute;
   outline: none;
@@ -162,3 +162,6 @@ md-input-container{
   margin: 2px
 }
 
+.selectedZoom{
+  background-color: red !important;
+}

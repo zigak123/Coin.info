@@ -1,8 +1,9 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv, $window, scrollSrv){
+    controller: function($scope, $http, tickerSrv, $window, scrollSrv,$state){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
+        $scope.favoriteIcon = "public/images/ic_favorite_border_black_24px.svg";
   
        $http.get('news').then(function(res){
         $scope.articles = res.data.articles;
@@ -16,7 +17,6 @@ app.component('news',{
         $scope.page += 1;
 
         $http.get('news?page='+$scope.page).then(function(res){
-        //$scope.articles = $scope.articles.concat(res.data.articles);
         [].push.apply($scope.articles,res.data.articles);
         $scope.isbusy = false;
     });   
@@ -25,6 +25,17 @@ app.component('news',{
     $scope.scrollTop = function(){
         $scope.showFAB = false;
         $window.scrollTo(0, 0);
+    }
+
+    $scope.readArticle = function(selected_article){
+        $state.go('article',{articleName: selected_article.title, article: selected_article})
+    }
+
+    $scope.likeArticle = function(selected_article){
+        console.log('liked');
+        $scope.isLiked = {"fill": "#E91E63"};
+        $scope.favoriteIcon = "public/images/ic_favorite_black_24px.svg";
+        console.log(selected_article)
     }
 
     scrollSrv.on($scope);

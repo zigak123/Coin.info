@@ -35,7 +35,6 @@ coinApiHelper.LoadCoinList(function(res){
 mongoh.MongoFind('coins',function(result){coinlist = result;})
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
-app.use(bodyParser({limit: '15mb'}));
 app.set('trust proxy', 1)
 
 
@@ -49,7 +48,7 @@ app.use(session({
 
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false, limit: '15mb' }))
 // parse application/json
 app.use(bodyParser.json())
 
