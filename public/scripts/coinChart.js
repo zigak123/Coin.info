@@ -1,4 +1,4 @@
-var chartConfig = {
+var chartConfigh = {
 					"type": "serial",
 					"theme": "default",
 					"categoryField": "time",
@@ -65,6 +65,8 @@ var timeConverter = function(UNIX_timestamp){
       var year = a.getFullYear();
       var month = a.getMonth()+1 < 10 ? '0'+(a.getMonth()+1) : a.getMonth()+1;
       var date = a.getDate();
-      var time = year + '-' + month + '-' + date;
+      var hour = a.getHours() < 10 ? '0'+a.getHours():a.getHours();
+      var minute = a.getMinutes() < 10 ? '0'+a.getMinutes(): a.getMinutes();
+      var time = year + '-' + month + '-' + date+' '+hour+':'+minute;
       return time;
-	}
+}

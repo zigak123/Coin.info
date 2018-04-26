@@ -9,7 +9,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	conversions = {'minute': 1,'hour': 60,'day':1440};
 
 	$scope.selectedZ = $scope.zoomSizes[0];
-	$scope.selectedC = $scope.candleSizes[0];
+	$scope.selectedC = $scope.candleSizes[4];
 	var chart = undefined;
 	$scope.isLoading = true;
     $scope.coin_data = $stateParams.coin_data;
@@ -32,7 +32,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         $scope.price = numeral($scope.price).format(num_format);
     }
 
-var drek = {
+		var chartConfig = {
 				"type": "serial",
 				"theme": "default",
 				"categoryField": "time",
@@ -93,52 +93,48 @@ var drek = {
 				}
 			}
 
-	   var chart = AmCharts.makeChart("chartdiv", drek);
+	   var chart = AmCharts.makeChart("chartdiv", chartConfig);
 
 
        var loadPriceData = function(){
        		cc = $scope.selectedC.timeSize*conversions[$scope.selectedC.timeUnit];
        		dd = $scope.selectedZ.timeSize*conversions[$scope.selectedZ.timeUnit];
-       		//console.log(cc);
-       		//console.log(dd);
-       		//console.log(dd/cc)
-       		//console.log($scope.selectedC.timeUnit)
-
 
 			$http({
 			    method : "GET",
 			    url : "https://min-api.cryptocompare.com/data/histo"+$scope.selectedC.timeUnit+"?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit="+(dd/cc)+"&aggregate="+$scope.selectedC.timeSize}).then(function(res){
-				//console.log(res.data)
-				chartData = res.data.Data;
+			    	
+			    chartData = res.data.Data;
 			    for (var i = 0; i < chartData.length; i++) {
-			    	chartData[i].time = timeConverter(chartData[i].time);
+			    	chartData[i].time = $scope.selectedC.timeUnit == 'day' ? timeConverter(chartData[i].time).split(" ")[0] : timeConverter(chartData[i].time);
 			    }
-
+				chart.categoryAxis.minPeriod = $scope.selectedC.timeUnit == 'day' ? 'DD': ($scope.selectedC.timeUnit == 'hour' ? 'hh':'mm');
+				chart.dataDateFormat = $scope.selectedC.timeUnit == 'day' ? chart.dataDateFormat = "YYYY-MM-DD" : "YYYY-MM-DD JJ:NN";
 			    chart.dataProvider = chartData;
-			    console.log(chart);
 			    chart.validateData();
+			    if (chartData.length < 128) {
+			    	chart.animateAgain();
+			    }
 			})
-
     	}
 
     $scope.changeZoom = function(newZoom){
-    	$scope.selectedZ = newZoom;
-    	loadPriceData();
+    	if ($scope.selectedZ != newZoom) {
+    		$scope.selectedZ = newZoom;
+    		loadPriceData();
+    	}
     };
 
     $scope.changeCandle = function(newCandle){
-    	$scope.selectedC = newCandle;
-    	loadPriceData();
+    	if ($scope.selectedC != newCandle) {
+    		$scope.selectedC = newCandle;
+    		loadPriceData();
+    	}
     };
 
     $scope.$on('$destroy', function() {
 	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
 	})
-
-	
-
-
-  
 
 
    $http({
@@ -150,13 +146,11 @@ var drek = {
      	chartData[i].time = timeConverter(chartData[i].time);
      }
 
-     n = response.data.Data.length;
-     oldprice = (response.data.Data[n-1].open);
-     chartConfig.dataProvider = chartData;
-     chart.dataProvider = chartData;
+    n = response.data.Data.length;
+    oldprice = (response.data.Data[n-1].open);
+    chart.dataProvider = chartData;
      
-     chart.validateData()
-	//angular.element('.md-scroll-mask').hide();
+    chart.validateData()
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;

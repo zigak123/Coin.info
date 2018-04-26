@@ -8,7 +8,7 @@ var UserSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
-    required: false,
+    required: true,
     trim: true
   },
   username: {
@@ -21,7 +21,9 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
-  }
+  },
+  articles: { type : Array , "default" : [] }
+  
 });
 
 // lookup user in mongoDB

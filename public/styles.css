@@ -91,7 +91,7 @@ md-tabs.md-no-animation md-ink-bar {
 }
 
 #chartdiv {
-  width : 580px;
+  width : 620px;
   height  : 400px;
 } 
 
@@ -164,4 +164,26 @@ md-input-container{
 
 .selectedZoom{
   background-color: red !important;
+}
+
+md-nav-ink-bar{
+  background: white !important;
+  height: 3px !important;
+}
+
+.md-nav-bar{
+  border-width: 0px !important;
+}
+
+
+/* For Tablets */
+@media screen and (min-width: 600px) and (max-width: 860px) {
+    #chartdiv {
+        width: 320px;
+        height: 280px
+    }
+
+    #backButton{
+      display: none;
+    }
 }

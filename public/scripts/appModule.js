@@ -40,7 +40,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   var signedInState = {
     name: 'signedin',
     url: '/user/{userId}',
-    component: 'profile'
+    templateUrl: '/public/templates/userDetails.html'
   }
 
 
@@ -62,6 +62,12 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     component: 'coinlist'
   }
 
+  var dexState = {
+    name: 'dex',
+    url: '/dexchange',
+    component: 'coinlist'
+  }
+
   var readArticleState = {
     name: 'article',
     url: '/news/article/{articleName}',
@@ -79,7 +85,7 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
       coin_data: null
     }
   }
-
+  $stateProvider.state(dexState);
   $stateProvider.state(loginState);
   $stateProvider.state(coinDetailsState);
   $stateProvider.state(profileState);

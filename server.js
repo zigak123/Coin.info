@@ -122,16 +122,11 @@ app.post('/user',function(req,res){
 	    });
 	  }
 	  else if(req.session.userId){
+
+	  	
 	  	User.find({_id: req.session.userId},{"_id":0, "username":1, "avatarImage":1}).exec(function(err, rez){
-	  		//console.log(rez[0].avatarImage.length)
 	  		//var base64String = btoa(String.fromCharCode.apply(null, rez[0].avatarImage));
 	  		//var encodedString = String.fromCharCode.apply(null, rez[0].avatarImage.data)
-	  		//console.log(encodedString)
-	  		//console.log('decoding to base64 done')
-	  		//console.log(base64String[0])
-	  		//var thumb = new Buffer(rez[0].avatarImage.data).toString('base64');
-	  		//rez[0].avatarImage.data = encodedString;
-	  		//console.log(thumb);
 	  		res.send(rez);
 	  	})
 	  }
@@ -153,6 +148,16 @@ app.get('/', function(req, res){
 	res.sendFile(__dirname +'/public/index.html');
 })
 
+app.post('/save', function(req, res){
+	if (req.session.userId == undefined) {return;}
+	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, upsert: true, new : true},function(err){
+		console.log(err)
+	})
+
+
+	res.send('haha ')
+})
+
 //------------------------------------------------------------------------------
 var io = require('socket.io')(http);
 
@@ -165,4 +170,3 @@ var io = require('socket.io')(http);
 http.listen(3000,function(){
 	console.log("Listening on port 3000.")
 })
-//app.listen(3000, () => console.log('Example app listening on port 3000!'))

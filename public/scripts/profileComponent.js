@@ -1,6 +1,8 @@
 app.component('profile',{
 	bindings: {userStatus: '<'},
 	controller: function ($scope,$state,$http) {
+
+
 		$scope.sendForm = function(){
 			
 			var submitData = {
@@ -15,7 +17,9 @@ app.component('profile',{
 			    url: '/user',
 			    data: submitData
 			}).then(function(res){
-				console.log(res.data)
+				if (res.data.status == 200) {
+					$state.go('login');
+				}
 			})
 		}
 	

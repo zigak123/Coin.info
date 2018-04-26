@@ -35,6 +35,13 @@ app.component('news',{
         console.log('liked');
         $scope.isLiked = {"fill": "#E91E63"};
         $scope.favoriteIcon = "public/images/ic_favorite_black_24px.svg";
+        $http({
+                method: 'POST',
+                url: '/save',
+                data: selected_article
+            }).then(function(res){
+                console.log(res)
+            })
         console.log(selected_article)
     }
 

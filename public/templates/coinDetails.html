@@ -35,7 +35,7 @@
 			
 		<section hide-xs layout="row" style="padding: 0px;height: auto">
 			<span style="text-align: center; align-self: center;" class="md-caption" flex="20">Zoom:</span>
-			<md-button class="candlestick md-raised md-primary" md-ink-ripple="false" ng-repeat="zoomSize in zoomSizes" ng-click="changeZoom(zoomSize)" ng-class="selectedZ.label === zoomSize.label ? 'md-accent':''">
+			<md-button class="candlestick md-raised md-primary md-disabled" md-ink-ripple="false" ng-repeat="zoomSize in zoomSizes" ng-click="changeZoom(zoomSize)" ng-class="selectedZ.label === zoomSize.label ? 'md-accent':''">
 				{{zoomSize.label}}
 			</md-button>
 		</section>
@@ -52,7 +52,7 @@
 		
 	</div>
 
-    <md-button ui-sref="coinlist" class="md-fab md-primary md-fab-bottom-left" aria-label="Go back">
+    <md-button id="backButton" ui-sref="coinlist" class="md-fab md-primary md-fab-bottom-left" aria-label="Go back" style="position: sticky;">
 		<md-icon md-svg-src="public/images/back_arrow.svg"></md-icon>
 	</md-button>
 </div>

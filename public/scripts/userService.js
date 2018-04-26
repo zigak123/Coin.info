@@ -24,11 +24,12 @@ app.factory('userSrv',function($http, $q, $state){
 
 		sendPost({status: true}).then(function(res){
 			results = res.data;
-			//console.log(results)
-			//if (res.data === 'NOT authenticated!') {deferred.reject(res.data);}
-			console.log(res.data)
-			deferred.resolve(res.data);
-			
+			if (res.data.status == 401) {
+				deferred.reject(res.data);
+			}
+			else{
+				deferred.resolve(res.data);
+			}
 		}, function(error) {
 			results = error;
             deferred.reject(error);
