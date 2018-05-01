@@ -12,8 +12,6 @@
   cursor: pointer;
 }
 
-
-
 .md-fab.animatestuff.ng-hide{
    -webkit-transition: all 200ms ease-in;
     -webkit-transform: scale(0); 
@@ -186,4 +184,8 @@ md-nav-ink-bar{
     #backButton{
       display: none;
     }
+}
+
+.liked{
+  fill: #E91E63
 }

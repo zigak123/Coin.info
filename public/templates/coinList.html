@@ -16,10 +16,10 @@
             </md-not-found>
         </md-autocomplete>
     
-        <md-content infinite-scroll-parent layout="row" style="width: 100%;" layout-align="center">
-          <md-list md-whiteframe="3" infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="2" flex="50" flex-xs="100" style="padding: 8px; border-radius: 5px">
+        <md-content infinite-scroll-parent layout="row" style="width: 100%;overflow: initial;" layout-align="center">
+          <md-list md-no-ink md-whiteframe infinite-scroll="loadMore()" infinite-scroll-immediate-check='true' infinite-scroll-disabled="isbusy" infinite-scroll-distance="2" flex="50" flex-xs="100" style="border-radius: 5px">
               <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.Symbol})">
-                  <img ng-src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: 12px">
+                  <img ng-src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" alt="avatar" style="margin-right: 12px;">
                   <div class="md-list-item-text" layout="column">
                       {{item.FullName}}
                   </div>
@@ -28,3 +28,4 @@
           </md-list>
         </md-content>
 </md-content>
+

@@ -1,5 +1,4 @@
 app.component('profile',{
-	bindings: {userStatus: '<'},
 	controller: function ($scope,$state,$http) {
 
 

@@ -1,12 +1,12 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 1000);
+app.value('THROTTLE_MILLISECONDS', 2000);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
 
   $mdProgressCircularProvider.configure({
     progressSize: 50,
-    duration: 800
+    duration: 400
   });
 
   // disable ripple UI effect globally
@@ -18,16 +18,16 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     .primaryPalette('green')
     .accentPalette('purple')
 
+    $mdThemingProvider
+    .theme('dark-default')
+    .primaryPalette('green')
+    .accentPalette('purple').dark()
+
   // initialize ui-router states
   var profileState = {
     name: 'profile',
     url: '/profile',
-    component: 'profile',
-    resolve: {
-      userStatus: function(userSrv){
-        return userSrv.authenticated();
-      }
-    }
+    component: 'profile'
   }
 
 
@@ -40,7 +40,12 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   var signedInState = {
     name: 'signedin',
     url: '/user/{userId}',
-    templateUrl: '/public/templates/userDetails.html'
+    component: 'userDetails',
+    resolve: {
+      userStatus: function(userSrv){
+        return userSrv.authenticated({username: true, avatarImage: true});
+      }
+    }
   }
 
 
@@ -85,6 +90,8 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
       coin_data: null
     }
   }
+
+  $stateProvider.state(signedInState);
   $stateProvider.state(dexState);
   $stateProvider.state(loginState);
   $stateProvider.state(coinDetailsState);
@@ -96,3 +103,22 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   $urlRouterProvider.otherwise('/');
 
 });
+
+app.directive('userMenu',function(){
+  return {
+    template: '\
+    <md-menu>\
+          <span aria-label="Open demo menu" ng-click="$mdMenu.open($event)">\
+            drek\
+          </span>\
+          <md-menu-content width="3">\
+            <md-menu-item ng-repeat="item in [1, 2, 3]">\
+              <md-button> <span md-menu-align-target>Option</span> {{item}} </md-button>\
+            </md-menu-item>\
+          </md-menu-content>\
+        </md-menu>'
+  }
+})
+
+
+  
