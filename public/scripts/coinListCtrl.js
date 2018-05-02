@@ -6,19 +6,21 @@ controller:
        // $scope.isbusy = true;
         $scope.showFAB = false;
         $scope.coins = [];
-/*
-        $http.get("coinlist?b="+skip)
-        .then(function(response) {
-            $scope.coins = response.data
-            $scope.isbusy = false;
-        });  
-*/
 
         $scope.searchText = function(query){
            return $http.get("search?text="+query)
                 .then(function(response) {
                     return response.data;
                 }); 
+        }
+
+        $scope.getSparklineData = function(coin){
+            return $http({
+                method : "GET",
+                url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym=USD&limit=30"
+                }).then(function(response) {
+                 return response.data.Data.map(a => a.open);
+            })
         }
 
         $scope.showDetails = function(item){
@@ -31,16 +33,10 @@ controller:
             $scope.isbusy = true;
             $http.get("coinlist?b="+skip)
                 .then(function(response) {
-                    //$scope.coins = $scope.coins.concat(response.data);
-                    /*
-                    for (var i = 0; i < response.data.length; i++) {
-                        
-                        $scope.coins.push(response.data[i])
-                    }
-                    */
+
+
                     [].push.apply($scope.coins,response.data);
                     $scope.isbusy = false;
-                    //$scope.$apply();
                 }); 
              skip += 10;
         }
