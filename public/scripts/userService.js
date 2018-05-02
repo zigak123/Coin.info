@@ -9,7 +9,6 @@ app.factory('userSrv',function($http, $q, $state){
 	}
 
 	var signIn = function(loginData){
-
 		sendPost(loginData).then(function(res){
 			console.log(res.data);
 			if (res.data.status == 200) {
@@ -18,11 +17,21 @@ app.factory('userSrv',function($http, $q, $state){
 		})
 	}
 
-	var isAthenticated = function(){
+	var signOut = function(loginData){
+		sendPost(loginData).then(function(res){
+			console.log(res.data);
+			if (res.data.status == 200) {
+				$state.go('coinlist');
+			}
+		})
+	}
+
+
+	var isAthenticated = function(getData){
 		var results = null;
 		var deferred = $q.defer();
 
-		sendPost({status: true}).then(function(res){
+		sendPost(getData).then(function(res){
 			results = res.data;
 			if (res.data.status == 401) {
 				deferred.reject(res.data);

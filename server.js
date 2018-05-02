@@ -39,7 +39,7 @@ app.set('trust proxy', 1)
 
 
 app.use(session({
-  secret: 'w0rk-harD ',
+  secret: 'w0rk-harD 3v3Ry dAy',
   resave: true,
   saveUninitialized: false,
   cookie: { maxAge: 600000 },
@@ -122,18 +122,31 @@ app.post('/user',function(req,res){
 	    });
 	  }
 	  else if(req.session.userId){
+	  	if (req.body.signout != undefined) {
+	  		req.session.userId = null;
+	  		return res.send({signout: true})
+	  	}
 
+
+	  	var query = {"_id":0};
+	  	if (req.body.length == 2 && req.body.username && req.body.avatarImage) {
+	  		query['avatarImage'] = 1;
+	  		query['username'] = 1;
+	  	}
+	  	else{
+	  		for(key in req.body){query[key] = 1;}
+	  	}
 	  	
-	  	User.find({_id: req.session.userId},{"_id":0, "username":1, "avatarImage":1}).exec(function(err, rez){
-	  		//var base64String = btoa(String.fromCharCode.apply(null, rez[0].avatarImage));
-	  		//var encodedString = String.fromCharCode.apply(null, rez[0].avatarImage.data)
+	  	User.find({_id: req.session.userId},query).exec(function(err, rez){
+	  		if ('articles' in req.body) {
+				article_titles = rez[0].articles.map(function(a){return a.title;});
+				return res.send(article_titles);
+	  		}
 	  		res.send(rez);
 	  	})
 	  }
 	  else if(!req.session.userId){
-	  	var err = new Error('Access Denied');
-	    err.status = 401;
-	  	res.send(err);
+	  	return res.send({status: 401});
 	  }
 })
 
@@ -150,12 +163,18 @@ app.get('/', function(req, res){
 
 app.post('/save', function(req, res){
 	if (req.session.userId == undefined) {return;}
-	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, upsert: true, new : true},function(err){
-		console.log(err)
+	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, new : true},function(err){
+		//console.log(err)
 	})
+	res.send('saved')
+})
 
-
-	res.send('haha ')
+app.post('/delete', function(req, res){
+	if (req.session.userId == undefined) {return;}
+	User.update({_id: req.session.userId}, {$pull: {articles: req.body}},{safe: true, new : true},function(err){
+		//console.log(err)
+	})
+	res.send('deleted');
 })
 
 //------------------------------------------------------------------------------

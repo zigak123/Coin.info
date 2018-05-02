@@ -187,3 +187,7 @@ md-nav-ink-bar{
       display: none;
     }
 }
+
+.liked{
+  fill: #E91E63
+}

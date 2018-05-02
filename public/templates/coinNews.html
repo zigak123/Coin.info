@@ -14,26 +14,24 @@
                 <span class="md-caption">{{article.description}}</span>
             </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-
                   <md-button class="md-icon-button" aria-label="Read story" ng-click="readArticle(article)">
                       <md-icon md-svg-icon="public/images/ic_library_books_black_24px.svg"></md-icon>
                   </md-button>
 
                   <md-button class="md-icon-button" aria-label="Like story" ng-click="likeArticle(article)">
-                      <md-icon ng-style="isLiked" md-svg-icon="{{favoriteIcon}}"></md-icon>
+                      <md-icon ng-class="likedArticlesDict && likedArticlesDict[article.title] ? 'liked': ''" md-svg-src="{{setIcon(article)}}"></md-icon>
                   </md-button>
 
-                     <md-button class="md-icon-button" aria-label="Share story">
+                  <md-button class="md-icon-button" aria-label="Share story">
                       <md-icon md-svg-icon="public/images/ic_share_black_24px.svg"></md-icon>
                   </md-button>
-          
         </md-card-actions>
         </md-card>
     </div>    
     <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-     <md-button ng-cloak ng-init="showFAB=false" class="md-fab md-primary md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB" style="position: fixed !important;">
+     <md-button ng-cloak ng-init="showFAB=false" class="md-fab md-primary md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
     </md-button>  
 </md-content>
