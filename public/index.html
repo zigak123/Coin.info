@@ -55,9 +55,9 @@
   var socket = io();
 </script>
 
-<body ng-app="coinTicker" ng-controller="priceTickerCtrl" ng-class="currentTheme == 'default'? 'md-default-theme' : 'md-dark-default-theme'">
-<md-content ng-cloak md-theme="{{ currentTheme }}" md-theme-watch>
-      <div class="header"> 
+<body ng-app="coinTicker" ng-controller="priceTickerCtrl" md-theme="{{ currentTheme }}" md-theme-watch ng-cloak>
+<md-content id="pageTop" layout="column" style="min-height: 100%">
+      <div class="header md-hue-2 md-primary"> 
           <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 54px; cursor: pointer;"> 
           <span ui-sref="coinlist" class="md-display-3" style="cursor: pointer;">Coin.info</span>   
           <div hide-xs show-gt-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start">
@@ -74,15 +74,13 @@
           </div>
       </div>
       
-      <md-nav-bar md-no-ink md-selected-nav-item="selectedItem" class="md-primary" nav-bar-aria-label="navigation links" md-no-ink-bar="false">
-        <md-nav-item md-nav-sref="coinlist" name="coinlist">
+      <md-nav-bar md-no-ink md-selected-nav-item="selectedItem" class="md-hue-2 md-primary" nav-bar-aria-label="navigation links" md-no-ink-bar="false">
+        <md-nav-item class="navbutton" md-nav-sref="coinlist" name="coinlist">
           Coin info
         </md-nav-item>
         <md-nav-item md-nav-sref="news" name="news">
           News
         </md-nav-item>
-        <md-divider>
-        </md-divider>
         <md-nav-item hide-xs md-nav-sref="about" name="about">
           About
         </md-nav-item>
@@ -118,7 +116,14 @@
 
 
      </md-nav-bar>
-  <ui-view/>
-</md-content>
+
+  <ui-view/> 
+  </md-content>
+
+  <md-toolbar ng-cloak layout-align="center center" class="md-caption md-hue-2" style="margin-top: auto;">
+    <span> CoinInfo © 2018 Made by Žiga Kus. </span>
+    <span> API data from <a style="text-decoration: none;" class="md-subtitle" ng-href="http://www.cryptocompare.com"> cryptocompare.com</a> </span>
+  </md-toolbar>
+
 </body>
 </html>

@@ -3,7 +3,7 @@ const https = require('https')
 
 	exports.getNews = function (callback, page) {
 	api_key = 'f0dfd6aea9364ec7a92ef6d0dba941c5';
-	url = "https://newsapi.org/v2/everything?sources=crypto-coins-news&apiKey="+api_key+"&pageSize=12&page="+page;
+	url = "https://newsapi.org/v2/everything?q='crypto AND blockchain'&apiKey="+api_key+"&pageSize=12&page="+page;
 	https.get(url, res => {
 		 let body = "";
 

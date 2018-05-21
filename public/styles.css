@@ -9,9 +9,27 @@
 }
 
 .articleCard{
-  cursor: pointer;
+  opacity: 1;
 }
 
+.articleCard.ng-enter{
+    transition-duration: 250ms;
+  -webkit-transition-duration: 250ms;
+  opacity: 0;
+}
+
+.articleCard.ng-enter-stagger{
+  transition-delay: 0.25s;
+  -webkit-transition-delay: 0.25s;
+    transition-duration: 0ms;
+  -webkit-transition-duration: 0ms;
+}
+
+
+.articleCard.ng-enter.ng-enter-active{
+  cursor: pointer;
+  opacity: 1;
+}
 
 
 .md-fab.animatestuff.ng-hide{
@@ -71,27 +89,8 @@ md-tabs.md-no-animation md-ink-bar {
   width: 18px;
 }
 
-.demo-dialog-example {
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 7px 8px -4px rgba(0, 0, 0, 0.2),
-      0 13px 19px 2px rgba(0, 0, 0, 0.14),
-      0 5px 24px 4px rgba(0, 0, 0, 0.12);
-      width: 680px;
-      height: 514px;
-}
-
-.demo-dialog-content {
-  padding: 18px;
-  color: black;
-}
-
-.demo-dialog-button {
-  width: 100%;
-}
-
 #chartdiv {
-  width : 620px;
+  width : 600px;
   height  : 400px;
 } 
 
@@ -108,6 +107,18 @@ md-tabs.md-no-animation md-ink-bar {
   outline: none;
 }
 
+.drek.ng-hide{
+  -webkit-transition: all 350ms ease-in;
+  transition: all 350ms ease-in;
+  opacity: 0;
+}
+
+.drek{
+  -webkit-transition: all 350ms ease-in;
+  transition: all 350ms ease-in;
+  opacity: 1
+}
+
 .inputdemoErrors .inputErrorsApp {
   min-height: 48px; }
 
@@ -119,7 +130,6 @@ md-tabs.md-no-animation md-ink-bar {
 /* fixes bug in md-autocomplete(selecting item) */
 /*.md-scroll-mask { position: initial !important;} */
 
-/* line 1, ../../source/scss/ng-img-crop.scss */
 img-crop {
   width: 100%;
   height: 100%;
@@ -127,7 +137,7 @@ img-crop {
   position: relative;
   overflow: hidden;
 }
-/* line 7, ../../source/scss/ng-img-crop.scss */
+
 img-crop canvas {
   left: 50%;
   top: 50%;
@@ -150,16 +160,32 @@ md-input-container{
 }
 
 .candlestick{
-  min-width: 48px;
   padding: 0px;
   margin: 0px;
-  border-radius: 40px;
+  border-radius: 0px;
   text-transform: none;
   height: 18px;
   line-height: 0px;
   min-height: 0px;
   font-size:11px;
-  margin: 2px
+  margin: 1px;
+  min-width: 52px
+}
+
+.candlestick.left{
+  border-radius: 0 0 0 6px;
+}
+
+.candlestick.right{
+  border-radius: 0 0 6px 0;
+}
+
+.candlestick.leftup{
+  border-radius: 6px 0 0 0;
+}
+
+.candlestick.rightup{
+  border-radius: 0 6px 0 0;
 }
 
 .selectedZoom{
@@ -179,15 +205,15 @@ md-nav-ink-bar{
 /* For Tablets */
 @media screen and (min-width: 600px) and (max-width: 860px) {
     #chartdiv {
-        width: 320px;
+      width: 320px;
+        
         height: 280px
-    }
-
-    #backButton{
-      display: none;
     }
 }
 
 .liked{
   fill: #E91E63
 }
+
+
+

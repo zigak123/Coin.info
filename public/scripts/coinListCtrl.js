@@ -1,7 +1,7 @@
 app.component("coinlist", {
 
 controller:
-    function($scope, $http, $interval, tickerSrv,$state,$window, scrollSrv) {
+    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q) {
         var skip = 0;
        // $scope.isbusy = true;
         $scope.showFAB = false;
@@ -19,7 +19,9 @@ controller:
                 method : "GET",
                 url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym=USD&limit=30"
                 }).then(function(response) {
-                 return response.data.Data.map(a => a.open);
+                 return response.data.Data.map(a => a.close);
+            },function(err){
+                return err;
             })
         }
 
@@ -29,26 +31,32 @@ controller:
 
         $scope.loadMore = function(){
             if ($scope.isbusy) {return;}
-            //else if (skip>=100) {$scope.isbusy = true; return;}
+            else if (skip>0) {$scope.isbusy = true; return;}
             $scope.isbusy = true;
-            $http.get("coinlist?b="+skip)
+            $http.get("coinlist?skip="+skip)
                 .then(function(response) {
+                    var promises = [];
+                
+                    angular.forEach(response.data, function(key){
+                        var promise = $scope.getSparklineData(key).then(function(responseData){
+                            key['lineData'] = responseData;     
+                        })   
+                        promises.push(promise);
+                    });
 
-
-                    [].push.apply($scope.coins,response.data);
-                    $scope.isbusy = false;
+                    $q.all(promises).then(function(){
+                       $timeout(function(){
+                        [].push.apply($scope.coins,response.data);
+                        $scope.isbusy = false; 
+                    },450);
+                    });
+                    
+                    
+                    
+                   
                 }); 
              skip += 10;
         }
-        
-        $scope.scrollTop = function(){
-            $window.scrollTo(0, 0);
-        }
-        /*
-        scrollSrv.on($scope);
-        $scope.$on('$destroy', function() {
-            scrollSrv.off();
-        })
-        */
+   
 
 }, templateUrl: '/public/templates/coinList.html'})

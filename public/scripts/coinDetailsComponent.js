@@ -1,11 +1,11 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions) {
+controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope) {
 	$scope.candleSizes = [{label: '15min', timeUnit: 'minute', timeSize: 15},{label: '1h', timeUnit: 'hour', timeSize: 1},
 	{label: '2h', timeUnit: 'hour', timeSize: 2},{label: '6h', timeUnit: 'hour', timeSize: 6},{label: '1d', timeUnit: 'day', timeSize: 1}]
 	$scope.zoomSizes = [{label: '1d', timeUnit: 'day', timeSize: 1},{label: '2d', timeUnit: 'day', timeSize: 2},
 	{label: '1w', timeUnit: 'day', timeSize: 7},{label: '1M', timeUnit: 'day', timeSize: 30},{label: 'All', timeUnit: 'day', timeSize: 2000}]
-
+	//$scope.currentTheme = $rootScope.currentTheme;
 	conversions = {'minute': 1,'hour': 60,'day':1440};
 
 	$scope.selectedZ = $scope.zoomSizes[0];
@@ -31,10 +31,16 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         var num_format = $scope.price >= 0.1 ? '0,0.00':'0,0.000';
         $scope.price = numeral($scope.price).format(num_format);
     }
+    	var chartTheme = $rootScope.currentTheme === 'default' ? 'default':'dark';
+
+    	$rootScope.$watch('currentTheme', function (event, data) {
+    	chartTheme = $rootScope.currentTheme !== 'default' ? 'default':'dark';
+});
+
 
 		var chartConfig = {
 				"type": "serial",
-				"theme": "default",
+				"theme": chartTheme,
 				"categoryField": "time",
 				"dataDateFormat": "YYYY-MM-DD",
 				"mouseWheelZoomEnabled": true,
@@ -45,7 +51,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 				"marginTop": 8,
 				"plotAreaBorderAlpha": 0,
 				"zoomOutButtonTabIndex": 0,
-				"startDuration": 0.35,
+				"startDuration": 0,
 				"fontFamily": "Roboto",
 				"categoryAxis": {
 					"parseDates": true
@@ -65,10 +71,10 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 						"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
 						"closeField": "close",
 						"fillAlphas": 0.9,
-						"fillColors": "green",
+						"fillColors": "limegreen",
 						"highField": "high",
 						"id": "g1",
-						"lineColor": "green",
+						"lineColor": "limegreen",
 						"lowField": "low",
 						"negativeFillColors": "red",
 						"negativeLineColor": "red",
@@ -112,9 +118,6 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 				chart.dataDateFormat = $scope.selectedC.timeUnit == 'day' ? chart.dataDateFormat = "YYYY-MM-DD" : "YYYY-MM-DD JJ:NN";
 			    chart.dataProvider = chartData;
 			    chart.validateData();
-			    if (chartData.length < 128) {
-			    	chart.animateAgain();
-			    }
 			})
     	}
 

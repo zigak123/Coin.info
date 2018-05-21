@@ -1,9 +1,9 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http) {
+app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
 	var userStatus;
-	$scope.currentTheme = 'default';
+	$rootScope.currentTheme = 'default';
 	var previous = $scope.selectedItem;
 	
 	$transitions.onSuccess({}, function(transition) {
@@ -20,6 +20,13 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		previous = $scope.selectedItem;
 	});
 
+	$transitions.onBefore({}, function(transition) {
+		
+		
+		$scope.selectedItem = transition.to().name;
+	
+	});
+
 
 	$scope.profileClick = function(mdMenu){
 		if ($scope.tabName != "SIGN IN") {
@@ -31,7 +38,7 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	}
 
 	$scope.changeTheme = function(){
-		$scope.currentTheme = $scope.currentTheme == 'default' ? 'dark-default':'default';
+		$rootScope.currentTheme = $rootScope.currentTheme == 'default' ? 'dark-default':'default';
 	}
 
 	$scope.signOut = function(){
@@ -46,7 +53,6 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 
 	$scope.$on("$mdMenuClose", function() { 
 		$scope.selectedItem = previous;
-		console.log($scope.selectedItem)
 	});
 
 	var ethCall = function(data){

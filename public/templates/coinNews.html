@@ -1,20 +1,20 @@
-<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1"> 
+<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
     <div layout="row" layout-wrap layout-align="center"> 
-
-        <md-card flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
+        <md-card class="articleCard" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
             <md-card-title>
               <md-card-title-text style="padding-right: 8px">
                 <span class="md-title">{{article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
-                <img ng-src="{{article.urlToImage}}" style="border-radius: 6px" class="md-media-md card-media">
+                <img ng-src="{{article.urlToImage}}" style="border-radius: 6px;background-image:url(public/images/baseline_broken_image_black_48dp.png);background-repeat: no-repeat;
+    background-position: center; background-size: auto;background:lightgray" class="md-media-md card-media">
               </md-card-title-media>
             </md-card-title>
             <md-card-content layout-align="start">
                 <span class="md-caption">{{article.description}}</span>
             </md-card-content>
                 <md-card-actions layout="row" layout-align="end center">
-                  <md-button class="md-icon-button" aria-label="Read story" ng-click="readArticle(article)">
+                  <md-button class="md-icon-button" aria-label="Read story" ng-href="{{article.url}}" style="margin-left: 6px; margin-right: 6px !important">
                       <md-icon md-svg-icon="public/images/ic_library_books_black_24px.svg"></md-icon>
                   </md-button>
 
@@ -28,10 +28,10 @@
         </md-card-actions>
         </md-card>
     </div>    
-    <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center">
+     <div layout="column" ng-if="isbusy" layout-sm="row" layout-align="center center" style="height: 100px">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-     <md-button ng-cloak ng-init="showFAB=false" class="md-fab md-primary md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">
+     <md-button ng-cloak ng-init="showFAB=false" class="md-fab md-primary md-fab-bottom-right animatestuff"; aria-label="Scroll to top"  ng-mouseup="scrollTop()" ng-show="showFAB">
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
     </md-button>  
 </md-content>

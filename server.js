@@ -48,7 +48,7 @@ app.use(session({
 
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false, limit: '15mb' }))
+app.use(bodyParser.urlencoded({ extended: false, limit: '25mb' }))
 // parse application/json
 app.use(bodyParser.json())
 
@@ -71,8 +71,8 @@ app.get('/search', function(req, resp){
 })
 
 app.get('/coinlist', function(req, resp){
-	if ("b" in req.query) {
-		resp.send(coinlist.slice(req.query.b, parseInt(req.query.b)+10));
+	if ("skip" in req.query) {
+		resp.send(coinlist.slice(req.query.skip, parseInt(req.query.skip)+10));
 	}
 })
 
@@ -164,7 +164,6 @@ app.get('/', function(req, res){
 app.post('/save', function(req, res){
 	if (req.session.userId == undefined) {return;}
 	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, new : true},function(err){
-		//console.log(err)
 	})
 	res.send('saved')
 })

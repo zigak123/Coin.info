@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv, $window, scrollSrv, $state, userSrv){
+    controller: function($scope, $http, tickerSrv, $window, scrollSrv, $state, userSrv, $anchorScroll, $location){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
@@ -16,7 +16,6 @@ app.component('news',{
             for (var i =  0; i < res.length; i++) {
                 $scope.likedArticlesDict[res[i]] = true;
             }
-            console.log($scope.likedArticlesDict);
        })
 
     $scope.LoadArticles = function(){
@@ -24,14 +23,15 @@ app.component('news',{
         $scope.page += 1;
 
         $http.get('news?page='+$scope.page).then(function(res){
+
         [].push.apply($scope.articles, res.data.articles);
         $scope.isbusy = false;
     });   
     }
 
     $scope.scrollTop = function(){
-        $scope.showFAB = false;
-        $window.scrollTo(0, 0);
+        $location.hash('pageTop');
+        $anchorScroll() && $location.hash('');
     }
 
     $scope.readArticle = function(selected_article){
@@ -53,12 +53,10 @@ app.component('news',{
         if (selected_article.title in $scope.likedArticlesDict) {
             reqUrl = '/delete';
             delete $scope.likedArticlesDict[selected_article.title];
-            //$scope.likedArticles.splice($scope.likedArticlesDict[selected_article.title),1);
         }
         else{
             reqUrl = '/save';
             $scope.likedArticlesDict[selected_article.title] = true;
-            //$scope.likedArticles.push(selected_article.title);
         }
         
 

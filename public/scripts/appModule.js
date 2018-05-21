@@ -1,12 +1,12 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 2000);
+app.value('THROTTLE_MILLISECONDS', 5000);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
 
   $mdProgressCircularProvider.configure({
     progressSize: 50,
-    duration: 400
+    duration: 2000
   });
 
   // disable ripple UI effect globally
@@ -22,6 +22,8 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     .theme('dark-default')
     .primaryPalette('green')
     .accentPalette('purple').dark()
+
+  $mdThemingProvider.alwaysWatchTheme(true);
 
   // initialize ui-router states
   var profileState = {
@@ -120,20 +122,52 @@ app.directive('userMenu',function(){
   }
 })
 
+app.directive('priceChangeLabel',function(){
+  function link(scope, el, attr){
+    n = scope.priceInfo.length;
+    scope.temp = (scope.priceInfo[n-1] / scope.priceInfo[n-31]) > 1 ? (scope.priceInfo[n-1] / scope.priceInfo[n-31]) - 1 : -1*(1 - (scope.priceInfo[n-1] / scope.priceInfo[n-31]));
+    scope.temp = numeral(scope.temp*100).format('0,0.00');
+    if (scope.temp < 0) {
+      scope.price_arrow = "public/images/arrow_drop.svg";
+      scope.style = {"color": "red"};
+    }
 
-app.directive('sl', function(){
+    else{
+      scope.price_arrow = "public/images/arrow_up.svg";
+      scope.style = {"color": "limegreen"};
+    }
+  }
+  return {
+    restrict: 'E',
+    scope: {
+        priceInfo: '=info'
+    },
+    template: '<div layout="row" align="end">\
+                    <md-icon style="height: 24px; margin-left: 0px; margin-right: 0px" md-svg-src={{price_arrow}}></md-icon>\
+                      <span style="font-weight: 900" class="md-caption" ng-style="style"> {{temp}} % </span>\
+              </div>'
+  ,
+  link: link
+  }
+})
+
+
+app.directive('sl', function($timeout,$window){
   function link(scope, el, attr){
     el = d3.select(el[0]);
     var svg = el;
-
-    scope.getSparklineData(scope.item).then(function(data){
+    var data = scope.item['lineData'];
     var min = attr.min !== undefined ? +attr.min : d3.min(data);
     var max = attr.max !== undefined ? +attr.max : d3.max(data);
     el.text(''); // remove the original data text
     var r = attr.r || 0;
     var m = r;
     var w = svg.node().clientWidth;
+    
+    //console.log(w+' ');
+    w = 64;
     var h = +getComputedStyle(el.node())['font-size'].replace('px','');
+    console.log(w+' '+h);
     svg.attr({width: w, height: h});
     var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
     var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
@@ -143,15 +177,14 @@ app.directive('sl', function(){
       .attr('r', r)
       .attr('cx', function(d, i){ return x(i) })
       .attr('cy', function(d){ return y(d) });
-
-
-    })
   }
   return {
-      link: link
+    link: link
     , restrict: 'E'
     , replace: true
     , template: '<svg ng-transclude class="sl"></svg>'
     , transclude: true
   };
+
+
 });
