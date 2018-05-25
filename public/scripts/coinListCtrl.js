@@ -3,7 +3,6 @@ app.component("coinlist", {
 controller:
     function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q) {
         var skip = 0;
-       // $scope.isbusy = true;
         $scope.showFAB = false;
         $scope.coins = [];
 
@@ -46,9 +45,9 @@ controller:
 
                     $q.all(promises).then(function(){
                        $timeout(function(){
-                        [].push.apply($scope.coins,response.data);
-                        $scope.isbusy = false; 
-                    },450);
+                            [].push.apply($scope.coins,response.data);
+                            $scope.isbusy = false; 
+                        },450);
                     });
                     
                     

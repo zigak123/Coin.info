@@ -1,11 +1,10 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope) {
+controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope,$interval) {
 	$scope.candleSizes = [{label: '15min', timeUnit: 'minute', timeSize: 15},{label: '1h', timeUnit: 'hour', timeSize: 1},
 	{label: '2h', timeUnit: 'hour', timeSize: 2},{label: '6h', timeUnit: 'hour', timeSize: 6},{label: '1d', timeUnit: 'day', timeSize: 1}]
 	$scope.zoomSizes = [{label: '1d', timeUnit: 'day', timeSize: 1},{label: '2d', timeUnit: 'day', timeSize: 2},
 	{label: '1w', timeUnit: 'day', timeSize: 7},{label: '1M', timeUnit: 'day', timeSize: 30},{label: 'All', timeUnit: 'day', timeSize: 2000}]
-	//$scope.currentTheme = $rootScope.currentTheme;
 	conversions = {'minute': 1,'hour': 60,'day':1440};
 
 	$scope.selectedZ = $scope.zoomSizes[0];
@@ -32,12 +31,6 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         $scope.price = numeral($scope.price).format(num_format);
     }
     	var chartTheme = $rootScope.currentTheme === 'default' ? 'default':'dark';
-
-    	$rootScope.$watch('currentTheme', function (event, data) {
-    	chartTheme = $rootScope.currentTheme !== 'default' ? 'default':'dark';
-});
-
-
 		var chartConfig = {
 				"type": "serial",
 				"theme": chartTheme,
@@ -49,7 +42,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 				"marginLeft": 8,
 				"marginRight": 0,
 				"marginTop": 8,
-				"plotAreaBorderAlpha": 0,
+				"plotAreaBorderAlpha": 0.5,
 				"zoomOutButtonTabIndex": 0,
 				"startDuration": 0,
 				"fontFamily": "Roboto",
@@ -157,6 +150,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;
+	 
 
     }, function (err) {
       console.log(err);

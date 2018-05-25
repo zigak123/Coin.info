@@ -14,6 +14,7 @@ var User = require('./userSchema.js')
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser')
+var numberOfVisits = 0;
 
 mongoose.connect('mongodb://localhost:27017/data')
 var db = mongoose.connection;
@@ -32,7 +33,13 @@ coinApiHelper.LoadCoinList(function(res){
 })
 */
 
-mongoh.MongoFind('coins',function(result){coinlist = result;})
+mongoh.MongoFind('coins',function(result){coinlist = result;
+	console.log(coinlist.length)
+})
+
+mongoh.MongoCount('coins',function(result){
+	console.log('count result: '+result);
+})
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1)
@@ -152,10 +159,12 @@ app.post('/user',function(req,res){
 
 app.get('/', function(req, res){
 	if (req.session.views) {
-		req.session.views++;
+		numberOfVisits++;
+		req.session.views = false;
+		console.log(numberOfVisits);
 	}
 	else{
-		req.session.views = 1;
+		req.session.views = true;
 	}
 	
 	res.sendFile(__dirname +'/public/index.html');

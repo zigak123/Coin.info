@@ -25,6 +25,19 @@ module.exports = class MongoHelper {
 		
 	 }  
 
+	 	MongoCount(input_collection, callback){
+		var that = this;
+		this.MongoClient.connect(this.url, function(err, db) {
+		  if (err) throw err;
+		  var dbo = db.db(that.dbname);
+		  var val = dbo.collection(input_collection).count({},function(err,result){
+		  	console.log(result)
+		  	return callback(result);
+		  })
+
+		});
+	}
+
 	 MongoSearch(input_collection,callback,query) {
 		var that = this;
 

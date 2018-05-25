@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv, $window, scrollSrv, $state, userSrv, $anchorScroll, $location){
+    controller: function($scope, $http, scrollSrv, $state, userSrv, $anchorScroll, $location, $rootScope){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
@@ -7,8 +7,37 @@ app.component('news',{
 
   
        $http.get('news').then(function(res){
-            $scope.articles = res.data.articles;
-            $scope.isbusy = false;
+            if (res.data.status === 'ok') {
+                 angular.forEach(res.data.articles, function(key){
+                    var dateFuture = new Date();
+                    var dateNow = new Date(key.publishedAt);                   
+                    dateNow = dateNow - 3600000;
+
+                    var seconds = Math.floor((dateFuture - (dateNow))/1000);
+                    var minutes = Math.floor(seconds/60);
+                    var hours = Math.floor(minutes/60);
+                    var days = Math.floor(hours/24);
+
+                    hours = hours-(days*24);
+                    minutes = minutes-(days*24*60)-(hours*60);
+                    seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+
+
+                    minutes = minutes > 0 ? minutes+' min ' : '';
+                    hours = hours > 0 ? hours+' h ' : '';
+                    days = days > 0 ? days+' d ' : '';
+
+
+                    key.publishedAt = (days+hours+minutes);
+                });
+
+                 $scope.articles = res.data.articles;
+                 $scope.isbusy = false;
+            }
+            else{
+                var err = new Error('bad response from newsAPI: '+res.data.message)
+                throw err;
+            }
        });
 
        userSrv.authenticated({articles: true}).then(function(res){
@@ -23,15 +52,43 @@ app.component('news',{
         $scope.page += 1;
 
         $http.get('news?page='+$scope.page).then(function(res){
+            if (res.data.articles !== undefined && res.data.articles !== null) {
+                angular.forEach(res.data.articles, function(key){
+                    var dateFuture = new Date();
+                    var dateNow = new Date(key.publishedAt);
+                    dateNow = dateNow - 3600000;
 
-        [].push.apply($scope.articles, res.data.articles);
-        $scope.isbusy = false;
+                    var seconds = Math.floor((dateFuture - (dateNow))/1000);
+                    var minutes = Math.floor(seconds/60);
+                    var hours = Math.floor(minutes/60);
+                    var days = Math.floor(hours/24);
+
+                    hours = hours-(days*24);
+                    minutes = minutes-(days*24*60)-(hours*60);
+                    seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+
+                    
+                    minutes = minutes > 0 ? minutes+' min ' : '';
+                    hours = hours > 0 ? hours+' h ' : '';
+                    days = days > 0 ? days+' d ' : '';
+
+
+                    key.publishedAt = (days+hours+minutes);
+                });
+                [].push.apply($scope.articles, res.data.articles);
+                $scope.isbusy = false;
+            }
+            else{
+                var err = new Error('bad response from newsAPI: '+res.data.message);
+                throw err;
+            }
     });   
     }
 
     $scope.scrollTop = function(){
         $location.hash('pageTop');
-        $anchorScroll() && $location.hash('');
+        $anchorScroll();
+        $location.url($location.path());
     }
 
     $scope.readArticle = function(selected_article){
@@ -60,8 +117,7 @@ app.component('news',{
         }
         
 
-        $http({
-                method: 'POST',
+        $http({method: 'POST',
                 url: reqUrl,
                 data: selected_article
             }).then(function(res){
