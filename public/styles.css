@@ -13,11 +13,10 @@
 }
 
 .hiddenDrek{
-    transition-duration: 500ms;
+  transition-duration: 500ms;
   -webkit-transition-duration: 500ms;
   opacity: 1
 }
-
 
 .hiddenDrek.ng-hide{
   display: block !important;
@@ -57,8 +56,8 @@ md-tabs.md-no-animation md-ink-bar {
 }
 
 .ticker{
-	display: flex;
-	flex-direction: column;
+	margin-left: auto;
+  align-self: center;
 }
 
 .autocomplete-custom-template li {
@@ -79,6 +78,10 @@ md-tabs.md-no-animation md-ink-bar {
 .autocomplete-custom-template .item-title md-icon {
   height: 18px;
   width: 18px;
+}
+
+md-autocomplete-wrap,md-autocomplete{
+  border-radius: 6px !important;
 }
 
 #chartdiv {
@@ -112,16 +115,14 @@ md-tabs.md-no-animation md-ink-bar {
 }
 
 .inputdemoErrors .inputErrorsApp {
-  min-height: 48px; }
+  min-height: 48px; 
+}
 
 .inputdemoErrors md-input-container > p {
   font-size: 0.8em;
   text-align: left;
   width: 100%; 
 }
-
-/* fixes bug in md-autocomplete(selecting item) */
-/*.md-scroll-mask { position: initial !important;} */
 
 img-crop {
   width: 100%;
@@ -187,15 +188,16 @@ md-input-container{
 
 md-nav-ink-bar{
   background: white !important;
-  height: 3px !important;
+  height: 4px !important;
 }
 
 .md-nav-bar{
   border-width: 0px !important;
+  height: auto;
 }
 
 
-/* For Tablets */
+/* For Tablets and Landscape mode */
 @media screen and (min-width: 600px) and (max-width: 860px) {
     #chartdiv {
       width: 320px;
@@ -203,7 +205,7 @@ md-nav-ink-bar{
     }
 }
 
-/* For Tablets */
+/* For Phones */
 @media screen and (max-width: 599px) {
   .articleCard.ng-enter{
     transition-duration: 500ms;
@@ -220,9 +222,20 @@ md-nav-ink-bar{
   }
 }
 
+.navbutton .md-button:not([disabled]):hover {
+    background-color: transparent !important;
+}
+
+.navbutton .md-button:not([disabled]) {
+    
+}
+
+.coinInput{
+  border-radius: 6px;
+}
 
 .liked{
-  fill: #E91E63
+  fill: #E91E63;
 }
 
 .md-button.md-icon-button:first-of-type{
@@ -236,10 +249,10 @@ md-nav-ink-bar{
 @keyframes show-on-load{
   0% {
     transform: scale(0);
-  
+    -webkit-transform: scale(0);
   }
   100% {
     transform: scale(1);
-    
+    -webkit-transform: scale(1);
   }
 }

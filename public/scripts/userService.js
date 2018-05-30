@@ -9,10 +9,12 @@ app.factory('userSrv',function($http, $q, $state){
 	}
 
 	var signIn = function(loginData){
-		sendPost(loginData).then(function(res){
-			console.log(res.data);
+		return sendPost(loginData).then(function(res){
 			if (res.data.status == 200) {
-				$state.go('coinlist');
+				return $state.go('coinlist');
+			}
+			else if(res.data.status == 401){
+				return 401;
 			}
 		})
 	}

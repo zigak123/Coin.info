@@ -1,5 +1,7 @@
+
+
 <div class="drek" layout="column" ng-hide="isLoading" layout-padding ng-cloak="">
-	<div md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-700-0.8'}" style="border-radius: 6px; display: flex;flex-direction: row;margin: auto" md-whiteframe="1">
+	<div md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-700-0.8'}" style="border-radius: 6px; display: flex;flex-direction: row;margin: auto" md-whiteframe="3">
 		<div style="display: flex;flex-direction: column;padding-bottom: 0px" layout-padding>
 	 			<div style="display: flex;flex-direction: row; align-items: center">
 	 				<img style="width: 52px; height: 52px;" ng-src="https://www.cryptocompare.com/{{coin_data.ImageUrl}}">
@@ -7,12 +9,14 @@
 	 			</div>
 
 	 			<div layout="column" style="height: 100%; padding-bottom: 0px">			
-		 			<span class="md-body-1">Algorithm:  {{coin_data.Algorithm}}</span>
-		            <span class="md-body-1">Proof type: {{coin_data.ProofType}}</span>
-		            <span class="md-body-1">Total supply: {{coin_data.TotalCoinSupply}}</span>
-		            <span class="md-body-1">24H volume: {{volume}}</span>
-		            <span class="md-body-1">24H high: {{high24hour}}</span>
-		            <span class="md-body-1">24H low: {{low24hour}}</span>
+		 			<span class="md-caption">Algorithm:  {{coin_data.Algorithm}}</span>
+		            <span class="md-caption">Proof type: {{coin_data.ProofType}}</span>
+		            <span class="md-caption">Total supply: {{coin_data.TotalCoinSupply}}</span>
+		            <span class="md-caption">Circulating supply: {{coin_supply}}</span>
+		             <span class="md-caption">Block number: {{coin_block_number}}</span>
+		            <span class="md-caption">24H volume: {{volume}}</span>
+		            <span class="md-caption">24H high: {{high24hour}}</span>
+		            <span class="md-caption">24H low: {{low24hour}}</span>
 
 		            <div>
 		            	<a style="text-decoration: none;" ng-href="https://www.cryptocompare.com{{coin_data.Url}}">
@@ -52,13 +56,13 @@
 		</div>
 		
 	</div>
-	<md-button id="backButton" ui-sref="coinlist" class="md-fab md-primary md-fab-bottom-left" aria-label="Go back" style="position: static;">
+	<md-button id="backButton" ui-sref="coinlist" class="md-fab md-accent md-fab-bottom-left" aria-label="Go back" style="position: static;">
 		<md-icon md-svg-src="public/images/back_arrow.svg"></md-icon>
 	</md-button>
     
 </div>
 
-<div layout="row" ng-show="isLoading" layout-padding layout-align="center center" style="padding: 15px">
+<div layout="row" ng-show="isLoading" layout-padding layout-align="center center" style="height: 100px">
 	 <md-progress-circular style="margin: auto;" md-mode="indeterminate"></md-progress-circular>
 </div>
      

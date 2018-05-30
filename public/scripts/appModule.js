@@ -1,26 +1,23 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 6000);
+app.value('THROTTLE_MILLISECONDS', 4000);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
 
   $mdProgressCircularProvider.configure({
     progressSize: 50,
-    duration: 2000
+    duration: 500
   });
-
-  // disable ripple UI effect globally
-  //$mdInkRippleProvider.disableInkRipple();
 
   // registering default theme
   $mdThemingProvider
     .theme('default')
-    .primaryPalette('green')
-    .accentPalette('purple')
+    .primaryPalette('blue')
+    .accentPalette('pink')
 
     $mdThemingProvider
-    .theme('dark-default')
-    .primaryPalette('green')
+    .theme('darkDefault')
+    .primaryPalette('blue')
     .accentPalette('purple').dark()
 
   $mdThemingProvider.alwaysWatchTheme(true);
@@ -205,13 +202,16 @@ app.directive('imageCheck', function($rootScope){
 
 app.directive('titleClamp', function(){
   function link(scope, el, attr){
-
-                //console.log(el);
-            
-                $clamp(el[0], {clamp: 4, useNativeClamp: true});
+      $clamp(el[0], {clamp: 4, useNativeClamp: true});
   }
 
   return {
     link: link
+  }
+})
+
+app.directive('userMenu', function(){
+  return {
+    templateUrl: 'public/templates/userMenu.template.html'
   }
 })

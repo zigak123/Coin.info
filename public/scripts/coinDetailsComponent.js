@@ -40,11 +40,11 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 				"autoMarginOffset": 0,
 				"marginBottom": 0,
 				"marginLeft": 8,
-				"marginRight": 0,
+				"marginRight": 16,
 				"marginTop": 8,
-				"plotAreaBorderAlpha": 0.5,
+				"plotAreaBorderAlpha": 0.1,
 				"zoomOutButtonTabIndex": 0,
-				"startDuration": 0,
+				"startDuration": 0.25,
 				"fontFamily": "Roboto",
 				"categoryAxis": {
 					"parseDates": true
@@ -53,7 +53,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 					"enabled": true
 				},
 				"chartScrollbar": {
-					"enabled": false,
+					"enabled": true,
 					"graph": "g1",
 					"graphType": "line",
 					"scrollbarHeight": 30
@@ -63,7 +63,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 					{
 						"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
 						"closeField": "close",
-						"fillAlphas": 0.9,
+						"fillAlphas": 0.85,
 						"fillColors": "limegreen",
 						"highField": "high",
 						"id": "g1",
@@ -114,6 +114,19 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 			})
     	}
 
+
+    	var getCoinSnapshot = function(){
+    		$http({
+			    method : "GET",
+			    url : "https://min-api.cryptocompare.com/data/top/exchanges/full?fsym="+$scope.coin_data.Symbol+"&tsym=USD"
+			}).then(function(response){
+				$scope.coin_supply = numeral(response.data.Data.CoinInfo.TotalCoinsMined).format('0,0.00');
+				$scope.coin_block_number = numeral(response.data.Data.CoinInfo.BlockNumber).format('0,0.00');
+			})
+    	};
+
+    	
+
     $scope.changeZoom = function(newZoom){
     	if ($scope.selectedZ != newZoom) {
     		$scope.selectedZ = newZoom;
@@ -137,6 +150,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     method : "GET",
     url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
 	}).then(function(response) {
+
      chartData = response.data.Data;
      for (var i = 0; i < chartData.length; i++) {
      	chartData[i].time = timeConverter(chartData[i].time);
@@ -150,11 +164,12 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	chart.zoomToIndexes( chart.dataProvider.length - 30, chart.dataProvider.length - 1 );
     tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
 	$scope.isLoading = false;
-	 
 
     }, function (err) {
       console.log(err);
   });
+
+	getCoinSnapshot();
   
 }
 });

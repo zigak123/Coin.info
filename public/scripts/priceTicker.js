@@ -5,11 +5,14 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	var userStatus;
 	$rootScope.currentTheme = 'default';
 	var previous = $scope.selectedItem;
+	themes = [{icon: "/public/images/moon.svg", label:"Dark Theme"},{icon: "/public/images/ic_wb_sunny_black_24px.svg", label:"Light Theme"}]
 	
 	$transitions.onSuccess({}, function(transition) {
-		userStatus = userSrv.authenticated({username: true, avatarImage: true}).then(function(res){
+		userStatus = userSrv.authenticated({username: true, avatarImage: true, theme: true}).then(function(res){
 				$scope.tabName = res[0].username;
 				$scope.imgSrc = String.fromCharCode.apply(null, res[0].avatarImage.data);
+				$rootScope.currentTheme = res[0].theme;
+				$scope.themeStuff = $rootScope.currentTheme === 'default' ? themes[0] : themes[1];
 			
 		}, function(err){
 			$scope.tabName = "SIGN IN";
@@ -21,10 +24,7 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	});
 
 	$transitions.onBefore({}, function(transition) {
-		
-		
 		$scope.selectedItem = transition.to().name;
-	
 	});
 
 
@@ -38,7 +38,13 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	}
 
 	$scope.changeTheme = function(){
-		$rootScope.currentTheme = $rootScope.currentTheme == 'default' ? 'dark-default':'default';
+		$rootScope.currentTheme = $rootScope.currentTheme === 'default' ? 'darkDefault':'default';
+		$scope.themeStuff = $rootScope.currentTheme === 'default' ? themes[0] : themes[1];
+		$http({
+		    method: 'POST',
+		    url: '/theme',
+		    data: {theme: $rootScope.currentTheme}
+		});
 	}
 
 	$scope.signOut = function(){

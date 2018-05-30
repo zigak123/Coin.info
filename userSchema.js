@@ -22,7 +22,15 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  articles: { type : Array , "default" : [] }
+  articles: { 
+    type : Array ,
+     "default" : [] 
+  },
+  theme: {
+    type: String,
+    required: true,
+    default: "default"
+  }
   
 });
 

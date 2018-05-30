@@ -86,9 +86,9 @@ app.component('news',{
     }
 
     $scope.scrollTop = function(){
-        $location.hash('pageTop');
-        $anchorScroll();
-        $location.url($location.path());
+        $('html, body').animate({
+        scrollTop: $("#pageTop").offset().top
+    }, 2000);
     }
 
     $scope.readArticle = function(selected_article){
@@ -129,7 +129,6 @@ app.component('news',{
     $scope.$on('$destroy', function() {
         scrollSrv.off();
     })
-    
 },
 templateUrl: '/public/templates/coinNews.html'
 

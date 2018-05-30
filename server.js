@@ -29,10 +29,12 @@ coinApiHelper.getNews(function(res){latest_news = res;},1);
 /*
 coinApiHelper.LoadCoinList(function(res){
 	coinlist = res;
-	mongoh.MongoInsert(coinlist,'coins')
+	mongoh.MongoInsert(coinlist,'coins',function(insertResult){
+		console.log(insertResult);
+	})
+
 })
 */
-
 mongoh.MongoFind('coins',function(result){coinlist = result;
 	console.log(coinlist.length)
 })
@@ -174,7 +176,7 @@ app.post('/save', function(req, res){
 	if (req.session.userId == undefined) {return;}
 	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, new : true},function(err){
 	})
-	res.send('saved')
+	res.send('saved');
 })
 
 app.post('/delete', function(req, res){
@@ -184,6 +186,15 @@ app.post('/delete', function(req, res){
 	})
 	res.send('deleted');
 })
+
+app.post('/theme', function(req, res){
+	if (req.session.userId == undefined) {return;}
+	User.update({_id: req.session.userId}, {theme: req.body.theme},function(err){
+		//console.log(err)
+	})
+	res.send('theme updated');
+})
+
 
 //------------------------------------------------------------------------------
 var io = require('socket.io')(http);

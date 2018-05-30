@@ -1,10 +1,25 @@
 app.component("coinlist", {
 
 controller:
-    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q) {
+    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval) {
         var skip = 0;
         $scope.showFAB = false;
         $scope.coins = [];
+
+        var getMarketData = function(){ $http({
+                method : "GET",
+                url : "https://api.coinmarketcap.com/v2/global/"
+                }).then(function(response) {
+                 $scope.marketData = response.data.data;
+                 $scope.marketData.quotes.USD.total_market_cap = numeral(response.data.data.quotes.USD.total_market_cap).format('0,0');
+                 $scope.marketData.quotes.USD.total_volume_24h = numeral(response.data.data.quotes.USD.total_volume_24h).format('0,0');
+
+            },function(err){
+                console.log(err);
+            })
+    }
+    getMarketData();
+    $interval(getMarketData, 60000);
 
         $scope.searchText = function(query){
            return $http.get("search?text="+query)
@@ -30,7 +45,7 @@ controller:
 
         $scope.loadMore = function(){
             if ($scope.isbusy) {return;}
-            else if (skip>0) {$scope.isbusy = true; return;}
+            //else if (skip>0) {$scope.isbusy = true; return;}
             $scope.isbusy = true;
             $http.get("coinlist?skip="+skip)
                 .then(function(response) {
@@ -47,12 +62,8 @@ controller:
                        $timeout(function(){
                             [].push.apply($scope.coins,response.data);
                             $scope.isbusy = false; 
-                        },450);
-                    });
-                    
-                    
-                    
-                   
+                        },250);
+                    });  
                 }); 
              skip += 10;
         }

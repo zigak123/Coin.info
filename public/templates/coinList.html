@@ -1,9 +1,35 @@
 <div layout="column" layout-align="center center" layout-margin ng-cloak>
-        <div layout="column" ng-if="isbusy" layout-sm="row" layout-align="center center" style="height: 100px">
+        <div layout="column" ng-if="isbusy" layout-sm="row" layout-align="center center" style="height: 100px;margin: auto;">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-        <md-autocomplete ng-cloak="" class="drek" ng-show="!isbusy"
+            <div hide-xs class="md-caption drek" layout="row" ng-show="!isbusy" style="width: 100%; margin-bottom: 0px; margin-top: 0px; padding-top: 0px">
+            <div layout="row" flex layout-align="center center">
+                <span style="margin-right: .5em;" md-colors="{color: 'default-primary'}">Total marketcap: </span>
+                <span ng-cloak> {{marketData.quotes.USD.total_market_cap}} USD</span>
+            </div>
+
+            <div layout="row" flex layout-align="center center">
+                <span style="margin-right: .5em" md-colors="{color: 'default-primary'}">Total volume: </span>
+                <span ng-cloak> {{marketData.quotes.USD.total_volume_24h}} USD</span>
+            </div>
+            <div layout="row" flex layout-align="center center">
+                <span style="margin-right: .5em" md-colors="{color: 'default-primary'}">Bitcoin dominance: </span>
+                <span ng-cloak> {{marketData.bitcoin_percentage_of_market_cap}} %</span>
+            </div>
+            <div layout="row" flex layout-align="center center">
+                <span style="margin-right: .5em" md-colors="{color: 'default-primary'}">Active cryptocurrencies: </span>
+                <span ng-cloak> {{marketData.active_cryptocurrencies}}</span>
+            </div>
+          </div>
+          <div hide-xs class="drek" ng-show="!isbusy" layout="column" style="width: 100%;padding: 0px;margin-bottom: 16px">
+            
+              <md-divider>
+          </md-divider>
+          </div>
+    
+        <div layout="row" layout-align="center center">
+          <md-autocomplete class="drek coinInput" ng-show="!isbusy"
               md-selected-item-change="showDetails(selectedCoin)"
               ng-disabled="false"
               md-search-text="searchCoin"
@@ -11,7 +37,7 @@
               md-items="coin in searchText(searchCoin)"
               md-item-text="coin.FullName"
               md-min-length="1"
-              placeholder="Search for coin" style="width: 320px">
+              placeholder="Search for coin" style="width: 320px;margin-bottom: 16px">
             <md-item-template>
               <span md-highlight-text="searchCoin" md-highlight-flags="^i">{{coin.FullName}}</span>
             </md-item-template>
@@ -19,20 +45,18 @@
               <a ng-click="">No coin found!</a>
             </md-not-found>
         </md-autocomplete>
-    
-        <div ng-init="loadMore()" layout="row" style="width: 100%;overflow: initial" layout-align="center center">
-          
-      
+        
+        </div>
+        
+        <div ng-init="loadMore()" layout="row" style="width: 100%;overflow: initial;" layout-align="center center">
           <md-list class="drek" ng-show="!isbusy" md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-800-1'}" md-no-ink md-whiteframe flex-gt-sm="40" flex-sm="75" flex-xs="100" style="border-radius: 5px">
-              <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.Symbol})">
-                  <img ng-src="https://www.cryptocompare.com/{{item.ImageUrl}}" width="32px" style="margin-right: .5em;">
-                  <span>{{item.FullName}}<md-tooltip md-direction="top">compared to today's open price</md-tooltip></span>
-                  <sl md-colors="{stroke: 'default-primary-600'}" style="width:4em;margin-left: auto"></sl>
-                  <price-change-label hide-xs info="item.lineData" style="margin-left: .5em;width: 5em"/>
+              <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.Symbol})" style="border-radius: 6px">
+                  <img ng-src="https://www.cryptocompare.com/{{::item.ImageUrl}}" width="32px" style="margin-right: .5em;">
+                  <span>{{::item.FullName}}<md-tooltip md-direction="top">compared to today's open price</md-tooltip></span>
+                  <sl md-colors="{stroke: 'default-primary-600'}" style="width:4em;margin-left: auto;"></sl>
+                  <price-change-label hide-xs info="::item.lineData" style="margin-left: .5em;width: 5em"/>
                   <md-divider></md-divider>
               </md-list-item>      
           </md-list>
         </div>
 </div>
-
-

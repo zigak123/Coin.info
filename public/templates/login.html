@@ -1,26 +1,32 @@
-<md-content layout="column" layout-padding layout-align="center center">
+<div layout="column" layout-padding layout-align="center center">
 	<h1 class="md-display-1" md-colors="{color: 'default-primary'}">Sign in</h1>
-	<form name="signUpForm" ng-submit="signUpForm.$valid && signIn()" novalidate flex="1">
+	<form name="signInForm" ng-submit="signInForm.$valid && signIn()" novalidate flex="1">
 		<md-input-container class="md-block" flex-gt-sm>
 		    <label>Email</label>
-		    <input required type="email" name="clientEmail" ng-model="clientEmail"
+		    <input required id="clientEmail" type="email" name="clientEmail" ng-model="clientEmail"
 		               minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
-		    <div ng-messages="signUpForm.clientEmail.$error" role="alert">
+		    <div ng-messages="signInForm.clientEmail.$error" role="alert">
 		      <div ng-message-exp="['required', 'minlength', 'maxlength', 'ng-pattern']">
 		        This field is required
+		      </div>
+		      <div ng-message-exp="'correctPassword'">
+		        Wrong email or password
 		      </div>
 		    </div>
 		</md-input-container>
 
 		<md-input-container class="md-block" flex-gt-sm>
 		    <label>Password</label>
-		    <input name="password" ng-model="password" type="password" required minlength="8">
-		    <div ng-messages="signUpForm.password.$error" role="alert">
+		    <input id="password" name="password" ng-model="password" type="password" required minlength="8">
+		    <div ng-messages="signInForm.password.$error" role="alert">
 		      <div ng-message-exp="'required'">
 		        This field is required
 		      </div>
 		      <div ng-message-exp="'minlength'">
 		        This field is required
+		      </div>
+		      <div ng-message-exp="'correctPassword'">
+		        Wrong email or password
 		      </div>
 		    </div>
 		</md-input-container>
@@ -32,4 +38,4 @@
 	</form>
 	<div class="md-body-1">Forgot password? <a class="md-primary" ui-sref='coinlist'>Click here</a></div>
 	<div class="md-body-1">Sign up <a class="md-primary" ui-sref='profile'>here</a></div>
-</md-content>
+</div>
