@@ -1,27 +1,26 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 2000);
+app.value('THROTTLE_MILLISECONDS', 4000);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
 
   $mdProgressCircularProvider.configure({
     progressSize: 50,
-    duration: 400
+    duration: 500
   });
-
-  // disable ripple UI effect globally
-  //$mdInkRippleProvider.disableInkRipple();
 
   // registering default theme
   $mdThemingProvider
     .theme('default')
-    .primaryPalette('green')
-    .accentPalette('purple')
+    .primaryPalette('blue')
+    .accentPalette('pink')
 
     $mdThemingProvider
-    .theme('dark-default')
-    .primaryPalette('green')
+    .theme('darkDefault')
+    .primaryPalette('blue')
     .accentPalette('purple').dark()
+
+  $mdThemingProvider.alwaysWatchTheme(true);
 
   // initialize ui-router states
   var profileState = {
@@ -104,36 +103,51 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
 
 });
 
-app.directive('userMenu',function(){
+app.directive('priceChangeLabel',function(){
+  function link(scope, el, attr){
+    n = scope.priceInfo.length;
+    scope.temp = (scope.priceInfo[n-1] / scope.priceInfo[n-31]) > 1 ? (scope.priceInfo[n-1] / scope.priceInfo[n-31]) - 1 : -1*(1 - (scope.priceInfo[n-1] / scope.priceInfo[n-31]));
+    scope.temp = numeral(scope.temp*100).format('0,0.00');
+
+    if (scope.temp < 0) {
+      scope.price_arrow = "public/images/arrow_drop.svg";
+      scope.style = {"color": "red"};
+    }
+
+    else{
+      scope.price_arrow = "public/images/arrow_up.svg";
+      scope.style = {"color": "limegreen"};
+    }
+  }
+
   return {
-    template: '\
-    <md-menu>\
-          <span aria-label="Open demo menu" ng-click="$mdMenu.open($event)">\
-            drek\
-          </span>\
-          <md-menu-content width="3">\
-            <md-menu-item ng-repeat="item in [1, 2, 3]">\
-              <md-button> <span md-menu-align-target>Option</span> {{item}} </md-button>\
-            </md-menu-item>\
-          </md-menu-content>\
-        </md-menu>'
+    restrict: 'E',
+    scope: {
+        priceInfo: '=info'
+    },
+    template: '<div layout="row" align="end">\
+                    <md-icon style="height: 24px; margin-left: 0px; margin-right: 0px" md-svg-src={{price_arrow}}></md-icon>\
+                      <span style="font-weight: 400" class="md-caption" ng-style="style"> {{temp}} % </span>\
+              </div>'
+  ,
+  link: link
   }
 })
 
-
-app.directive('sl', function(){
+app.directive('sl', function($timeout,$window){
   function link(scope, el, attr){
     el = d3.select(el[0]);
     var svg = el;
-
-    scope.getSparklineData(scope.item).then(function(data){
+    var data = scope.item['lineData'];
     var min = attr.min !== undefined ? +attr.min : d3.min(data);
     var max = attr.max !== undefined ? +attr.max : d3.max(data);
     el.text(''); // remove the original data text
     var r = attr.r || 0;
     var m = r;
     var w = svg.node().clientWidth;
+    w = 64; // fixed width becasue of firefox width issues
     var h = +getComputedStyle(el.node())['font-size'].replace('px','');
+    //console.log(w+' '+h);
     svg.attr({width: w, height: h});
     var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
     var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
@@ -143,15 +157,61 @@ app.directive('sl', function(){
       .attr('r', r)
       .attr('cx', function(d, i){ return x(i) })
       .attr('cy', function(d){ return y(d) });
-
-
-    })
   }
   return {
-      link: link
+    link: link
     , restrict: 'E'
     , replace: true
     , template: '<svg ng-transclude class="sl"></svg>'
     , transclude: true
   };
 });
+
+app.directive('imageCheck', function($rootScope){
+
+  function link(scope, el, attr){
+
+    if (scope.article.urlToImage == null) {
+      scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
+    }
+    
+    el.bind('error', function(){
+      scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
+    })
+
+    el.bind('load', function(){
+      el.removeClass('imageLoad');
+    })
+
+    el.addClass('imageLoad');
+
+    $rootScope.$watch('currentTheme',function(){
+      if (scope.article.urlToImage.split("/")[0] == 'public') {
+              scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
+
+      }
+    })
+
+  }
+
+  return{
+    scope: false,
+    link: link,
+  }
+});
+
+app.directive('titleClamp', function(){
+  function link(scope, el, attr){
+      $clamp(el[0], {clamp: 4, useNativeClamp: true});
+  }
+
+  return {
+    link: link
+  }
+})
+
+app.directive('userMenu', function(){
+  return {
+    templateUrl: 'public/templates/userMenu.template.html'
+  }
+})

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <head>
     <title>CoinChange</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
     <link rel="icon" href="public/images/ic_equalizer_black_48dp_1x.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
@@ -35,6 +37,8 @@
     <script src="public/scripts/ng-file-upload.js"></script>
     <script src="public/scripts/scrollDirective.js"></script>
     <script src="public/scripts/userDetails.js"></script>
+    <!-- clam.js-->
+    <script src="public/scripts/clamp.js"></script>
 
     <!-- amCharts lib imports -->
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
@@ -55,70 +59,48 @@
   var socket = io();
 </script>
 
-<body ng-app="coinTicker" ng-controller="priceTickerCtrl" ng-class="currentTheme == 'default'? 'md-default-theme' : 'md-dark-default-theme'">
-<md-content ng-cloak md-theme="{{ currentTheme }}" md-theme-watch>
-      <div class="header"> 
-          <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 54px; cursor: pointer;"> 
+<body ng-app="coinTicker" ng-controller="priceTickerCtrl" md-theme="{{ currentTheme }}" md-theme-watch ng-cloak>
+      <div id="pageTop" class="header" md-colors="{background: '{{currentTheme}}-background'}"> 
+          <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 52px; cursor: pointer;"> 
           <span ui-sref="coinlist" class="md-display-3" style="cursor: pointer;">Coin.info</span>   
-          <div hide-xs show-gt-xs class="ticker" style="margin-left: auto; align-self: center;justify-content: flex-start">
-              <div style="display: flex; flex-direction: row;">
-                <span style="align-self: flex-end;" class="md-body-1">BTC-USD</span>
+          <div hide-xs show-gt-xs class="ticker" layout="row">
+              <div style="display: flex; flex-direction: row">
+                <span style="align-self: flex-end;font-weight: 500" md-colors="{color: 'default-primary-500'}" class="md-body-1">BTC</span>
                 <md-icon style="margin: 0px" md-svg-src="{{btcArrow}}"></md-icon>
                 <span class="md-title">{{btcPrice}}</span>
               </div>
+              <md-divider style="margin-left: 1em;margin-right: 1em"></md-divider>
               <div style="display: flex; flex-direction: row; justify-content: flex-start;">
-                  <span style="align-self: flex-end;" class="md-body-1">ETH-USD</span>
+                  <span style="align-self: flex-end;font-weight: 500" class="md-body-1" md-colors="{color: 'default-primary-500'}">ETH</span>
                   <md-icon style="margin: 0px;margin-right: auto;" md-svg-src="{{ethArrow}}"></md-icon>
                   <span class="md-title">{{ethPrice}}</span>
               </div>
           </div>
       </div>
       
-      <md-nav-bar md-no-ink md-selected-nav-item="selectedItem" class="md-primary" nav-bar-aria-label="navigation links" md-no-ink-bar="false">
-        <md-nav-item md-nav-sref="coinlist" name="coinlist">
+      <md-nav-bar md-selected-nav-item="selectedItem" class="md-primary" nav-bar-aria-label="navigation links" md-no-ink-bar="false" md-no-ink>
+        <md-nav-item class="navbutton" md-nav-sref="coinlist" name="coinlist">
           Coin info
         </md-nav-item>
-        <md-nav-item md-nav-sref="news" name="news">
+        <md-nav-item class="navbutton" md-nav-sref="news" name="news">
           News
         </md-nav-item>
-        <md-divider>
-        </md-divider>
-        <md-nav-item hide-xs md-nav-sref="about" name="about">
+        <md-nav-item class="navbutton" hide-xs md-nav-sref="about" name="about">
           About
         </md-nav-item>
 
-        <md-menu md-position-mode="target bottom" style="margin-left: auto">
-       <md-nav-item md-nav-ink-bar="false" aria-label="Open demo menu" md-nav-click="profileClick($mdMenu)" name="login" aria-label="user">
-            <div layout="row" layout-align="center center">
-              <span style="text-transform: none; margin-right: 6px">{{tabName}}</span>
-              <img ng-src="{{imgSrc}}" style="margin: 0px;height: 24px;border-radius: 50%">
-            </div>
-       </md-nav-item>
-        <md-menu-content width="3">
-            <md-menu-item>
-              <md-button ui-sref="signedin({userId: tabName})" aria-label="profile button">
-                    <md-icon md-svg-src="public/images/ic_person_black_48px.svg"></md-icon>
-                    Profile
-               </md-button>   
-            </md-menu-item>
-             <md-menu-item>
-              <md-button aria-label="theme button" ng-click="changeTheme()">
-                    <md-icon md-svg-src="public/images/moon.svg"></md-icon>
-                    Dark theme
-               </md-button>   
-            </md-menu-item>
-            <md-menu-item>
-              <md-button aria-label="theme button" ng-click="signOut()">
-                    <md-icon md-svg-src="public/images/ic_exit_to_app_black_48px.svg"></md-icon>
-                    Sign out
-               </md-button>   
-            </md-menu-item>
-          </md-menu-content>
-       </md-menu>
-
+        <user-menu style="margin-left: auto;"/>
 
      </md-nav-bar>
-  <ui-view/>
-</md-content>
+
+  <md-content layout="column" style="min-height: calc(100% - 104px);z-index: 3">
+    <ui-view/> 
+  </md-content>
+
+  <md-toolbar ng-cloak layout-align="center center" class="md-caption" style="margin-top: auto;">
+    <span> CoinInfo © 2018 Made by Žiga Kus. </span>
+    <span> API data from <a style="text-decoration: none;" class="md-subtitle" ng-href="http://www.cryptocompare.com"> cryptocompare.com</a> </span>
+  </md-toolbar>
+
 </body>
 </html>

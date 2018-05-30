@@ -1,11 +1,10 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions) {
+controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope,$interval) {
 	$scope.candleSizes = [{label: '15min', timeUnit: 'minute', timeSize: 15},{label: '1h', timeUnit: 'hour', timeSize: 1},
 	{label: '2h', timeUnit: 'hour', timeSize: 2},{label: '6h', timeUnit: 'hour', timeSize: 6},{label: '1d', timeUnit: 'day', timeSize: 1}]
 	$scope.zoomSizes = [{label: '1d', timeUnit: 'day', timeSize: 1},{label: '2d', timeUnit: 'day', timeSize: 2},
 	{label: '1w', timeUnit: 'day', timeSize: 7},{label: '1M', timeUnit: 'day', timeSize: 30},{label: 'All', timeUnit: 'day', timeSize: 2000}]
-
 	conversions = {'minute': 1,'hour': 60,'day':1440};
 
 	$scope.selectedZ = $scope.zoomSizes[0];
@@ -31,21 +30,21 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         var num_format = $scope.price >= 0.1 ? '0,0.00':'0,0.000';
         $scope.price = numeral($scope.price).format(num_format);
     }
-
+    	var chartTheme = $rootScope.currentTheme === 'default' ? 'default':'dark';
 		var chartConfig = {
 				"type": "serial",
-				"theme": "default",
+				"theme": chartTheme,
 				"categoryField": "time",
 				"dataDateFormat": "YYYY-MM-DD",
 				"mouseWheelZoomEnabled": true,
 				"autoMarginOffset": 0,
 				"marginBottom": 0,
 				"marginLeft": 8,
-				"marginRight": 0,
+				"marginRight": 16,
 				"marginTop": 8,
-				"plotAreaBorderAlpha": 0,
+				"plotAreaBorderAlpha": 0.1,
 				"zoomOutButtonTabIndex": 0,
-				"startDuration": 0.35,
+				"startDuration": 0.25,
 				"fontFamily": "Roboto",
 				"categoryAxis": {
 					"parseDates": true
@@ -54,7 +53,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 					"enabled": true
 				},
 				"chartScrollbar": {
-					"enabled": false,
+					"enabled": true,
 					"graph": "g1",
 					"graphType": "line",
 					"scrollbarHeight": 30
@@ -64,11 +63,11 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 					{
 						"balloonText": "Open:<b>[[open]]</b><br>Low:<b>[[low]]</b><br>High:<b>[[high]]</b><br>Close:<b>[[close]]</b><br>",
 						"closeField": "close",
-						"fillAlphas": 0.9,
-						"fillColors": "green",
+						"fillAlphas": 0.85,
+						"fillColors": "limegreen",
 						"highField": "high",
 						"id": "g1",
-						"lineColor": "green",
+						"lineColor": "limegreen",
 						"lowField": "low",
 						"negativeFillColors": "red",
 						"negativeLineColor": "red",
@@ -112,11 +111,21 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 				chart.dataDateFormat = $scope.selectedC.timeUnit == 'day' ? chart.dataDateFormat = "YYYY-MM-DD" : "YYYY-MM-DD JJ:NN";
 			    chart.dataProvider = chartData;
 			    chart.validateData();
-			    if (chartData.length < 128) {
-			    	chart.animateAgain();
-			    }
 			})
     	}
+
+
+    	var getCoinSnapshot = function(){
+    		$http({
+			    method : "GET",
+			    url : "https://min-api.cryptocompare.com/data/top/exchanges/full?fsym="+$scope.coin_data.Symbol+"&tsym=USD"
+			}).then(function(response){
+				$scope.coin_supply = numeral(response.data.Data.CoinInfo.TotalCoinsMined).format('0,0.00');
+				$scope.coin_block_number = numeral(response.data.Data.CoinInfo.BlockNumber).format('0,0.00');
+			})
+    	};
+
+    	
 
     $scope.changeZoom = function(newZoom){
     	if ($scope.selectedZ != newZoom) {
@@ -141,6 +150,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     method : "GET",
     url : "https://min-api.cryptocompare.com/data/histoday?fsym="+$scope.coin_data.Symbol+"&tsym=USD&limit=365"
 	}).then(function(response) {
+
      chartData = response.data.Data;
      for (var i = 0; i < chartData.length; i++) {
      	chartData[i].time = timeConverter(chartData[i].time);
@@ -158,6 +168,8 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     }, function (err) {
       console.log(err);
   });
+
+	getCoinSnapshot();
   
 }
 });

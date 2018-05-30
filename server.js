@@ -14,6 +14,7 @@ var User = require('./userSchema.js')
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser')
+var numberOfVisits = 0;
 
 mongoose.connect('mongodb://localhost:27017/data')
 var db = mongoose.connection;
@@ -28,11 +29,19 @@ coinApiHelper.getNews(function(res){latest_news = res;},1);
 /*
 coinApiHelper.LoadCoinList(function(res){
 	coinlist = res;
-	mongoh.MongoInsert(coinlist,'coins')
+	mongoh.MongoInsert(coinlist,'coins',function(insertResult){
+		console.log(insertResult);
+	})
+
 })
 */
+mongoh.MongoFind('coins',function(result){coinlist = result;
+	console.log(coinlist.length)
+})
 
-mongoh.MongoFind('coins',function(result){coinlist = result;})
+mongoh.MongoCount('coins',function(result){
+	console.log('count result: '+result);
+})
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1)
@@ -48,7 +57,7 @@ app.use(session({
 
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false, limit: '15mb' }))
+app.use(bodyParser.urlencoded({ extended: false, limit: '25mb' }))
 // parse application/json
 app.use(bodyParser.json())
 
@@ -71,8 +80,8 @@ app.get('/search', function(req, resp){
 })
 
 app.get('/coinlist', function(req, resp){
-	if ("b" in req.query) {
-		resp.send(coinlist.slice(req.query.b, parseInt(req.query.b)+10));
+	if ("skip" in req.query) {
+		resp.send(coinlist.slice(req.query.skip, parseInt(req.query.skip)+10));
 	}
 })
 
@@ -152,10 +161,12 @@ app.post('/user',function(req,res){
 
 app.get('/', function(req, res){
 	if (req.session.views) {
-		req.session.views++;
+		numberOfVisits++;
+		req.session.views = false;
+		console.log(numberOfVisits);
 	}
 	else{
-		req.session.views = 1;
+		req.session.views = true;
 	}
 	
 	res.sendFile(__dirname +'/public/index.html');
@@ -164,9 +175,8 @@ app.get('/', function(req, res){
 app.post('/save', function(req, res){
 	if (req.session.userId == undefined) {return;}
 	User.update({_id: req.session.userId}, {$push: {articles: req.body}},{safe: true, new : true},function(err){
-		//console.log(err)
 	})
-	res.send('saved')
+	res.send('saved');
 })
 
 app.post('/delete', function(req, res){
@@ -176,6 +186,15 @@ app.post('/delete', function(req, res){
 	})
 	res.send('deleted');
 })
+
+app.post('/theme', function(req, res){
+	if (req.session.userId == undefined) {return;}
+	User.update({_id: req.session.userId}, {theme: req.body.theme},function(err){
+		//console.log(err)
+	})
+	res.send('theme updated');
+})
+
 
 //------------------------------------------------------------------------------
 var io = require('socket.io')(http);

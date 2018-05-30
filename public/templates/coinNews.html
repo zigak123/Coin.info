@@ -1,20 +1,28 @@
-<md-content layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="1"> 
+<div layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
     <div layout="row" layout-wrap layout-align="center"> 
-
-        <md-card flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
+        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles | limitTo:articles.length track by $index" style="border-radius: 6px; position: relative;">
             <md-card-title>
-              <md-card-title-text style="padding-right: 8px">
-                <span class="md-title">{{article.title}}</span>
+              <md-card-title-text style="padding-right: .5em">
+                <span class="md-subhead">{{::article.source.name}}</span>
+                <span class="md-title" style="font-size: 16px" title-clamp>{{::article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
-                <img ng-src="{{article.urlToImage}}" style="border-radius: 6px" class="md-media-md card-media">
+                <img image-check ng-src="{{::article.urlToImage}}" class="md-media-md card-media" style="border-radius: 4px; animation: show-on-load .25s 0s; object-fit: cover">
               </md-card-title-media>
             </md-card-title>
-            <md-card-content layout-align="start">
-                <span class="md-caption">{{article.description}}</span>
+            <md-card-content>
+                <span class="md-caption">{{::article.description}}</span>
             </md-card-content>
-                <md-card-actions layout="row" layout-align="end center">
-                  <md-button class="md-icon-button" aria-label="Read story" ng-click="readArticle(article)">
+                <md-card-actions layout="row" layout-align="end center" layout-wrap>
+                    
+                  <div layout-align="start center" flex>
+                    <md-icon class="md-primary md-hue-4" md-svg-icon="public/images/baseline-access_time-24px.svg" style="min-height: 18px !important; min-width: 18px !important; width: 18px; height: 18px; margin-left: .5em" >
+                        <md-tooltip md-direction="top">since article publishing</md-tooltip> 
+                    </md-icon>
+                    <span class="md-caption md-primary" style="font-weight: 500"> {{::article.publishedAt}}</span>
+                  </div>
+                  
+                  <md-button class="md-icon-button" aria-label="Read story" ng-href="{{::article.url}}" style="margin-left: 6px; margin-right: 6px !important">
                       <md-icon md-svg-icon="public/images/ic_library_books_black_24px.svg"></md-icon>
                   </md-button>
 
@@ -28,10 +36,10 @@
         </md-card-actions>
         </md-card>
     </div>    
-    <div layout="column" ng-show="isbusy" layout-sm="row" layout-align="center center">
+     <div layout="column" ng-if="isbusy" layout-sm="row" layout-align="center center" style="height: 100px">
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-     <md-button ng-cloak ng-init="showFAB=false" class="md-fab md-primary md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-click="scrollTop()" ng-show="showFAB">
+     <md-button id="scrollTop" ng-click="scrollTop()" ng-cloak ng-init="showFAB=false" class="md-fab md-accent md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-show="showFAB">
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
     </md-button>  
-</md-content>
+</div>

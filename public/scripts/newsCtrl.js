@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: function($scope, $http, tickerSrv, $window, scrollSrv, $state, userSrv){
+    controller: function($scope, $http, scrollSrv, $state, userSrv, $anchorScroll, $location, $rootScope){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
@@ -7,8 +7,37 @@ app.component('news',{
 
   
        $http.get('news').then(function(res){
-            $scope.articles = res.data.articles;
-            $scope.isbusy = false;
+            if (res.data.status === 'ok') {
+                 angular.forEach(res.data.articles, function(key){
+                    var dateFuture = new Date();
+                    var dateNow = new Date(key.publishedAt);                   
+                    dateNow = dateNow - 3600000;
+
+                    var seconds = Math.floor((dateFuture - (dateNow))/1000);
+                    var minutes = Math.floor(seconds/60);
+                    var hours = Math.floor(minutes/60);
+                    var days = Math.floor(hours/24);
+
+                    hours = hours-(days*24);
+                    minutes = minutes-(days*24*60)-(hours*60);
+                    seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+
+
+                    minutes = minutes > 0 ? minutes+' min ' : '';
+                    hours = hours > 0 ? hours+' h ' : '';
+                    days = days > 0 ? days+' d ' : '';
+
+
+                    key.publishedAt = (days+hours+minutes);
+                });
+
+                 $scope.articles = res.data.articles;
+                 $scope.isbusy = false;
+            }
+            else{
+                var err = new Error('bad response from newsAPI: '+res.data.message)
+                throw err;
+            }
        });
 
        userSrv.authenticated({articles: true}).then(function(res){
@@ -16,7 +45,6 @@ app.component('news',{
             for (var i =  0; i < res.length; i++) {
                 $scope.likedArticlesDict[res[i]] = true;
             }
-            console.log($scope.likedArticlesDict);
        })
 
     $scope.LoadArticles = function(){
@@ -24,14 +52,43 @@ app.component('news',{
         $scope.page += 1;
 
         $http.get('news?page='+$scope.page).then(function(res){
-        [].push.apply($scope.articles, res.data.articles);
-        $scope.isbusy = false;
+            if (res.data.articles !== undefined && res.data.articles !== null) {
+                angular.forEach(res.data.articles, function(key){
+                    var dateFuture = new Date();
+                    var dateNow = new Date(key.publishedAt);
+                    dateNow = dateNow - 3600000;
+
+                    var seconds = Math.floor((dateFuture - (dateNow))/1000);
+                    var minutes = Math.floor(seconds/60);
+                    var hours = Math.floor(minutes/60);
+                    var days = Math.floor(hours/24);
+
+                    hours = hours-(days*24);
+                    minutes = minutes-(days*24*60)-(hours*60);
+                    seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
+
+                    
+                    minutes = minutes > 0 ? minutes+' min ' : '';
+                    hours = hours > 0 ? hours+' h ' : '';
+                    days = days > 0 ? days+' d ' : '';
+
+
+                    key.publishedAt = (days+hours+minutes);
+                });
+                [].push.apply($scope.articles, res.data.articles);
+                $scope.isbusy = false;
+            }
+            else{
+                var err = new Error('bad response from newsAPI: '+res.data.message);
+                throw err;
+            }
     });   
     }
 
     $scope.scrollTop = function(){
-        $scope.showFAB = false;
-        $window.scrollTo(0, 0);
+        $('html, body').animate({
+        scrollTop: $("#pageTop").offset().top
+    }, 2000);
     }
 
     $scope.readArticle = function(selected_article){
@@ -53,17 +110,14 @@ app.component('news',{
         if (selected_article.title in $scope.likedArticlesDict) {
             reqUrl = '/delete';
             delete $scope.likedArticlesDict[selected_article.title];
-            //$scope.likedArticles.splice($scope.likedArticlesDict[selected_article.title),1);
         }
         else{
             reqUrl = '/save';
             $scope.likedArticlesDict[selected_article.title] = true;
-            //$scope.likedArticles.push(selected_article.title);
         }
         
 
-        $http({
-                method: 'POST',
+        $http({method: 'POST',
                 url: reqUrl,
                 data: selected_article
             }).then(function(res){
@@ -75,7 +129,6 @@ app.component('news',{
     $scope.$on('$destroy', function() {
         scrollSrv.off();
     })
-    
 },
 templateUrl: '/public/templates/coinNews.html'
 
