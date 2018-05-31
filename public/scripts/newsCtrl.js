@@ -1,44 +1,21 @@
 app.component('news',{
-    controller: function($scope, $http, scrollSrv, $state, userSrv, $anchorScroll, $location, $rootScope){
+    controller: function($scope, $http, scrollSrv, $state, userSrv, $rootScope, $timeout){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
         $scope.favoriteIcon = "public/images/ic_favorite_border_black_24px.svg";
+        $scope.articles = [];
 
-  
-       $http.get('news').then(function(res){
-            if (res.data.status === 'ok') {
-                 angular.forEach(res.data.articles, function(key){
-                    var dateFuture = new Date();
-                    var dateNow = new Date(key.publishedAt);                   
-                    dateNow = dateNow - 3600000;
-
-                    var seconds = Math.floor((dateFuture - (dateNow))/1000);
-                    var minutes = Math.floor(seconds/60);
-                    var hours = Math.floor(minutes/60);
-                    var days = Math.floor(hours/24);
-
-                    hours = hours-(days*24);
-                    minutes = minutes-(days*24*60)-(hours*60);
-                    seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
-
-
-                    minutes = minutes > 0 ? minutes+' min ' : '';
-                    hours = hours > 0 ? hours+' h ' : '';
-                    days = days > 0 ? days+' d ' : '';
-
-
-                    key.publishedAt = (days+hours+minutes);
-                });
-
-                 $scope.articles = res.data.articles;
-                 $scope.isbusy = false;
-            }
-            else{
-                var err = new Error('bad response from newsAPI: '+res.data.message)
-                throw err;
-            }
-       });
+        $scope.refreshNews = function(){
+            if ($scope.isbusy || $scope.animate) {return;};
+            $scope.animate = !$scope.animate;
+            
+            $timeout(function(){
+                $scope.animate = !$scope.animate;
+            },10000);
+            
+            $scope.LoadArticles(true);
+        }
 
        userSrv.authenticated({articles: true}).then(function(res){
             $scope.likedArticlesDict = {};
@@ -47,7 +24,8 @@ app.component('news',{
             }
        })
 
-    $scope.LoadArticles = function(){
+    $scope.LoadArticles = function(reverse){
+     
         $scope.isbusy = true;
         $scope.page += 1;
 
@@ -75,6 +53,7 @@ app.component('news',{
 
                     key.publishedAt = (days+hours+minutes);
                 });
+
                 [].push.apply($scope.articles, res.data.articles);
                 $scope.isbusy = false;
             }
@@ -121,7 +100,7 @@ app.component('news',{
                 url: reqUrl,
                 data: selected_article
             }).then(function(res){
-                console.log('articles updated in mongoDB')
+                console.log('articles updated in mongoDB');
             })
     }
 

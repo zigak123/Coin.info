@@ -1,13 +1,20 @@
-<div layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
+<div layout-padding infinite-scroll="LoadArticles(false)" infinite-scroll-immediate-check='false' ng-init="LoadArticles(false)" infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
+    <h1 style="text-align: center;" class="md-display-1 drek" md-colors="{color: 'default-primary'}">
+        Crypto news
+
+    </h1>
+    <md-divider>
+
+    </md-divider>
     <div layout="row" layout-wrap layout-align="center"> 
-        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles | limitTo:articles.length track by $index" style="border-radius: 6px; position: relative;">
+        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
             <md-card-title>
-              <md-card-title-text style="padding-right: .5em">
+              <md-card-title-text style="padding-right: .5em;">
                 <span class="md-subhead">{{::article.source.name}}</span>
                 <span class="md-title" style="font-size: 16px" title-clamp>{{::article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
-                <img image-check ng-src="{{::article.urlToImage}}" class="md-media-md card-media" style="border-radius: 4px; animation: show-on-load .25s 0s; object-fit: cover">
+                <img image-check ng-src="{{::article.urlToImage}}" class="md-media-md card-media imageLoad" style="border-radius: 4px; animation: show-on-load 0.5s 0s; object-fit: cover;">
               </md-card-title-media>
             </md-card-title>
             <md-card-content>

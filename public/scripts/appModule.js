@@ -183,7 +183,7 @@ app.directive('imageCheck', function($rootScope){
       el.removeClass('imageLoad');
     })
 
-    el.addClass('imageLoad');
+    //el.addClass('imageLoad');
 
     $rootScope.$watch('currentTheme',function(){
       if (scope.article.urlToImage.split("/")[0] == 'public') {

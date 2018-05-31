@@ -41,14 +41,14 @@
 			<div hide-xs id="chartdiv" style="margin-bottom: 8px; margin-right: 8px"></div>
 			
 			<section hide-xs layout="row" style="padding: 0px;height: auto">
-				<span style="text-align: center; align-self: center; font-weight: 500;flex-basis: auto;flex-shrink: 1" class="md-caption" flex="15">Zoom:</span>
+				<span style="text-align: center; align-self: center; font-weight: 500;flex-basis: auto;flex-shrink: 1; margin-left: 1em" class="md-caption" flex="15">Zoom:</span>
 				<md-button class="candlestick md-primary md-raised" md-ink-ripple="false" ng-repeat="zoomSize in zoomSizes" ng-click="changeZoom(zoomSize)" ng-class="{'leftup': zoomSize == zoomSizes[0],'rightup': zoomSize == zoomSizes[zoomSizes.length-1], 'md-accent': selectedZ.label === zoomSize.label}">
 					{{zoomSize.label}}
 				</md-button>
 			</section>
 			
 			<section hide-xs layout="row" style="padding: 0px;height: auto;">		
-				<span style="text-align: center;align-self: center; font-weight: 500;flex-basis: auto;flex-shrink: 1 " class="md-caption" flex="15">Candlestick:</span>
+				<span style="text-align: center;align-self: center; font-weight: 500;flex-basis: auto;flex-shrink: 1;margin-left: 1em " class="md-caption" flex="15">Candle:</span>
 				<md-button class="candlestick md-primary md-raised" md-ink-ripple="false" ng-repeat="candleSize in candleSizes" ng-click="changeCandle(candleSize)" ng-class="{'left': candleSize == candleSizes[0],'right': candleSize == candleSizes[candleSizes.length-1], 'md-accent': selectedC.label === candleSize.label}">
 					{{candleSize.label}}
 				</md-button>
