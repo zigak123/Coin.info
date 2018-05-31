@@ -3,7 +3,7 @@
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
         </div>
 
-            <div hide-xs class="md-caption drek" layout="row" ng-show="!isbusy" style="width: 100%; margin-bottom: 0px; margin-top: 0px; padding-top: 0px">
+            <div hide-xs hide-sm class="md-caption drek" layout="row" ng-show="!isbusy" style="width: 100%; margin-bottom: 0px; margin-top: 0px; padding-top: 0px">
             <div layout="row" flex layout-align="center center">
                 <span style="margin-right: .5em;" md-colors="{color: 'default-primary'}">Total marketcap: </span>
                 <span ng-cloak> {{marketData.quotes.USD.total_market_cap}} USD</span>
@@ -24,8 +24,7 @@
           </div>
           <div hide-xs class="drek" ng-show="!isbusy" layout="column" style="width: 100%;padding: 0px;margin-bottom: 16px">
             
-              <md-divider>
-          </md-divider>
+          <md-divider hide-xs hide-sm></md-divider>
           </div>
     
         <div layout="row" layout-align="center center">

@@ -226,9 +226,10 @@ md-nav-ink-bar{
     background-color: transparent !important;
 }
 
-.navbutton .md-button:not([disabled]) {
-    
+.sidenavbutton .md-button:not([disabled]):hover {
+    background-color: transparent !important;
 }
+
 
 .coinInput{
   border-radius: 6px;
@@ -248,11 +249,26 @@ md-nav-ink-bar{
 
 @keyframes show-on-load{
   0% {
-    transform: scale(0);
-    -webkit-transform: scale(0);
+    opacity: 0;
   }
   100% {
-    transform: scale(1);
-    -webkit-transform: scale(1);
+    opacity: 1;
   }
+}
+
+@keyframes refresh-rotate{
+  0% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+
+  }
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+.refresh{
+  animation: refresh-rotate 1s;
 }

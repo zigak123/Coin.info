@@ -1,4 +1,4 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope) {
+app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$log,$timeout,$mdMedia) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
@@ -26,6 +26,10 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	$transitions.onBefore({}, function(transition) {
 		$scope.selectedItem = transition.to().name;
 	});
+
+	$scope.isSmall = function(){
+		return $mdMedia('xs');
+	}
 
 
 	$scope.profileClick = function(mdMenu){
@@ -56,6 +60,36 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		    	$state.go('login');
 		    })
 	}
+
+	
+
+	 $scope.close = function (stateToGo) {
+      $mdSidenav('left').close()
+        .then(function () {
+            if(stateToGo === 'user' && $scope.tabName !== 'SIGN IN'){
+	        	$state.go('signedin',{userId: $scope.tabName});
+	        }
+	        else{
+	        	$state.go(stateToGo);
+	        }
+        });
+    };
+
+   function buildToggler(navID) {
+	  return function() {
+	    // Component lookup should always be available since we are not using `ng-if`
+	    $mdSidenav(navID)
+	      .toggle()
+	      .then(function () {
+	        $log.debug("toggle " + navID + " is done");
+	      });
+  		};
+    }
+
+    $scope.toggleLeft = buildToggler('left');
+    $scope.isOpenLeft = function(){
+      return $mdSidenav('left').isOpen();
+    };
 
 	$scope.$on("$mdMenuClose", function() { 
 		$scope.selectedItem = previous;
