@@ -14,8 +14,8 @@ app.factory('tickerSrv',function($http, $rootScope){
 			$rootScope.$apply(function () {
         for (var i = 0; i < callbackArray.length; i++) {
           if (coins[i] === res.FROMSYMBOL) {
-          callbackArray[i].call(socket, res);;
-        }
+            callbackArray[i].call(socket, res);;
+          }
         }
       });
 		}		

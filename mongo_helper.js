@@ -31,7 +31,6 @@ module.exports = class MongoHelper {
 		  if (err) throw err;
 		  var dbo = db.db(that.dbname);
 		  var val = dbo.collection(input_collection).count({},function(err,result){
-		  	console.log(result)
 		  	return callback(result);
 		  })
 

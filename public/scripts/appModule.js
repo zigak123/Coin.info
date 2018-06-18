@@ -1,13 +1,14 @@
 var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 4000);
+app.value('THROTTLE_MILLISECONDS', 5000);
 
 
-app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider) {
+app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider,$mdAriaProvider) {
 
   $mdProgressCircularProvider.configure({
-    progressSize: 50,
-    duration: 500
+    progressSize: 50
   });
+  // disable aria label warnings
+  $mdAriaProvider.disableWarnings();
 
   // registering default theme
   $mdThemingProvider
@@ -22,13 +23,18 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
 
   $mdThemingProvider.alwaysWatchTheme(true);
 
+   $mdThemingProvider.enableBrowserColor({
+      theme: 'default', // Default is 'default'
+      palette: 'primary', // Default is 'primary', any basic material palette and extended palettes are available
+      hue: '800' // Default is '800'
+    });
+
   // initialize ui-router states
   var profileState = {
     name: 'profile',
     url: '/profile',
     component: 'profile'
   }
-
 
   var loginState = {
     name: 'login',
@@ -66,12 +72,6 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     component: 'coinlist'
   }
 
-  var dexState = {
-    name: 'dex',
-    url: '/dexchange',
-    component: 'coinlist'
-  }
-
   var readArticleState = {
     name: 'article',
     url: '/news/article/{articleName}',
@@ -91,7 +91,6 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   }
 
   $stateProvider.state(signedInState);
-  $stateProvider.state(dexState);
   $stateProvider.state(loginState);
   $stateProvider.state(coinDetailsState);
   $stateProvider.state(profileState);
@@ -127,7 +126,7 @@ app.directive('priceChangeLabel',function(){
     },
     template: '<div layout="row" align="end">\
                     <md-icon style="height: 24px; margin-left: 0px; margin-right: 0px" md-svg-src={{price_arrow}}></md-icon>\
-                      <span style="font-weight: 400" class="md-caption" ng-style="style"> {{temp}} % </span>\
+                      <span class="md-caption" ng-style="style"> {{temp}} % </span>\
               </div>'
   ,
   link: link
@@ -147,7 +146,6 @@ app.directive('sl', function($timeout,$window){
     var w = svg.node().clientWidth;
     w = 64; // fixed width becasue of firefox width issues
     var h = +getComputedStyle(el.node())['font-size'].replace('px','');
-    //console.log(w+' '+h);
     svg.attr({width: w, height: h});
     var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
     var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
@@ -170,28 +168,23 @@ app.directive('sl', function($timeout,$window){
 app.directive('imageCheck', function($rootScope){
 
   function link(scope, el, attr){
-
-    if (scope.article.urlToImage == null) {
-      scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
+    if (scope.article.image == null || jQuery.isEmptyObject(scope.article.image)) {
+      scope.article.image = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
     }
     
     el.bind('error', function(){
-      scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
+      scope.article.image = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
     })
 
     el.bind('load', function(){
       el.removeClass('imageLoad');
     })
 
-    //el.addClass('imageLoad');
-
     $rootScope.$watch('currentTheme',function(){
-      if (scope.article.urlToImage.split("/")[0] == 'public') {
-              scope.article.urlToImage = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
-
+      if (scope.article.image.split("/")[0] == 'public') {
+          scope.article.image = $rootScope.currentTheme == 'default' ? 'public/images/baseline_broken_image_black_48dp.png':'public/images/baseline_broken_image_white_48dp.png';
       }
     })
-
   }
 
   return{
@@ -204,7 +197,6 @@ app.directive('titleClamp', function(){
   function link(scope, el, attr){
       $clamp(el[0], {clamp: 4, useNativeClamp: true});
   }
-
   return {
     link: link
   }
@@ -215,3 +207,7 @@ app.directive('userMenu', function(){
     templateUrl: 'public/templates/userMenu.template.html'
   }
 })
+
+
+
+

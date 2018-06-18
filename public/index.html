@@ -32,6 +32,7 @@
     <script src="public/scripts/profileComponent.js"></script>
     <script src="public/scripts/scrollService.js"></script>
     <script src="public/scripts/userService.js"></script>
+    <script src="public/scripts/dataService.js"></script>
     <script src="public/scripts/loginComponent.js"></script>
     <script src="public/scripts/ng-img-crop.js"></script>
     <script src="public/scripts/ng-file-upload.js"></script>
@@ -43,6 +44,7 @@
     <!-- amCharts lib imports -->
     <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
     <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amstock.js"></script>
     <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
     <script src="https://www.amcharts.com/lib/3/themes/dark.js"></script>
@@ -65,34 +67,36 @@
        <md-sidenav
         class="md-sidenav-left"
         md-component-id="left"
-        md-whiteframe="4" style="min-height: 100%" aria-label="sidenav">
+        md-whiteframe="4" style="position: fixed;" aria-label="sidenav">
 
           <md-toolbar class="md-hue-2">
-            <h1 class="md-toolbar-tools"><img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 1em; cursor: pointer;"> Coin.info</h1>
+            <h1 class="md-toolbar-tools">
+            <img src="/public/images/chart-line.png" style="width: 1em;"> Coin.info</h1>
           </md-toolbar>
           <md-content layout="column" layout-padding>
-             <md-button ng-click="close('coinlist')" aria-label="sidenav1" class="md-primary sidenavbutton">
+             <md-button ng-click="close('coinlist')" aria-label="sidenav1" style="text-align: left;" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/coin.svg"></md-icon>
               CoinList
             </md-button>
-             <md-button ng-click="close('news')" aria-label="sidenav2" class="md-primary sidenavbutton">
+             <md-button ng-click="close('news')" aria-label="sidenav2" style="text-align: left;" class="md-primary sidenavbutton">
+                <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/baseline-library_books-24px.svg"></md-icon>
               News
             </md-button>
-            <md-button ng-click="close('about')" aria-label="sidenav3" class="md-primary sidenavbutton">
+            <md-button ng-click="close('about')" aria-label="sidenav3" style="text-align: left;" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/baseline-info-24px.svg"></md-icon>
               About
             </md-button>
-
-            <md-button ng-click="close('user')" aria-label="sidenav4" ng-show="tabName !== 'SIGN IN'" class="md-primary sidenavbutton">
+            <md-button ng-click="close('user')" aria-label="sidenav4" style="text-align: left;" ng-show="tabName !== 'SIGN IN'" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/ic_account_box_black_48px.svg"></md-icon>
               {{tabName}}
-            </md-button>
-           
+            </md-button>       
           </md-content>
-
         </md-sidenav>
 
 
-      <div id="pageTop" class="header" md-colors="{background: '{{currentTheme}}-background'}"> 
-          <img ui-sref="coinlist" src="/public/images/chart-line.png" style="width: 52px; cursor: pointer;"> 
-          <span ui-sref="coinlist" class="md-display-3" style="cursor: pointer;">Coin.info</span>   
+      <div id="pageTop" hide-xs class="header" md-colors="{background: '{{currentTheme}}-background'}"> 
+          <img ui-sref="coinlist" src="/public/images/chart-line.png" class="md-display-2" style="width: 1em; cursor: pointer;"> 
+          <span ui-sref="coinlist" class="md-display-2" style="cursor: pointer; line-height: 1em">Coin.info</span>   
           <div hide-xs show-gt-xs class="ticker" layout="row">
               <div style="display: flex; flex-direction: row">
                 <span style="align-self: flex-end;font-weight: 500" md-colors="{color: 'default-primary-500'}" class="md-body-1">BTC</span>
@@ -111,7 +115,8 @@
 
 
       
-      <md-nav-bar md-selected-nav-item="selectedItem" class="md-primary md-hue-2" nav-bar-aria-label="navigation links" md-no-ink-bar="isSmall()" md-no-ink>
+<md-nav-bar id="mobileTop" md-selected-nav-item="selectedItem" class="md-primary md-hue-2" nav-bar-aria-label="navigation links" md-no-ink-bar="isSmall()" md-no-ink>
+
         <md-nav-item hide-xs class="navbutton" md-nav-sref="coinlist" name="coinlist">
           Coin info
         </md-nav-item>
@@ -122,19 +127,23 @@
           About
         </md-nav-item>
 
-        <md-nav-item hide show-xs  md-ink-bar="false" md-nav-click="toggleLeft()" name="opennav">  
+        <md-nav-item id="hamburger" aria-label="openmenu" hide show-xs md-ink-bar="false" md-nav-click="toggleLeft()" name="logo">  
           <md-icon style="fill:white;" md-svg-icon="public/images/baseline-menu-24px.svg"></md-icon>
+        </md-nav-item>
+
+        <md-nav-item id="mobileLogo" aria-label="menu button" hide show-xs md-ink-bar="false" md-nav-sref="coinlist" name="opennav" style="line-height: 1em;min-width: 0px;align-self: center;text-align: center;">  
+          <md-icon style="fill:green; min-width: 24px; position: relative;top: -2px" md-svg-icon="public/images/chart-line.svg"></md-icon> Coin.info  
         </md-nav-item>
  
         <user-menu style="margin-left: auto;"/>
 
      </md-nav-bar>
 
-      <md-content layout="column" style="min-height: calc(100% - 104px);z-index: 3">
+      <md-content id="pageContent" style="z-index: 3">
         <ui-view/> 
       </md-content>
 
-    <md-toolbar ng-cloak layout-align="center center" class="md-caption md-hue-2" style="margin-top: auto;">
+    <md-toolbar id="footer" layout-align="center center" class="md-caption md-hue-2">
       <span> CoinInfo © 2018 Made by Žiga Kus. </span>
       <span> API data from <a style="text-decoration: none;" class="md-subtitle" ng-href="http://www.cryptocompare.com"> cryptocompare.com</a> </span>
     </md-toolbar>

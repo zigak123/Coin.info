@@ -15,12 +15,14 @@
 .hiddenDrek{
   transition-duration: 500ms;
   -webkit-transition-duration: 500ms;
-  opacity: 1
+  opacity: 1;
+   min-width: 180px
 }
 
 .hiddenDrek.ng-hide{
   display: block !important;
   opacity: 0;
+  min-width: 180px
 }
 
 .md-fab.animatestuff.ng-hide{
@@ -36,7 +38,7 @@
 
 .md-fab.animatestuff{
   position: fixed !important;
-   -webkit-transition: all 200ms ease-in;
+  -webkit-transition: all 200ms ease-in;
     -webkit-transform: scale(1); 
     -ms-transition: all 200ms ease-in;
     -ms-transform: scale(1); 
@@ -48,11 +50,6 @@
 
 md-tabs.md-no-animation md-ink-bar {
     transition: none;
-}
-
-  md-nav-bar .md-nav-bar {
-      padding: 0px;
-      margin: 0px
 }
 
 .ticker{
@@ -85,7 +82,7 @@ md-autocomplete-wrap,md-autocomplete{
 }
 
 #chartdiv {
-  width : 600px;
+  width : 680px;
   height  : 400px;
 } 
 
@@ -166,6 +163,23 @@ md-input-container{
   min-width: 48px
 }
 
+.candlestick:not([disabled]):hover{
+    background-color: rgb(21,101,192) !important;
+}
+
+.chartSelector{
+  color: white;
+    background-color: rgb(21,101,192) !important;
+}
+
+.chartSelector:not([disabled]):hover{
+    background-color: rgb(21,101,192) !important;
+}
+
+.md-accent.candlestick:not([disabled]):hover{
+    background-color: rgb(245,0,87) !important;
+}
+
 .candlestick.left{
   border-radius: 0 0 0 6px;
 }
@@ -193,9 +207,7 @@ md-nav-ink-bar{
 
 .md-nav-bar{
   border-width: 0px !important;
-  height: auto;
 }
-
 
 /* For Tablets and Landscape mode */
 @media screen and (min-width: 600px) and (max-width: 860px) {
@@ -206,30 +218,45 @@ md-nav-ink-bar{
 }
 
 /* For Phones */
-@media screen and (max-width: 599px) {
-  .articleCard.ng-enter{
-    transition-duration: 500ms;
-    -webkit-transition-duration: 500ms;
-    opacity: 0;
+@media screen and (min-width: 620px) and (max-width: 740px) {
+
+
+  #backButton{
+      display: none;
   }
 }
 
 @media screen and (min-width: 600px) {
-  .articleCard.ng-enter{
-    transition-duration: 250ms;
-    -webkit-transition-duration: 250ms;
-    opacity: 0;
-  }
+ 
 }
 
 .navbutton .md-button:not([disabled]):hover {
     background-color: transparent !important;
 }
 
+#hamburger .md-button {
+    width: 48px;
+    min-width: 48px;
+}
+
 .sidenavbutton .md-button:not([disabled]):hover {
     background-color: transparent !important;
 }
 
+.md-button.sidenavbutton{
+}
+
+#mobileLogo .md-button{
+    margin-left: 0px;
+    padding-left: 0px;
+    text-transform: none;
+    font-size: 24px !important;
+    color: white
+}
+
+#mobileLogo .md-button:not([disabled]):hover{
+    background-color: transparent !important;
+}
 
 .coinInput{
   border-radius: 6px;
@@ -243,6 +270,10 @@ md-nav-ink-bar{
   margin-left: 6px !important;
 }
 
+.md-button.md-icon-button:last-of-type{
+  margin-right: 6px !important;
+}
+
 .imgLoad{
   animation-play-state: paused !important;
 }
@@ -252,8 +283,12 @@ md-nav-ink-bar{
     opacity: 0;
   }
   100% {
-    opacity: 1;
+    opacity: 1
   }
+}
+
+.md-sidenav-backdrop{
+  position: fixed;
 }
 
 @keyframes refresh-rotate{
@@ -268,7 +303,14 @@ md-nav-ink-bar{
   }
 }
 
+  md-fab-speed-dial.md-left md-fab-actions .md-fab-action-item{
+    margin-right: 6px
+  }
 
-.refresh{
-  animation: refresh-rotate 1s;
+.md-button.md-darkDefault-theme.md-hue-2.md-accent.md-raised{
+  background-color: rgb(245,0,87) !important;
+}
+
+.menuitem{
+  min-width: 0px !important;
 }

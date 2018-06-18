@@ -1,27 +1,27 @@
-<div layout-padding infinite-scroll="LoadArticles(false)" infinite-scroll-immediate-check='false' ng-init="LoadArticles(false)" infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
-    <h1 style="text-align: center;" class="md-display-1 drek" md-colors="{color: 'default-primary'}">
-        Crypto news
-
-    </h1>
+<div layout-padding infinite-scroll="LoadArticles(false)" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
+    <div style="text-align: center;" class="md-display-1" md-colors="{color: 'default-primary'}">
+        Latest news
+    </div>
     <md-divider>
-
     </md-divider>
     <div layout="row" layout-wrap layout-align="center"> 
-        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles" style="border-radius: 6px">
+        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles | limitTo: articles.length track by $index" style="border-radius: 6px">
             <md-card-title>
               <md-card-title-text style="padding-right: .5em;">
-                <span class="md-subhead">{{::article.source.name}}</span>
+                <div layout="row" layout-align="start center">
+                     <img ng-src="https://s2.googleusercontent.com/s2/favicons?domain_url={{article.url}}" style="border-radius: 3px;margin-right: .4em;">
+                <span class="md-subhead" style="font-size: 11px; padding: 0px">{{::article.source.name}}</span>
+                </div>
                 <span class="md-title" style="font-size: 16px" title-clamp>{{::article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
-                <img image-check ng-src="{{::article.urlToImage}}" class="md-media-md card-media imageLoad" style="border-radius: 4px; animation: show-on-load 0.5s 0s; object-fit: cover;">
+                <img image-check ng-src="{{::article.image}}" class="md-media-md card-media imageLoad" style="border-radius: 4px; animation: show-on-load 0.5s ease-in">
               </md-card-title-media>
             </md-card-title>
             <md-card-content>
                 <span class="md-caption">{{::article.description}}</span>
             </md-card-content>
-                <md-card-actions layout="row" layout-align="end center" layout-wrap>
-                    
+                <md-card-actions layout="row" layout-align="end center" layout-wrap> 
                   <div layout-align="start center" flex>
                     <md-icon class="md-primary md-hue-4" md-svg-icon="public/images/baseline-access_time-24px.svg" style="min-height: 18px !important; min-width: 18px !important; width: 18px; height: 18px; margin-left: .5em" >
                         <md-tooltip md-direction="top">since article publishing</md-tooltip> 
@@ -33,20 +33,38 @@
                       <md-icon md-svg-icon="public/images/ic_library_books_black_24px.svg"></md-icon>
                   </md-button>
 
-                  <md-button class="md-icon-button" aria-label="Like story" ng-click="likeArticle(article)">
+                  <md-button md-ink-ripple="#E91E63" class="md-icon-button" aria-label="Like story" ng-click="likeArticle(article)">
                       <md-icon ng-class="likedArticlesDict && likedArticlesDict[article.title] ? 'liked': ''" md-svg-src="{{setIcon(article)}}"></md-icon>
                   </md-button>
+                     <md-fab-speed-dial md-open="false" md-direction="left"
+                         class="md-scale">
+        <md-fab-trigger>
+                      <md-button class="md-icon-button" aria-label="Share story">
+                          <md-icon md-svg-icon="public/images/ic_share_black_24px.svg"></md-icon>
+                      </md-button>
+ </md-fab-trigger>
 
-                  <md-button class="md-icon-button" aria-label="Share story">
-                      <md-icon md-svg-icon="public/images/ic_share_black_24px.svg"></md-icon>
-                  </md-button>
+        <md-fab-actions style="width: 0px">
+          <md-button aria-label="Twitter" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="public/images/facebook.svg" aria-label="Twitter"></md-icon>
+          </md-button>
+          <md-button aria-label="Facebook" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="public/images/twitter.svg" aria-label="Facebook"></md-icon>
+          </md-button>
+          <md-button aria-label="Google Hangout" class="md-fab md-raised md-mini">
+            <md-icon md-svg-src="public/images/baseline-mail_outline-24px.svg" aria-label="Google Hangout"></md-icon>
+          </md-button>
+        </md-fab-actions>
+      </md-fab-speed-dial>
+
         </md-card-actions>
         </md-card>
     </div>    
-     <div layout="column" ng-if="isbusy" layout-sm="row" layout-align="center center" style="height: 100px">
-        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+     <div layout="column" layout-align="center center" style="height: 100px">
+        <md-progress-circular md-duration="200" ng-disabled="!isbusy" md-mode="indeterminate"></md-progress-circular>
     </div>
-     <md-button id="scrollTop" ng-click="scrollTop()" ng-cloak ng-init="showFAB=false" class="md-fab md-accent md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-show="showFAB">
+</div>
+
+ <md-button id="scrollTop" ng-click="scrollTop()" ng-cloak ng-init="showFAB=false" class="md-fab md-accent md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-class="{'md-mini': isSmall}" ng-show="showFAB">
             <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
     </md-button>  
-</div>

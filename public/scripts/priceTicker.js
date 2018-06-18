@@ -1,4 +1,4 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$log,$timeout,$mdMedia) {
+app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$log,$timeout,$mdMedia,$location) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
@@ -8,6 +8,7 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	themes = [{icon: "/public/images/moon.svg", label:"Dark Theme"},{icon: "/public/images/ic_wb_sunny_black_24px.svg", label:"Light Theme"}]
 	
 	$transitions.onSuccess({}, function(transition) {
+
 		userStatus = userSrv.authenticated({username: true, avatarImage: true, theme: true}).then(function(res){
 				$scope.tabName = res[0].username;
 				$scope.imgSrc = String.fromCharCode.apply(null, res[0].avatarImage.data);
@@ -23,14 +24,25 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		previous = $scope.selectedItem;
 	});
 
-	$transitions.onBefore({}, function(transition) {
-		$scope.selectedItem = transition.to().name;
-	});
+	$transitions.onBefore({},function(transition){
+		var topHeaderHeight = angular.element('#pageTop')[0].clientHeight;
+		var mobileTopHeight = angular.element('.md-nav-bar')[0].clientHeight;
+		var footerHeight = angular.element('#footer').height()
+		var height_offset = footerHeight + mobileTopHeight + topHeaderHeight;
 
+		if (transition.to().name === 'news' || transition.to().name === 'coinlist' || transition.to().name === 'coinDetails') {
+			height_offset -= footerHeight;
+		}
+
+		angular.element('#pageContent').css('min-height','calc(100% - '+height_offset+'px)');
+	})
+
+
+	$scope.screenSize;
 	$scope.isSmall = function(){
+		$scope.screenSize = $mdMedia('xs');
 		return $mdMedia('xs');
 	}
-
 
 	$scope.profileClick = function(mdMenu){
 		if ($scope.tabName != "SIGN IN") {
@@ -61,8 +73,6 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		    })
 	}
 
-	
-
 	 $scope.close = function (stateToGo) {
       $mdSidenav('left').close()
         .then(function () {
@@ -77,7 +87,6 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 
    function buildToggler(navID) {
 	  return function() {
-	    // Component lookup should always be available since we are not using `ng-if`
 	    $mdSidenav(navID)
 	      .toggle()
 	      .then(function () {
@@ -107,6 +116,36 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		$scope.btcArrow = data.FLAGS === '4' ? same: $scope.btcArrow;
 	}
 
-	tickerSrv.subscribe('BTC',btcCall);
-	tickerSrv.subscribe('ETH',ethCall);
+	if (!$scope.isSmall()) {
+		tickerSrv.subscribe('BTC',btcCall);
+		tickerSrv.subscribe('ETH',ethCall);
+	}
+
+	$scope.$watch('screenSize', function(){
+		if (!$mdMedia('xs')) {
+			tickerSrv.subscribe('BTC',btcCall);
+			tickerSrv.subscribe('ETH',ethCall);
+		}
+	})
+
+
+	
+	$scope.$watch(function(){
+		return angular.element('#pageTop')[0].clientHeight > 0;
+	}, function(arg){
+		//angular.element('#pageContent')[0].height(angular.element('#pageContent')[0].offsetheight+angular.element('#pageTop')[0].offsetHeight);
+		//console.log(angular.element('#pageTop')[0].offsetHeight);
+			//console.log($state.current.name == 'coinlist' || $state.current.name == 'news')
+			var topHeaderHeight = angular.element('#pageTop')[0].clientHeight;
+			var mobileTopHeight = angular.element('.md-nav-bar')[0].clientHeight;
+			var footerHeight = angular.element('#footer').height()
+			var height_offset = footerHeight + mobileTopHeight + topHeaderHeight;
+			//console.log(height_offset,topHeaderHeight);
+		
+		if ($location.path() === '/' || $location.path() === '/news') {
+			height_offset -= footerHeight;
+		}
+
+		angular.element('#pageContent').css('min-height','calc(100% - '+height_offset+'px)');
+	})
 });

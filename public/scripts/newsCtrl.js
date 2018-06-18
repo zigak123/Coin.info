@@ -1,37 +1,34 @@
 app.component('news',{
-    controller: function($scope, $http, scrollSrv, $state, userSrv, $rootScope, $timeout){
+    controller: ["$scope", "$http", "scrollSrv", "$state", "userSrv", "$rootScope", "$timeout","$mdMedia","$location","$anchorScroll", function($scope, $http, scrollSrv, $state, userSrv, $rootScope, $timeout,$mdMedia,$location,$anchorScroll){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;
         $scope.favoriteIcon = "public/images/ic_favorite_border_black_24px.svg";
         $scope.articles = [];
+        $scope.isSmall = $mdMedia('xs');
 
-        $scope.refreshNews = function(){
-            if ($scope.isbusy || $scope.animate) {return;};
-            $scope.animate = !$scope.animate;
-            
-            $timeout(function(){
-                $scope.animate = !$scope.animate;
-            },10000);
-            
-            $scope.LoadArticles(true);
-        }
+        $scope.$watch(function(){
+            return $mdMedia('xs');
+        }, function(arg){
+            $scope.isSmall = arg;
+        })
 
        userSrv.authenticated({articles: true}).then(function(res){
             $scope.likedArticlesDict = {};
             for (var i =  0; i < res.length; i++) {
                 $scope.likedArticlesDict[res[i]] = true;
             }
+       }, function(err){
+
        })
 
     $scope.LoadArticles = function(reverse){
-     
         $scope.isbusy = true;
-        $scope.page += 1;
+        $scope.showFAB = false;
 
         $http.get('news?page='+$scope.page).then(function(res){
-            if (res.data.articles !== undefined && res.data.articles !== null) {
-                angular.forEach(res.data.articles, function(key){
+            if (res.data !== undefined && res.data !== null) {
+                angular.forEach(res.data, function(key){
                     var dateFuture = new Date();
                     var dateNow = new Date(key.publishedAt);
                     dateNow = dateNow - 3600000;
@@ -45,29 +42,37 @@ app.component('news',{
                     minutes = minutes-(days*24*60)-(hours*60);
                     seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
 
-                    
                     minutes = minutes > 0 ? minutes+' min ' : '';
                     hours = hours > 0 ? hours+' h ' : '';
                     days = days > 0 ? days+' d ' : '';
 
-
                     key.publishedAt = (days+hours+minutes);
                 });
 
-                [].push.apply($scope.articles, res.data.articles);
-                $scope.isbusy = false;
+                [].push.apply($scope.articles, res.data);
             }
             else{
                 var err = new Error('bad response from newsAPI: '+res.data.message);
                 throw err;
             }
+    }).then(function(){
+        $scope.isbusy = false;
+        $scope.page += 1;
     });   
     }
 
     $scope.scrollTop = function(){
-        $('html, body').animate({
-        scrollTop: $("#pageTop").offset().top
-    }, 2000);
+
+        if (!$mdMedia('gt-xs')) {
+            $location.hash("mobileTop");
+            $anchorScroll();
+        }
+        else{
+            $('html, body').animate({
+                scrollTop: $("#pageTop").offset().top
+            }, $("body")[0].scrollHeight*0.1);
+        }
+        
     }
 
     $scope.readArticle = function(selected_article){
@@ -85,6 +90,7 @@ app.component('news',{
         if (!$scope.likedArticlesDict) {return;}
         var reqMethod;
         var reqUrl;
+        delete selected_article.image;
 
         if (selected_article.title in $scope.likedArticlesDict) {
             reqUrl = '/delete';
@@ -95,7 +101,6 @@ app.component('news',{
             $scope.likedArticlesDict[selected_article.title] = true;
         }
         
-
         $http({method: 'POST',
                 url: reqUrl,
                 data: selected_article
@@ -108,7 +113,6 @@ app.component('news',{
     $scope.$on('$destroy', function() {
         scrollSrv.off();
     })
-},
-templateUrl: '/public/templates/coinNews.html'
-
-});
+    $timeout(function(){$scope.LoadArticles(false)},350);
+}],
+templateUrl: '/public/templates/coinNews.html'});

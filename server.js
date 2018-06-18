@@ -1,4 +1,4 @@
-const https = require('https')
+const https = require('https');
 const express = require('express')
 const app = express()
 var http = require('http').Server(app);
@@ -6,15 +6,15 @@ const path = require('path')
 const mongodbHelper = require('./mongo_helper.js')
 const coinApiHelper = require('./coinApi.js')
 const mongoose = require('mongoose');
-var coinlist = {};
+var coinlist = [];
 var price = {};
-var latest_news = {};
 var mongoh = new mongodbHelper('mongodb://localhost:27017/','data');
 var User = require('./userSchema.js')
 var session = require('express-session')
 var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser')
 var numberOfVisits = 0;
+var coinnews = [];
 
 mongoose.connect('mongodb://localhost:27017/data')
 var db = mongoose.connection;
@@ -24,7 +24,7 @@ db.once('open', function() {
   console.log("mongoose connected!")
 });
 
-coinApiHelper.getNews(function(res){latest_news = res;},1);
+//coinApiHelper.getNews(function(res){latest_news = res;},1);
 
 /*
 coinApiHelper.LoadCoinList(function(res){
@@ -35,16 +35,17 @@ coinApiHelper.LoadCoinList(function(res){
 
 })
 */
-mongoh.MongoFind('coins',function(result){coinlist = result;
-	console.log(coinlist.length)
+
+mongoh.MongoFind('coins',function(result){
+	coinlist = result;
 })
 
 mongoh.MongoCount('coins',function(result){
-	console.log('count result: '+result);
+	console.log('number of coins: '+result);
 })
 
 app.use('/public',express.static(path.join(__dirname, 'public')));
-app.set('trust proxy', 1)
+//app.set('trust proxy', 1)
 
 
 app.use(session({
@@ -57,19 +58,52 @@ app.use(session({
 
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false, limit: '25mb' }))
+app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }));
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+//load news from newsAPI
+
+
+var updateNews = function(){
+	console.log('triggering')
+	if (coinnews.length == 100) {
+		coinApiHelper.loadNewsAsync(2,10).then(function(res){
+			var skip = 0;
+			while(coinnews[0].title != res[skip].title){
+				skip += 1;
+			}
+
+			if (skip != 0) {
+				coinnews = res.slice(0,skip+1).concat(coinnews);
+				coinnews = coinnews.slice(0, 100);
+			}
+			
+		})
+		
+			
+	}
+}
+
+var b = coinApiHelper.loadNewsAsync(1,100).then(function(gg){
+	console.log('Downloading articles and images: done');
+	coinnews = gg;
+	setInterval(updateNews, 600000);
+})
+/*
+coinApiHelper.loadNews(articles_limit/100,100, (res)=>{
+	console.log('bum done');
+	coinnews = res;
+	setInterval(updateNews, 600000);
+});
+*/
 
 //-------------routing----------------------------------------------------------
+
+//var counter = 1;
 app.get('/news', function(req, resp){
 	if (req.query) {
-		coinApiHelper.getNews(function(result){
-			resp.send(result);
-		},req.query.page)
-	}
-	else{
-		resp.send(latest_news);
+		resp.send(coinnews.slice((req.query.page*10)-10, req.query.page*10))
 	}
 })
 
@@ -95,7 +129,7 @@ app.get('/price', function(req, resp){
 })
 
 app.post('/user',function(req,res){
-	console.log(req.body);
+	//console.log(req.body);
 	if (req.body.email && req.body.username && req.body.password) {
 
 	  imageData = req.body.avatarImage != undefined ? req.body.avatarImage: null;
@@ -145,9 +179,9 @@ app.post('/user',function(req,res){
 	  	else{
 	  		for(key in req.body){query[key] = 1;}
 	  	}
-	  	
+	  	//console.log(Object.keys(req.body).length)
 	  	User.find({_id: req.session.userId},query).exec(function(err, rez){
-	  		if ('articles' in req.body) {
+	  		if (Object.keys(req.body).length == 1 && 'articles' in req.body) {
 				article_titles = rez[0].articles.map(function(a){return a.title;});
 				return res.send(article_titles);
 	  		}
@@ -163,7 +197,6 @@ app.get('/', function(req, res){
 	if (req.session.views) {
 		numberOfVisits++;
 		req.session.views = false;
-		console.log(numberOfVisits);
 	}
 	else{
 		req.session.views = true;
@@ -181,7 +214,7 @@ app.post('/save', function(req, res){
 
 app.post('/delete', function(req, res){
 	if (req.session.userId == undefined) {return;}
-	User.update({_id: req.session.userId}, {$pull: {articles: req.body}},{safe: true, new : true},function(err){
+	User.update({_id: req.session.userId}, {$pull: {articles: {title: req.body.title}}},{safe: true, new : true},function(err){
 		//console.log(err)
 	})
 	res.send('deleted');

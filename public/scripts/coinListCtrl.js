@@ -1,10 +1,12 @@
 app.component("coinlist", {
 
 controller:
-    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval) {
-        var skip = 0;
+    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval,$mdMedia,dataSrv) {
+        //var skip = 0;
         $scope.showFAB = false;
         $scope.coins = [];
+        var marketTicker;
+
 
         var getMarketData = function(){ $http({
                 method : "GET",
@@ -17,9 +19,7 @@ controller:
             },function(err){
                 console.log(err);
             })
-    }
-    getMarketData();
-    $interval(getMarketData, 60000);
+        }
 
         $scope.searchText = function(query){
            return $http.get("search?text="+query)
@@ -28,45 +28,31 @@ controller:
                 }); 
         }
 
-        $scope.getSparklineData = function(coin){
-            return $http({
-                method : "GET",
-                url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym=USD&limit=30"
-                }).then(function(response) {
-                 return response.data.Data.map(a => a.close);
-            },function(err){
-                return err;
-            })
-        }
-
         $scope.showDetails = function(item){
             $state.go('coinDetails', {coin_data: item, coinName: item.FullName})
         }
 
         $scope.loadMore = function(){
             if ($scope.isbusy) {return;}
-            //else if (skip>0) {$scope.isbusy = true; return;}
             $scope.isbusy = true;
-            $http.get("coinlist?skip="+skip)
-                .then(function(response) {
-                    var promises = [];
-                
-                    angular.forEach(response.data, function(key){
-                        var promise = $scope.getSparklineData(key).then(function(responseData){
-                            key['lineData'] = responseData;     
-                        })   
-                        promises.push(promise);
-                    });
+            
+                 dataSrv.getCoins(function(result_data){
+                 $scope.coins = result_data;
+                 $scope.isbusy = false;
 
-                    $q.all(promises).then(function(){
-                       $timeout(function(){
-                            [].push.apply($scope.coins,response.data);
-                            $scope.isbusy = false; 
-                        },250);
-                    });  
-                }); 
-             skip += 10;
+                 //skip += 10;
+            }) 
+          
         }
-   
+
+        $scope.$on("$destroy",function(event){
+            $interval.cancel(marketTicker);
+        })
+
+
+        // start global market ticker(1min repeat api update)
+        getMarketData();
+        marketTicker = $interval(getMarketData, 60000);
+
 
 }, templateUrl: '/public/templates/coinList.html'})
