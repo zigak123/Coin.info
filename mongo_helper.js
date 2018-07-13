@@ -1,7 +1,6 @@
 
 module.exports = class MongoHelper {
 
-
 	constructor(url,dbname){
 		this.url = url;
 		this.dbname = dbname;
@@ -49,7 +48,6 @@ module.exports = class MongoHelper {
 		    db.close();
 		  });
 		});
-		
 	 }  
 
 

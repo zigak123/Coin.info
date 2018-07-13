@@ -1,20 +1,21 @@
 app.factory('dataSrv',function($http,$q){
 	var coins = [];
-
-	var loadCoins = function(callback){
+    var currency = "USD";
+    var previous = currency;
+	var loadCoins = function(callback, currency){
 		if (coins.length == 0) {
-			loadMore(0, callback);
+			loadMore(0, callback, currency);
 		}
 
 		else{
-			refreshData(coins, callback);
+			refreshData(coins, callback, currency);
 		}
 	}
 
-	var refreshData = function(coins_array, callback){
+	var refreshData = function(coins_array, callback, currency){
 		var promises = [];
 		angular.forEach(coins_array, function(key){
-            var promise = getSparklineData(key).then(function(responseData){
+            var promise = getSparklineData(key, currency).then(function(responseData){
                 key['lineData'] = responseData;     
             })   
             promises.push(promise);
@@ -26,26 +27,41 @@ app.factory('dataSrv',function($http,$q){
         }); 
 	}
 
-	var getSparklineData = function(coin){
+	var getSparklineData = function(coin, currency){
             return $http({
                 method : "GET",
-                url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym=USD&limit=30"
+                url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym="+currency+"&limit=30"
                 }).then(function(response) {
-                 return response.data.Data.map(a => Math.round(a.close * 100) / 100);
+                 return response.data.Data.map(a => a.close);
             },function(err){
                 return err;
             })
         }
 
-	var loadMore = function(skip, callback){
+	var loadMore = function(skip, callback, currency){
         $http.get("coinlist?skip="+skip)
             .then(function(response) {
-                refreshData(response.data, callback); 
+                refreshData(response.data, callback, currency); 
             }); 
     }
 
+    var changeCurrency = function(new_currency){
+        previous = currency;
+        currency = new_currency;
+    }
+
+    var getCurrency = function(){
+        return currency;
+    }
+
+    var getPrevious = function(){
+        return previous;
+    } 
 
 	return{
-		getCoins: loadCoins
+		getCoins: loadCoins,
+        setCurrency: changeCurrency,
+        getCurrency: getCurrency,
+        getPrevious: getPrevious
 	}
 })

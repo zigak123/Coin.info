@@ -1,25 +1,31 @@
-<div layout-padding infinite-scroll="LoadArticles(false)" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0"> 
+<div id="newsContent" layout-padding infinite-scroll="LoadArticles()" infinite-scroll-immediate-check='false' infinite-scroll-disabled="isbusy" infinite-scroll-distance="0" infinite-scroll-parent="true"> 
+      <md-button id="scrollTop" ng-click="scrollTop()" ng-cloak="" ng-init="showFAB=false" class="md-fab md-accent md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-show="showFAB" style="z-index: 100; position: fixed;">
+            <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
+    </md-button>  
     <div style="text-align: center;" class="md-display-1" md-colors="{color: 'default-primary'}">
+        <md-icon class="md-primary md-hue-4" md-svg-icon="/public/images/baseline-library_books-24px.svg" style="height: 1em;width: 1em">        
+        </md-icon>
         Latest news
     </div>
     <md-divider>
     </md-divider>
+           
     <div layout="row" layout-wrap layout-align="center"> 
-        <md-card flex-gt-lg="25" flex-gt-sm="40" flex-sm="75" flex-xs="100" ng-repeat="article in articles | limitTo: articles.length track by $index" style="border-radius: 6px">
-            <md-card-title>
-              <md-card-title-text style="padding-right: .5em;">
-                <div layout="row" layout-align="start center">
-                     <img ng-src="https://s2.googleusercontent.com/s2/favicons?domain_url={{article.url}}" style="border-radius: 3px;margin-right: .4em;">
-                <span class="md-subhead" style="font-size: 11px; padding: 0px">{{::article.source.name}}</span>
+        <md-card flex-gt-sm="50" flex-sm="75" flex-xs="100" ng-repeat="article in articles | limitTo: articles.length track by $index" style="border-radius: 6px;">
+            <md-card-title flex="nogrow">
+              <md-card-title-text class="md-body-3" style="padding-right: .5em">
+                <div layout="row" layout-align="start center" style="margin-bottom: 8px">
+                     <img ng-src="https://s2.googleusercontent.com/s2/favicons?domain_url={{::article.url}}" style="border-radius: 3px;margin-right: .4em; width: 16px; height: 16px">
+                <span class="md-subhead" style="font-size: 13px; padding: 0px">{{::article.source.name}}</span>
                 </div>
-                <span class="md-title" style="font-size: 16px" title-clamp>{{::article.title}}</span>
+                <span class="md-body-3" style="font-weight: 500;font-size: 18px" title-clamp>{{::article.title}}</span>
               </md-card-title-text>
               <md-card-title-media>
                 <img image-check ng-src="{{::article.image}}" class="md-media-md card-media imageLoad" style="border-radius: 4px; animation: show-on-load 0.5s ease-in">
               </md-card-title-media>
             </md-card-title>
-            <md-card-content>
-                <span class="md-caption">{{::article.description}}</span>
+            <md-card-content class="md-caption" flex="noshrink">
+                <span>{{::article.description}}</span>
             </md-card-content>
                 <md-card-actions layout="row" layout-align="end center" layout-wrap> 
                   <div layout-align="start center" flex>
@@ -60,11 +66,9 @@
         </md-card-actions>
         </md-card>
     </div>    
-     <div layout="column" layout-align="center center" style="height: 100px">
-        <md-progress-circular md-duration="200" ng-disabled="!isbusy" md-mode="indeterminate"></md-progress-circular>
+     <div layout="column" layout-align="center center" style="height: 80px">
+        <md-progress-circular ng-if="isbusy" md-mode="indeterminate"></md-progress-circular>
     </div>
 </div>
 
- <md-button id="scrollTop" ng-click="scrollTop()" ng-cloak ng-init="showFAB=false" class="md-fab md-accent md-fab-bottom-right animatestuff"; aria-label="Scroll to top" ng-class="{'md-mini': isSmall}" ng-show="showFAB">
-            <md-icon md-svg-src="public/images/arrow-collapse-up.svg"></md-icon>
-    </md-button>  
+

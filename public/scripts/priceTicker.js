@@ -1,15 +1,29 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$log,$timeout,$mdMedia,$location) {
+app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$mdMedia,$location, dataSrv,$window,$document,$timeout) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
-	var userStatus;
 	$rootScope.currentTheme = 'default';
 	var previous = $scope.selectedItem;
-	themes = [{icon: "/public/images/moon.svg", label:"Dark Theme"},{icon: "/public/images/ic_wb_sunny_black_24px.svg", label:"Light Theme"}]
+	var themes = [{icon: "/public/images/moon.svg", label:"Dark Theme", name: "darkDefault"},{icon: "/public/images/ic_wb_sunny_black_24px.svg", label:"Light Theme", name: "default"}]
+	var userAgent = navigator.userAgent.toLowerCase();
+	var isAndroidChrome = /chrome/.test(userAgent) && /android/.test(userAgent);
+	var isIOSChrome = /crios/.test(userAgent);
+	$scope.ethInfo = [null,null];
+	$scope.btcInfo = [null,null];
 	
+	var adjustShit = function(){
+		$timeout(function() {
+			var heights = Math.min(document.documentElement.clientHeight, window.screen.height, window.innerHeight);
+			var topHeaderHeight = angular.element('#pageTop')[0].clientHeight;
+			var mobileTopHeight = angular.element('.md-nav-bar')[0].clientHeight;
+			var height_offset = mobileTopHeight + topHeaderHeight;
+			angular.element('#pageContent').css('height',(heights-height_offset)+'px');
+		});
+	};
+
 	$transitions.onSuccess({}, function(transition) {
 
-		userStatus = userSrv.authenticated({username: true, avatarImage: true, theme: true}).then(function(res){
+		userSrv.authenticated({username: true, avatarImage: true, theme: true}).then(function(res){
 				$scope.tabName = res[0].username;
 				$scope.imgSrc = String.fromCharCode.apply(null, res[0].avatarImage.data);
 				$rootScope.currentTheme = res[0].theme;
@@ -24,18 +38,7 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 		previous = $scope.selectedItem;
 	});
 
-	$transitions.onBefore({},function(transition){
-		var topHeaderHeight = angular.element('#pageTop')[0].clientHeight;
-		var mobileTopHeight = angular.element('.md-nav-bar')[0].clientHeight;
-		var footerHeight = angular.element('#footer').height()
-		var height_offset = footerHeight + mobileTopHeight + topHeaderHeight;
 
-		if (transition.to().name === 'news' || transition.to().name === 'coinlist' || transition.to().name === 'coinDetails') {
-			height_offset -= footerHeight;
-		}
-
-		angular.element('#pageContent').css('min-height','calc(100% - '+height_offset+'px)');
-	})
 
 
 	$scope.screenSize;
@@ -105,15 +108,15 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	});
 
 	var ethCall = function(data){
-		$scope.ethPrice = numeral(data.PRICE).format('0,0.00');
-		$scope.ethArrow = data.FLAGS === '1' ? up : drop;
-		$scope.ethArrow = data.FLAGS === '4' ? same: $scope.ethArrow;
+		$scope.ethInfo[0] = numeral(data.PRICE).format('0,0.00');
+		$scope.ethInfo[1] = data.FLAGS === '1' ? up : drop;
+		//$scope.ethInfo.push(data.FLAGS === '4' ? same: $scope.ethArrow);
 	}
 
 	var btcCall = function(data){
-		$scope.btcPrice = numeral(data.PRICE).format('0,0.00');
-		$scope.btcArrow = data.FLAGS === '1' ? up : drop;
-		$scope.btcArrow = data.FLAGS === '4' ? same: $scope.btcArrow;
+		$scope.btcInfo[0] = numeral(data.PRICE).format('0,0.00');
+		$scope.btcInfo[1] = data.FLAGS === '1' ? up : drop;
+		//$scope.btcArrow = data.FLAGS === '4' ? same: $scope.btcArrow;
 	}
 
 	if (!$scope.isSmall()) {
@@ -126,26 +129,26 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 			tickerSrv.subscribe('BTC',btcCall);
 			tickerSrv.subscribe('ETH',ethCall);
 		}
+
+		else{
+			tickerSrv.unsub('BTC',btcCall);
+			tickerSrv.unsub('ETH',ethCall);
+		}
 	})
 
+	$scope.$on('user:updated', function(event,data) {  
+    	tickerSrv.unsub('BTC',btcCall,dataSrv.getPrevious());
+		tickerSrv.unsub('ETH',ethCall,dataSrv.getPrevious());
+		tickerSrv.subscribe('BTC',btcCall,dataSrv.getCurrency());
+		tickerSrv.subscribe('ETH',ethCall,dataSrv.getCurrency());
+
+		if (dataSrv.getCurrency() === 'BTC') {
+			$scope.btcInfo[0] = "1.00";
+		}
+   });
+
+	angular.element($window).on('resize orientationchange', adjustShit);
+	$timeout(adjustShit);
 
 	
-	$scope.$watch(function(){
-		return angular.element('#pageTop')[0].clientHeight > 0;
-	}, function(arg){
-		//angular.element('#pageContent')[0].height(angular.element('#pageContent')[0].offsetheight+angular.element('#pageTop')[0].offsetHeight);
-		//console.log(angular.element('#pageTop')[0].offsetHeight);
-			//console.log($state.current.name == 'coinlist' || $state.current.name == 'news')
-			var topHeaderHeight = angular.element('#pageTop')[0].clientHeight;
-			var mobileTopHeight = angular.element('.md-nav-bar')[0].clientHeight;
-			var footerHeight = angular.element('#footer').height()
-			var height_offset = footerHeight + mobileTopHeight + topHeaderHeight;
-			//console.log(height_offset,topHeaderHeight);
-		
-		if ($location.path() === '/' || $location.path() === '/news') {
-			height_offset -= footerHeight;
-		}
-
-		angular.element('#pageContent').css('min-height','calc(100% - '+height_offset+'px)');
-	})
 });

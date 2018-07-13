@@ -4,21 +4,23 @@ app.factory('scrollSrv',function($window,$rootScope){
 
   var on = function(fscope) {
     scope = fscope;
-    angular.element($window).on("scroll",scrollFunction);
+    angular.element("#pageContent").on("scroll",scrollFunction);
   };
 
   var off = function() {
-    angular.element($window).off("scroll",scrollFunction);
+    angular.element("#pageContent").off("scroll",scrollFunction);
     scope = null;
   };
 	
   var scrollFunction = function() {
-     if (scope.showFAB == false && $window.pageYOffset != 0) {
+    //console.log(angular.element("#pageContent").scrollTop())
+    //console.log('trigerring')
+     if (scope.showFAB == false && angular.element("#pageContent").scrollTop() != 0) {
         scope.showFAB = true;
         scope.$apply();
       }
 
-      else if(scope.showFAB == true && $window.pageYOffset == 0){
+      else if(scope.showFAB == true && angular.element("#pageContent").scrollTop() == 0){
         scope.showFAB = false;
         scope.$apply();
       } 

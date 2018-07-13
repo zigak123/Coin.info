@@ -1,12 +1,9 @@
 app.component("coinlist", {
 
 controller:
-    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval,$mdMedia,dataSrv) {
-        //var skip = 0;
-        $scope.showFAB = false;
+    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval,$mdMedia,dataSrv,$rootScope) {
         $scope.coins = [];
         var marketTicker;
-
 
         var getMarketData = function(){ $http({
                 method : "GET",
@@ -35,22 +32,43 @@ controller:
         $scope.loadMore = function(){
             if ($scope.isbusy) {return;}
             $scope.isbusy = true;
-            
-                 dataSrv.getCoins(function(result_data){
-                 $scope.coins = result_data;
-                 $scope.isbusy = false;
 
-                 //skip += 10;
-            }) 
+            $timeout(function() {
+               dataSrv.getCoins(function(result_data){
+               $scope.coins = result_data;
+               $scope.isbusy = false;
+            }, $scope.currency) 
+
+            }, 250);
+               
           
+        }
+
+        $scope.currency = dataSrv.getCurrency();
+        $scope.changeCurrency = function(currency){
+            $scope.currency = currency;
+            dataSrv.setCurrency(currency);
+            dataSrv.getCoins(function(result_data){
+                $scope.coins = result_data;
+                $rootScope.$broadcast('user:updated',result_data);
+            }, $scope.currency)
+        }
+
+        $scope.roundPrice = function(item_data){
+            if (item_data.lineData[item_data.lineData.length-1] == undefined) {
+                return "1.00000000"
+            }
+            if ($scope.currency == 'BTC') {
+                return item_data.lineData[item_data.lineData.length-1].toFixed(8);
+            }
+
+            return item_data.lineData[item_data.lineData.length-1].toFixed(2);
         }
 
         $scope.$on("$destroy",function(event){
             $interval.cancel(marketTicker);
         })
 
-
-        // start global market ticker(1min repeat api update)
         getMarketData();
         marketTicker = $interval(getMarketData, 60000);
 

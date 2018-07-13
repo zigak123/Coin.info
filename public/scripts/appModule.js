@@ -1,11 +1,11 @@
-var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
-app.value('THROTTLE_MILLISECONDS', 5000);
+var app = angular.module("coinTicker", ['vs-repeat','ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
+app.value('THROTTLE_MILLISECONDS', 2000);
 
 
 app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider,$mdAriaProvider) {
 
   $mdProgressCircularProvider.configure({
-    progressSize: 50
+    progressSize: 40
   });
   // disable aria label warnings
   $mdAriaProvider.disableWarnings();
@@ -51,6 +51,12 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
         return userSrv.authenticated({username: true, avatarImage: true});
       }
     }
+  }
+
+  var appState = {
+    name: 'app',
+    url: '/app',
+    component: 'priceTicker'
   }
 
 
@@ -104,19 +110,31 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
 
 app.directive('priceChangeLabel',function(){
   function link(scope, el, attr){
-    n = scope.priceInfo.length;
-    scope.temp = (scope.priceInfo[n-1] / scope.priceInfo[n-31]) > 1 ? (scope.priceInfo[n-1] / scope.priceInfo[n-31]) - 1 : -1*(1 - (scope.priceInfo[n-1] / scope.priceInfo[n-31]));
-    scope.temp = numeral(scope.temp*100).format('0,0.00');
+    function calculateChange(){
+        n = scope.priceInfo.length;
+        scope.temp = (scope.priceInfo[n-1] / scope.priceInfo[n-31]) > 1 ? (scope.priceInfo[n-1] / scope.priceInfo[n-31]) - 1 : -1*(1 - (scope.priceInfo[n-1] / scope.priceInfo[n-31]));
+        scope.temp = numeral(scope.temp*100).format('0,0.00');
 
-    if (scope.temp < 0) {
-      scope.price_arrow = "public/images/arrow_drop.svg";
-      scope.style = {"color": "red"};
+        if (scope.temp < 0) {
+          scope.price_arrow = "public/images/arrow_drop.svg";
+          scope.style = {"color": "red"};
+        }
+
+        else{
+          scope.price_arrow = "public/images/arrow_up.svg";
+          scope.style = {"color": "limegreen"};
+        }
     }
 
-    else{
-      scope.price_arrow = "public/images/arrow_up.svg";
-      scope.style = {"color": "limegreen"};
-    }
+    scope.$watch('priceInfo', function(newValue,oldValue){
+      if (newValue == oldValue) {
+        return;
+      } 
+      calculateChange();
+    })
+
+    calculateChange();
+
   }
 
   return {
@@ -127,41 +145,67 @@ app.directive('priceChangeLabel',function(){
     template: '<div layout="row" align="end">\
                     <md-icon style="height: 24px; margin-left: 0px; margin-right: 0px" md-svg-src={{price_arrow}}></md-icon>\
                       <span class="md-caption" ng-style="style"> {{temp}} % </span>\
-              </div>'
-  ,
+              </div>',
   link: link
   }
 })
 
-app.directive('sl', function($timeout,$window){
+app.directive('sl', function($timeout,$window,dataSrv){
   function link(scope, el, attr){
-    el = d3.select(el[0]);
-    var svg = el;
-    var data = scope.item['lineData'];
-    var min = attr.min !== undefined ? +attr.min : d3.min(data);
-    var max = attr.max !== undefined ? +attr.max : d3.max(data);
-    el.text(''); // remove the original data text
-    var r = attr.r || 0;
-    var m = r;
-    var w = svg.node().clientWidth;
-    w = 64; // fixed width becasue of firefox width issues
-    var h = +getComputedStyle(el.node())['font-size'].replace('px','');
-    svg.attr({width: w, height: h});
-    var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
-    var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
-    var lines = svg.append('path').data(data)
-      .attr('d', 'M' + data.map(function(d, i){ return [x(i),y(d)] }).join('L'));
-    var circles = svg.selectAll('circle').data(data).enter().append('circle')
-      .attr('r', r)
-      .attr('cx', function(d, i){ return x(i) })
-      .attr('cy', function(d){ return y(d) });
+
+        console.log(dataSrv.getCurrency())
+        el = d3.select(el[0]);
+        var svg = el;
+        var data = scope.priceData;
+        var min = attr.min !== undefined ? +attr.min : d3.min(data);
+        var max = attr.max !== undefined ? +attr.max : d3.max(data);
+        el.text(''); // remove the original data text
+        var r = attr.r || 0;
+        var m = r;
+        var w = svg.node().clientWidth;
+        w = 64; // fixed width becasue of firefox width issues
+        var h = getComputedStyle(el.node())['font-size'].replace('px','');
+        svg.attr({width: w, height: h});
+        var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
+        var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
+        var lines = svg.append('path').data(data)
+          .attr('d', 'M' + data.map(function(d, i){ return [x(i),y(d)] }).join('L'));
+        var circles = svg.selectAll('circle').data(data).enter().append('circle')
+          .attr('r', r)
+          .attr('cx', function(d, i){ return x(i) })
+          .attr('cy', function(d){ return y(d) });
+    
+
+    scope.$watch("priceData",function(newValue,oldValue) {
+      if (newValue == oldValue) {
+        return;
+      }
+       svg.selectAll('circle').remove();
+       svg.selectAll('path').remove();
+       
+      data = scope.priceData;
+      min = attr.min !== undefined ? +attr.min : d3.min(data);
+      max = attr.max !== undefined ? +attr.max : d3.max(data);
+      x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
+      y = d3.scale.linear().domain([min, max]).range([h - m, m]);
+      lines = svg.append('path').data(data)
+          .attr('d', 'M' + data.map(function(d, i){ return [x(i),y(d)] }).join('L'));
+      circles = svg.selectAll('circle').data(data).enter().append('circle')
+          .attr('r', r)
+          .attr('cx', function(d, i){ return x(i) })
+          .attr('cy', function(d){ return y(d) });
+    });
   }
   return {
     link: link
     , restrict: 'E'
     , replace: true
     , template: '<svg ng-transclude class="sl"></svg>'
-    , transclude: true
+    , transclude: true,
+    scope: {
+        priceData: '=data',
+        coinSymbol: '=symbol'
+    }
   };
 });
 
@@ -195,7 +239,7 @@ app.directive('imageCheck', function($rootScope){
 
 app.directive('titleClamp', function(){
   function link(scope, el, attr){
-      $clamp(el[0], {clamp: 4, useNativeClamp: true});
+      $clamp(el[0], {clamp: 3, useNativeClamp: true});
   }
   return {
     link: link
@@ -208,6 +252,15 @@ app.directive('userMenu', function(){
   }
 })
 
+app.directive('infiniteScrollFix', function($window) {
+  return {
+    restrict: 'A',
+    link: function($scope, $element) {
+      
+      $element.on('scroll', function(event) {
+        $window.dispatchEvent(new Event('scroll'));
+      });
 
-
-
+    }
+  };
+});

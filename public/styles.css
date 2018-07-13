@@ -26,25 +26,25 @@
 }
 
 .md-fab.animatestuff.ng-hide{
-   -webkit-transition: all 200ms ease-in;
+   -webkit-transition: all 250ms ease-in;
     -webkit-transform: scale(0); 
-    -ms-transition: all 200ms ease-in;
+    -ms-transition: all 250ms ease-in;
     -ms-transform: scale(0); 
-    -moz-transition: all 200ms ease-in;
+    -moz-transition: all 250ms ease-in;
     -moz-transform: scale(0);
-    transition: all 200ms ease-in;
+    transition: all 250ms ease-in;
     transform: scale(0);   
 }
 
 .md-fab.animatestuff{
   position: fixed !important;
-  -webkit-transition: all 200ms ease-in;
+  -webkit-transition: all 250ms ease-in;
     -webkit-transform: scale(1); 
-    -ms-transition: all 200ms ease-in;
+    -ms-transition: all 250ms ease-in;
     -ms-transform: scale(1); 
-    -moz-transition: all 200ms ease-in;
+    -moz-transition: all 250ms ease-in;
     -moz-transform: scale(1);
-    transition: all 200ms ease-out;
+    transition: all 250ms ease-out;
     transform: scale(1);   
 }
 
@@ -81,9 +81,21 @@ md-autocomplete-wrap,md-autocomplete{
   border-radius: 6px !important;
 }
 
-#chartdiv {
-  width : 680px;
+#chartcontainer {
+   width : 680px;
   height  : 400px;
+  position: relative;
+}
+
+#curtain{
+  top: calc(-50% - 45px);
+  left: calc(50% - 12.5px);
+  z-index: 50
+}
+
+#chartdiv {
+  width : 100%;
+  height  : 100%;
 } 
 
 .md-button {
@@ -167,13 +179,40 @@ md-input-container{
     background-color: rgb(21,101,192) !important;
 }
 
-.chartSelector{
-  color: white;
+.chartSelected:not([disabled]):hover{
     background-color: rgb(21,101,192) !important;
 }
 
-.chartSelector:not([disabled]):hover{
-    background-color: rgb(21,101,192) !important;
+.md-accent.chartSelected:not([disabled]):hover{
+    background-color: rgb(245,0,87) !important;
+}
+
+.chartSelected{
+  height: 40px;
+  border-radius: 6px; 
+  text-transform: none; 
+  font-size: 12px; 
+  height: 40px; 
+  margin: 0px;
+  margin-left: .5em;
+  margin-right: .5em
+}
+
+
+.average{
+    min-width: 0;
+    height: 40px; 
+    border-radius: 6px; 
+    font-size: 12px; 
+    margin: 0px; 
+    margin-right: .5em;
+    margin-left: .5em;
+    border: 2px solid;
+    transition-duration: 0.5s
+}
+
+.detailsLabel{
+  float: right;
 }
 
 .md-accent.candlestick:not([disabled]):hover{
@@ -211,7 +250,7 @@ md-nav-ink-bar{
 
 /* For Tablets and Landscape mode */
 @media screen and (min-width: 600px) and (max-width: 860px) {
-    #chartdiv {
+    #chartcontainer {
       width: 320px;
       height: 280px
     }
@@ -219,19 +258,13 @@ md-nav-ink-bar{
 
 /* For Phones */
 @media screen and (min-width: 620px) and (max-width: 740px) {
-
-
   #backButton{
       display: none;
   }
 }
 
-@media screen and (min-width: 600px) {
- 
-}
-
 .navbutton .md-button:not([disabled]):hover {
-    background-color: transparent !important;
+  background-color: transparent !important;
 }
 
 #hamburger .md-button {
@@ -241,9 +274,6 @@ md-nav-ink-bar{
 
 .sidenavbutton .md-button:not([disabled]):hover {
     background-color: transparent !important;
-}
-
-.md-button.sidenavbutton{
 }
 
 #mobileLogo .md-button{
@@ -291,21 +321,10 @@ md-nav-ink-bar{
   position: fixed;
 }
 
-@keyframes refresh-rotate{
-  0% {
-    transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
 
-  }
-  100% {
-    transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-  }
+md-fab-speed-dial.md-left md-fab-actions .md-fab-action-item{
+  margin-right: 6px
 }
-
-  md-fab-speed-dial.md-left md-fab-actions .md-fab-action-item{
-    margin-right: 6px
-  }
 
 .md-button.md-darkDefault-theme.md-hue-2.md-accent.md-raised{
   background-color: rgb(245,0,87) !important;
@@ -313,4 +332,27 @@ md-nav-ink-bar{
 
 .menuitem{
   min-width: 0px !important;
+}
+
+.niceshit{
+   margin: 10px;
+    padding: 10px;
+    height: 100%;
+    overflow: auto;
+    border: 1px solid lightgray;
+}
+
+.currencySelect:focus{
+  outline: none;
+}
+
+.currencySelect{
+  cursor: pointer;
+  
+}
+
+.selectedCurrency{
+  transition-duration: 1s;
+  background-color: rgb(30, 136, 229);
+  color: white !important;
 }

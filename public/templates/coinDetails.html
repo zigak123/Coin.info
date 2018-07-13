@@ -2,44 +2,47 @@
 	<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 </div>
 
-<div class="drek" layout="column" ng-hide="isLoading" layout-padding ng-cloak="">
-	<div md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-700-0.8'}"  style="border-radius: 6px; display: flex;flex-direction: row;margin: auto" md-whiteframe="3">
-		<div style="display: flex;flex-direction: column;padding-bottom: 0px" layout-padding>
+<div layout="column" ng-hide="isLoading" layout-padding ng-cloak="">
+	<div md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-700-1'}"  style="border-radius: 6px; display: flex;flex-direction: row;margin: auto" md-whiteframe="3">
+		<div layout="column" style="padding-bottom: 0px" layout-padding>
 	 			<div style="display: flex;flex-direction: row; align-items: center;padding-top: 0px;padding-bottom: 0px" class="md-title">
 	 				<img style="width: 1em; height: 1em; border-radius: 6px" ng-src="https://www.cryptocompare.com/{{::coin_data.ImageUrl}}">
-	 				<a style="margin-left: .2em">{{::coin_data.FullName}}</a>
+	 				<span style="margin-left: .2em">{{::coin_data.FullName}}</span>
 	 			</div>
 	 			<div layout="column" style="height: 100%; padding-bottom: 0px">		
 	 				<md-divider style="margin-bottom: 8px"></md-divider>
-	 			<span class="md-caption">
-	 				<span style="float: left;">Algorithm: </span>
-	 				<span style="float: right;">{{::coin_data.Algorithm}}</span>
+	 			<span class="md-caption" style="margin-bottom: ">
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">Algorithm: </span>
+	 				<span class="detailsLabel">{{::coin_data.Algorithm}}</span>
 	 			</span>	
+	 			
 	 			<span class="md-caption">
-	 				<span style="float: left;">Proof type: </span>
-	 				<span style="float: right;">{{::coin_data.ProofType}}</span>
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">Proof type: </span>
+	 				<span class="detailsLabel">{{::coin_data.ProofType}}</span>
 	 			</span>	
+	 			
 	 			<span class="md-caption">
-	 				<span style="float: left;">Total supply: </span>
-	 				<span style="float: right;">{{::coin_data.TotalCoinSupply}}</span>
-	 			</span>	
-
-
-	 			<span class="md-caption">
-	 				<span style="float: left;">Coin supply: </span>
-	 				<span style="float: right;">{{coin_supply}}</span>
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">Total supply: </span>
+	 				<span class="detailsLabel">{{::coin_data.TotalCoinSupply}}</span>
 	 			</span>	
 
+	 			
+	 			<span class="md-caption">
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">Coin supply: </span>
+	 				<span class="detailsLabel">{{coin_supply}}</span>
+	 			</span>	
+	 			
 
 	 			<span class="md-caption">
-	 				<span style="float: left">Marketcap: </span>
-	 				<span style="float: right;">{{coin_market_cap}}</span>
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">Marketcap: </span>
+	 				<span class="detailsLabel">{{coin_market_cap}}</span>
 	 			</span>	
-
+	 			
 	 			<span class="md-caption">
-	 				<span style="float: left">24H volume: </span>
-	 				<span style="float: right;">{{volume}}</span>
+	 				<span md-colors="{color: 'default-primary-600'}" style="float: left;font-weight: 900">24H volume: </span>
+	 				<span class="detailsLabel">{{volume}}</span>
 	 			</span>	
+	 			
 
 	 			<div>
 	            	<a style="text-decoration: none" ng-href="https://www.cryptocompare.com{{coin_data.Url}}">
@@ -59,8 +62,6 @@
 	 				</div>	
 				</div>
 
-
-
 	            <div class="hiddenDrek" ng-show="price" style=" min-width: 200px;">
 	              <div style="position: relative;left: -5px;margin-top: 1em" layout="row" align="start center">
 	            		<md-icon style="height: 24px; margin: 0px" md-svg-src="{{priceArrow}}"></md-icon>
@@ -69,39 +70,53 @@
 							<md-tooltip md-direction="top">compared to today's open price</md-tooltip>
 		              	</span> 
 	              </div>
-	              <span class="md-display-1">{{price}}<span style="margin-left: .5em" class="md-body-2">USD</span> </span>
+	              <span class="md-display-1">{{price}}<span style="margin-left: .5em" class="md-body-2">{{::currency}}</span> </span>
 	            </div>
 	 			</div>     
 		</div>
 		<div layout="column">
+			<div hide-xs id="chartcontainer">
+				<div hide-xs id="chartdiv"/>
+				 <md-button id="zoomout" class="md-icon-button" ng-click="zoomOut()" md-no-ink aria-label="Zoom out" style="padding: 0px !important; margin: 0px !important; top: calc(-100% + 22px); left: calc(100% - 40px);display: block !important;position: relative !important;z-index: 20; visibility: hidden;" hide show-gt-sm>
+			        <md-icon md-svg-icon="public/images/baseline-zoom_out-24px.svg"></md-icon>
+			     </md-button>
+				<md-progress-circular id="curtain" md-diameter="25" md-mode="indeterminate"></md-progress-circular>
+				<div id ="backgroundcurtain" md-colors="$root.currentTheme === 'darkDefault' ? {background: 'default-background-700'} : ''" style="width: 100%;height: 100%;top: 0%;z-index: 49;position: absolute; background-color: rgb(250,250,250);"> </div>
+			
+			</div>
+			
 
-			<div hide-xs id="chartdiv" style="margin-bottom: 0px; margin-right: 8px"></div>
 			<div layout="row" layout-align="start center" style="margin-bottom: 6px">
 				<div layout="column">
-					<section hide-xs layout="row" style="padding: 0px;height: auto">
+			<section hide-xs layout="row" style="padding: 0px;height: auto">
 				<div style="text-align: center;align-self: center;  font-weight: 500; min-width: 50px; margin-right: .5em" class="md-caption">Zoom:</div>
 				<md-button class="candlestick md-primary md-raised md-hue-2" md-ink-ripple="false" ng-repeat="zoomSize in zoomSizes" ng-click="changeZoom(zoomSize)" ng-class="{'leftup': zoomSize == zoomSizes[0],'rightup': zoomSize == zoomSizes[zoomSizes.length-1], 'md-accent': selectedZ.label === zoomSize.label}">
 					{{zoomSize.label}}
 				</md-button>
 			</section>
 			
-			<section hide-xs layout="row" style="padding: 0px;height: auto">		
+			<section hide-xs layout="row" style="padding: 0px;height: auto; margin-right: .5em">		
 				<div style="text-align: center;align-self: center; font-weight: 500; min-width: 50px;margin-right: .5em" class="md-caption">Candle:</div>
 				<md-button class="candlestick md-primary md-raised md-hue-2" md-ink-ripple="false" ng-repeat="candleSize in candleSizes" ng-click="changeCandle(candleSize)" ng-class="{'left': candleSize == candleSizes[0],'right': candleSize == candleSizes[candleSizes.length-1], 'md-accent': selectedC.label === candleSize.label}">
 					{{candleSize.label}}
 				</md-button>
 			</section>
 				</div>
-				<span hide show-gt-sm class="md-caption" style="font-weight: 500; margin-left: 1em; margin-right: 1em">chart type:</span>
-				<md-button ng-class="{'md-accent': selectedChart === 'candlestick'}" hide show-gt-sm md-no-ink ng-click="changeChartType('candlestick')" class="md-raised md-primary md-hue-2" style="height: 40px; border-radius: 6px; text-transform: none; font-size: 12px; height: 40px; margin: 0px; margin-right: 1em"> candlestick </md-button>
-				<md-button ng-class="{'md-accent': selectedChart === 'line'}" hide show-gt-sm md-no-ink ng-click="changeChartType('line')" class="md-raised md-primary md-hue-2" style="height: 40px; border-radius: 6px; text-transform: none; font-size: 12px; height: 40px; margin: 0px; margin-right: 4.5em"> linechart </md-button>
-				<md-icon hide show-gt-sm style="margin: 0px; margin-right: 26px" md-svg-src="/public/images/baseline-info-24px.svg"> <md-tooltip md-direction="top" style="height: auto;text-align: center;line-height: 1.8em">Set candle to 15 minutes <br> for real time chart data</md-tooltip> </md-icon>
+				
+				<md-button ng-class="{'md-accent': selectedChart === 'candlestick'}" hide show-gt-sm md-no-ink ng-click="changeChartType('candlestick')" class="md-raised md-primary md-hue-2 chartSelected"> candlestick </md-button>
+				<md-button ng-class="{'md-accent': selectedChart === 'line'}" hide show-gt-sm md-no-ink ng-click="changeChartType('line')" class="md-raised md-primary md-hue-2 chartSelected"> linechart </md-button>
+
+				<md-button hide show-gt-sm md-no-ink ng-click="addMovingAverage('50')" class="average" md-colors="movingAverage == true ?  {'border-color': 'green-A400','color': 'grey-A100','background': 'green-A400'}:{'border-color': 'green-A400','color': 'green-A400'}"> MA70 </md-button>
+				
+				<md-button hide show-gt-sm md-no-ink ng-click="addMovingAverage('200')" class="average" md-colors="movingAverage200 == true ?  {'border-color': 'orange-A400','color': 'grey-A100','background': 'orange-A400'}:{'border-color': 'orange-A400','color': 'orange-A400'}"> MA200 </md-button>
+
+				<md-icon hide show-gt-sm style="margin: 0px;margin-left: auto;margin-right: 8px" md-svg-src="/public/images/baseline-info-24px.svg"> <md-tooltip md-direction="top" style="height:auto;text-align: center;line-height: 1.8em">Set candle to 15 minutes <br> for real time chart data</md-tooltip> </md-icon>
 			</div>
 			
 		</div>
 		
 	</div>
-    <md-button id="backButton" ui-sref="coinlist" class="md-fab md-accent md-fab-bottom-left" aria-label="Go back" style="position: absolute;">
+    <md-button id="backButton" ui-sref="coinlist" class="md-fab md-accent md-fab-bottom-left" aria-label="Go back" style="position: fixed;">
 		<md-icon md-svg-src="public/images/back_arrow.svg"></md-icon>
 	</md-button> 
 </div>   

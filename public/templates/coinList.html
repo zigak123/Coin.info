@@ -9,7 +9,7 @@
                 <span ng-cloak> {{marketData.quotes.USD.total_market_cap}} USD</span>
             </div>
 
-            <div layout="row" hide-xs hide-sm flex layout-align="center center">
+            <div layout="row" hide-xs flex layout-align="center center">
                 <span style="margin-right: .5em" md-colors="{color: 'default-primary'}">Total volume: </span>
                 <span ng-cloak> {{marketData.quotes.USD.total_volume_24h}} USD</span>
             </div>
@@ -22,12 +22,13 @@
                 <span ng-cloak> {{marketData.active_cryptocurrencies}}</span>
             </div>
           </div>
-          <div ng-show="!isbusy" layout="column" style="width: 100%;padding: 0px;margin-bottom: 8px">
+          <div ng-show="!isbusy" layout="column" style="width: 100%">
             
           <md-divider></md-divider>
           </div>
-        <div layout="row" layout-align="center center">
-          <md-autocomplete class="coinInput" ng-show="!isbusy"
+         
+       
+          <md-autocomplete md-autocomplete-snap="width" class="coinInput" ng-show="!isbusy"
               md-selected-item-change="showDetails(selectedCoin)"
               ng-disabled="false"
               md-search-text="searchCoin"
@@ -43,19 +44,37 @@
               <a ng-click="">No coin found!</a>
             </md-not-found>
         </md-autocomplete>
-        
-        </div>
-      
-        <div ng-init="loadMore()" layout="row" style="width: 100%;overflow: initial;" layout-align="center center">
-          <md-list ng-show="!isbusy" md-colors="$root.currentTheme === 'default' ? {}:{background: 'default-background-800-1'}" md-no-ink md-whiteframe flex-gt-sm="50" flex-sm="75" flex-xs="100" style="border-radius: 5px">
+
+
+
+        <div layout="row" ng-show="!isbusy">
+          <div hide show-gt-xs style="width: 4em"></div>
+        <div ng-init="loadMore()">
+     
+          <md-list md-colors="$root.currentTheme === 'default' ? {background: 'default-background-200-0.5'}:{background: 'default-background-800-1'}" md-no-ink md-whiteframe flex="grow" style="border-radius: 6px;padding: 0px;overflow: hidden;">
+             <md-list-item class="md-list-item-text" md-colors="$root.currentTheme === 'default' ? {background: 'default-background-200-0.0', color : 'default-primary-700-1'}:{background: 'default-background-800-1'}" style="height: 24px;min-height: 24px">
+              <span style="margin:0;margin-left: auto;font-weight: 500">Top coins - 30 day info</span>
+            </md-list-item>
+            <md-divider> </md-divider>
               <md-list-item class="md-1-line" ng-repeat="item in coins" ui-sref="coinDetails({coin_data: item, coinName: item.Symbol})" style="border-radius: 6px">
                   <img ng-src="https://www.cryptocompare.com/{{::item.ImageUrl}}" width="32px" style="margin-right: .5em;border-radius: 6px">
-                  <span>{{::item.FullName}}</span>
-                  <sl md-colors="{stroke: 'default-primary-600'}" style="width:4em; margin-right: 1em; margin-left: auto;"></sl>
-                  <price-change-label hide-xs info="::item.lineData" style="width: 5em"/>
+                  <span style="margin-right: auto;font-weight: 500">{{::item.FullName}}</span>
+                  <sl hide-xs md-colors="{stroke: 'default-primary-600'}" symbol="item.Symbol" data="item.lineData" style="width: 4em; margin-right: 1em;margin-left: 4em"></sl>
+                  <price-change-label hide-xs info="item.lineData" style="width: 5em"/>
+                   <span class="md-caption" md-colors="{color: 'default-primary-600'}" style=" font-weight: 900;min-width: 6.5em; text-align: right;">{{roundPrice(item)}}  <span style="font-size: 9px; font-weight: 500;">{{currency}}</span></span>
                   <md-divider></md-divider>
               </md-list-item>      
           </md-list>
         </div>
-        
+        <div hide show-gt-xs style="width: 4em" class="md-caption">
+          <div ng-click="changeCurrency('EUR')" style="width: 4em;height: 2em;border-bottom-right-radius: 6px;border-top-right-radius: 6px; text-align: center;margin-top: 36px" class="currencySelect" ng-class="{'selectedCurrency': currency == 'EUR'}" md-colors="{color: 'default-primary-600'}" layout-align="center center" layout="column"> <span> EUR </span></div>
+      
+             <div ng-click="changeCurrency('USD')" class="currencySelect" ng-class="{'selectedCurrency': currency == 'USD'}" md-colors="{color: 'default-primary-600'}" style="width: 4em;height: 2em;border-bottom-right-radius: 6px;border-top-right-radius: 6px; text-align: center;margin-top: 8px;" layout-align="center center" layout="column"> <span> USD </span></div>
+
+
+             <div ng-click="changeCurrency('BTC')" class="currencySelect" ng-class="{'selectedCurrency': currency == 'BTC'}" md-colors="{color: 'default-primary-600'}" style="width: 4em;height: 2em;border-bottom-right-radius: 6px;border-top-right-radius: 6px; text-align: center;margin-top: 8px" layout-align="center center" layout="column"> <span> BTC </span></div>
+        </div>
+
+        </div>
+    </div>
 </div>

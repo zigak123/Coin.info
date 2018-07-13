@@ -22,11 +22,12 @@ app.component('news',{
 
        })
 
-    $scope.LoadArticles = function(reverse){
+    $scope.LoadArticles = function(){
         $scope.isbusy = true;
-        $scope.showFAB = false;
+        
 
         $http.get('news?page='+$scope.page).then(function(res){
+            
             if (res.data !== undefined && res.data !== null) {
                 angular.forEach(res.data, function(key){
                     var dateFuture = new Date();
@@ -62,17 +63,12 @@ app.component('news',{
     }
 
     $scope.scrollTop = function(){
-
         if (!$mdMedia('gt-xs')) {
-            $location.hash("mobileTop");
-            $anchorScroll();
+            $('body, html, #pageContent').scrollTop(0);
         }
         else{
-            $('html, body').animate({
-                scrollTop: $("#pageTop").offset().top
-            }, $("body")[0].scrollHeight*0.1);
-        }
-        
+            $("#pageContent").animate({ scrollTop: 0 }, angular.element("#pageContent").scrollTop()*0.025);
+        }      
     }
 
     $scope.readArticle = function(selected_article){
@@ -109,10 +105,25 @@ app.component('news',{
             })
     }
 
-    scrollSrv.on($scope);
-    $scope.$on('$destroy', function() {
-        scrollSrv.off();
-    })
+    var scrollFunc = function(){
+        if (angular.element("#pageContent").scrollTop() > 0) {
+            $scope.showFAB = true;
+            $scope.$apply();
+        }
+
+        else if (angular.element("#pageContent").scrollTop() == 0) {
+            $scope.showFAB = false;
+            $scope.$apply();
+        }
+    }
+
+    $scope.$on('$destroy', function(){
+        angular.element("#pageContent").off('scroll', scrollFunc);
+    });
+    
+    angular.element("#pageContent").on('scroll', scrollFunc);
     $timeout(function(){$scope.LoadArticles(false)},350);
 }],
 templateUrl: '/public/templates/coinNews.html'});
+
+
