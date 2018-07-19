@@ -60,8 +60,8 @@
                   <img ng-src="https://www.cryptocompare.com/{{::item.ImageUrl}}" width="32px" style="margin-right: .5em;border-radius: 6px">
                   <span style="margin-right: auto;font-weight: 500">{{::item.FullName}}</span>
                   <sl hide-xs md-colors="{stroke: 'default-primary-600'}" symbol="item.Symbol" data="item.lineData" style="width: 4em; margin-right: 1em;margin-left: 4em"></sl>
-                  <price-change-label hide-xs info="item.lineData" style="width: 5em"/>
-                   <span class="md-caption" md-colors="{color: 'default-primary-600'}" style=" font-weight: 900;min-width: 6.5em; text-align: right;">{{roundPrice(item)}}  <span style="font-size: 9px; font-weight: 500;">{{currency}}</span></span>
+                  <price-change-label hide-xs info="item.lineData" style="width: 5em"></price-change-label>
+                   <span class="md-caption" md-colors="{color: 'default-primary-600'}" style=" font-weight: 900;min-width: 8.5em; text-align: right;">{{roundPrice(item)}}  <span style="font-size: 9px; font-weight: 500;">{{currency}}</span></span>
                   <md-divider></md-divider>
               </md-list-item>      
           </md-list>

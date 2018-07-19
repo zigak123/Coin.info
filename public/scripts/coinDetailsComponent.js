@@ -1,6 +1,6 @@
 app.component('coinDetails',{
 templateUrl: '/public/templates/coinDetails.html',
-controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope,$interval,$mdMedia,$timeout, dataSrv) {
+controller: ['$scope', '$state', '$stateParams', '$http', 'tickerSrv', '$transitions','$rootScope','$interval','$mdMedia','$timeout', 'dataSrv', function ($scope, $state, $stateParams, $http, tickerSrv, $transitions,$rootScope,$interval,$mdMedia,$timeout, dataSrv) {
 	if($stateParams.coin_data == null){
 		$state.go('coinlist');
 	}
@@ -24,7 +24,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	var numbertoround = roundCurrency[dataSrv.getCurrency()];
 
     var panelCall =  function (data) {
- 		$scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
+ 		    $scope.volume = numeral(data.VOLUME24HOUR).format('0,0.00');
         $scope.price = Number(data.PRICE.toString());
         $scope.data = data;
         $scope.high24hour = data.HIGH24HOUR ? data.HIGH24HOUR: $scope.high24hour;
@@ -37,7 +37,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
         num_format = dataSrv.getCurrency() == "BTC" ? '0,0.00000000' : num_format;
         $scope.coin_market_cap = numeral($scope.coin_supply_int * $scope.price).format('0,0');
 
-        if (chart) {
+        if (chart != undefined) {
         	var data_length = chart.dataSets[0].dataProvider.length;
         	var last = new Date(chart.dataSets[0].dataProvider[data_length-1].time);
         	var now = new Date();
@@ -103,15 +103,15 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 
 		    chart.dataSets[0].dataProvider = chartData;
 		    
-			chart.categoryAxesSettings.minPeriod = $scope.selectedC.periods[0];
+			  chart.categoryAxesSettings.minPeriod = $scope.selectedC.periods[0];
 		    chart.categoryAxesSettings.groupToPeriods = $scope.selectedChart == 'line' ? [$scope.selectedC.periods[0]] : $scope.selectedC.periods;
 		    if (chart.dataSets[0].dataProvider.length < 365 == false) {
 		    	chart.panels[0].hideGraph(chart.panels[0].stockGraphs[2]);
 		    	chart.panels[0].hideGraph(chart.panels[0].stockGraphs[3]);
-      			AmCharts.addMovingAverage(chart.dataSets[0], chart.panels[0], "close");
-      		}
+      		AmCharts.addMovingAverage(chart.dataSets[0], chart.panels[0], "close");
+      	}
 		    
-		   		chart.validateData();   	
+		   	chart.validateData();   	
 		   	chart.zoom(new Date(chart.dataSets[0].dataProvider[Math.ceil(chart.dataSets[0].dataProvider.length/2)-1].time),new Date());
 		   	
 		},function(err){
@@ -135,7 +135,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 			var curtain = document.getElementById("curtain");
 			curtain.style.visibility = "visible";
 			var backgroundcurtain = document.getElementById("backgroundcurtain");
-      		backgroundcurtain.style.visibility = "visible";
+      backgroundcurtain.style.visibility = "visible";
 			$scope.selectedZ = newZoom;
 			loadPriceData();
 		}
@@ -148,7 +148,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 			curtain.style.visibility = "visible";
 
 			var backgroundcurtain = document.getElementById("backgroundcurtain");
-      		backgroundcurtain.style.visibility = "visible";
+      backgroundcurtain.style.visibility = "visible";
 			$scope.selectedC = newCandle;
 			loadPriceData();
 		}
@@ -207,7 +207,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	}
 
 	$scope.$on('$destroy', function() {
-	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall);
+	  tickerSrv.unsub($scope.coin_data.Symbol, panelCall,dataSrv.getCurrency());
 	})
 
 	$timeout(function(){
@@ -450,7 +450,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
       	backgroundcurtain.style.visibility = "hidden";
       	$scope.movingAverage = chart.dataSets[0].dataProvider.length < 365 ? false : $scope.movingAverage;
       	$scope.movingAverage200 = chart.dataSets[0].dataProvider.length < 365 ? false : $scope.movingAverage200;
-      	$scope.$apply()
+      	
 
     }
   }]
@@ -463,7 +463,7 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
     chart.categoryAxesSettings.groupToPeriods = [$scope.selectedC.periods[0]];
     n = response.data.Data.length;
     oldprice = (response.data.Data[n-1].open);
-    tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall);
+    tickerSrv.subscribe($stateParams.coin_data.Symbol, panelCall, dataSrv.getCurrency());
 
 
   chart.addListener( "zoomed", function( event ) {
@@ -491,4 +491,4 @@ controller: function ($scope, $state, $stateParams, $http, tickerSrv, $transitio
 	$scope.currency = dataSrv.getCurrency();
 	getCoinSnapshot();
 }
-});
+]});

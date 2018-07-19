@@ -1,7 +1,7 @@
 app.component("coinlist", {
 
 controller:
-    function($scope, $http, tickerSrv,$state, scrollSrv, $timeout, $q, $interval,$mdMedia,dataSrv,$rootScope) {
+    ['$scope', '$http', 'tickerSrv','$state', '$timeout', '$q', '$interval','$mdMedia','dataSrv','$rootScope',function($scope, $http, tickerSrv,$state, $timeout, $q, $interval,$mdMedia,dataSrv,$rootScope) {
         $scope.coins = [];
         var marketTicker;
 
@@ -73,4 +73,4 @@ controller:
         marketTicker = $interval(getMarketData, 60000);
 
 
-}, templateUrl: '/public/templates/coinList.html'})
+}], templateUrl: '/public/templates/coinList.html'})

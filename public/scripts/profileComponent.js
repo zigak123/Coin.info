@@ -1,5 +1,5 @@
 app.component('profile',{
-	controller: function ($scope,$state,$http) {
+	controller: ['$scope','$state','$http',function ($scope,$state,$http) {
 
 
 		$scope.sendForm = function(){
@@ -22,6 +22,6 @@ app.component('profile',{
 			})
 		}
 	
-	},
+	}],
 	templateUrl:'/public/templates/profile.html'
 })

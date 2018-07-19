@@ -1,5 +1,5 @@
 app.component('login',{
-	controller: function ($scope, $http, userSrv) {
+	controller: ['$scope','$http','userSrv',function ($scope, $http, userSrv) {
 		$scope.signIn = function(){ 
 			userSrv.signIn({'logemail': $scope.clientEmail,'logpassword':$scope.password}).then(function(res){
 				if (res == 401) {
@@ -13,6 +13,6 @@ app.component('login',{
 				$scope.signInForm.password.$setValidity("correctPassword", true);
 			})
 		}
-	},
+	}],
 	templateUrl:'public/templates/login.html'
 })

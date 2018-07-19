@@ -77,8 +77,13 @@ md-tabs.md-no-animation md-ink-bar {
   width: 18px;
 }
 
+.contentSidebar{
+  width: 4em
+}
+
 md-autocomplete-wrap,md-autocomplete{
   border-radius: 6px !important;
+  width: 320px
 }
 
 #chartcontainer {
@@ -276,6 +281,10 @@ md-nav-ink-bar{
     background-color: transparent !important;
 }
 
+.sidenavbutton{
+  text-align: left;
+}
+
 #mobileLogo .md-button{
     margin-left: 0px;
     padding-left: 0px;
@@ -348,7 +357,16 @@ md-fab-speed-dial.md-left md-fab-actions .md-fab-action-item{
 
 .currencySelect{
   cursor: pointer;
-  
+  width: 4em;
+  height: 2em;
+  border-bottom-right-radius: 6px;
+  border-top-right-radius: 6px; 
+  text-align: center;
+  margin-top: 8px
+}
+
+.currencySelect:first-of-type{
+  margin-top: 36px
 }
 
 .selectedCurrency{

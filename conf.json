@@ -1,0 +1,14 @@
+{
+    "dev": {
+    	"dir": "/public",
+    	"port": 3000,
+        "MONGO_URI": "mongodb://localhost:27017/data",
+        "MONGO_OPTIONS": { "db": { "safe": true } }
+    },
+    "production": {
+    	"dir": "/public/dist",
+    	"port": 8080,
+        "MONGO_URI": "mongodb://localhost:27017/data",
+        "MONGO_OPTIONS": { "db": { "safe": true } }
+    }
+}

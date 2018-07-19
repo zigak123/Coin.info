@@ -1,6 +1,6 @@
-app.factory('dataSrv',function($http,$q){
+app.factory('dataSrv',['$http','$q',function($http,$q){
 	var coins = [];
-    var currency = "USD";
+    var currency = 'USD';
     var previous = currency;
 	var loadCoins = function(callback, currency){
 		if (coins.length == 0) {
@@ -32,7 +32,7 @@ app.factory('dataSrv',function($http,$q){
                 method : "GET",
                 url : "https://min-api.cryptocompare.com/data/histoday?fsym="+coin.Symbol+"&tsym="+currency+"&limit=30"
                 }).then(function(response) {
-                 return response.data.Data.map(a => a.close);
+                 return response.data.Data.map(function(a){return a.close});
             },function(err){
                 return err;
             })
@@ -64,4 +64,4 @@ app.factory('dataSrv',function($http,$q){
         getCurrency: getCurrency,
         getPrevious: getPrevious
 	}
-})
+}])

@@ -20,6 +20,7 @@ module.exports = class MongoHelper {
 		    return callback(result)
 		    db.close();
 		  });
+
 		});
 		
 	 }  

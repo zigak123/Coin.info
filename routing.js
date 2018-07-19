@@ -1,8 +1,13 @@
 var User = require('./userSchema.js');
 var articles_collection;
+var coins;
 
 exports.update_articles = function(articles){
 	articles_collection = articles;
+}
+
+exports.update_coins = function(coins){
+	coins_collection = coins;
 }
 
 exports.handle_request = function (req,res){

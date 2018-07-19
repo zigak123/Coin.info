@@ -5,7 +5,6 @@ var routingHelper;
 
 exports.add_routing_handler = function(routing_helper){
 	routingHelper = routing_helper;
-	console.log('done')
 }
 
 
@@ -57,7 +56,7 @@ var getNewsImagesAsync = function(uri){
 	})
 };
 
-exports.loadNewsAsync = async function(numOfPages,pageSize){
+var loadNewsAsync = async function(numOfPages,pageSize){
 	var promises = [];
 	var news500 = [];
 
@@ -79,10 +78,11 @@ exports.loadNewsAsync = async function(numOfPages,pageSize){
 	return news500;	
 }
 
-exports.LoadCoinList = function(callback){
+exports.loadNewsAsync = loadNewsAsync;
+
+var LoadCoinList = function(callback){
 	url = "https://www.cryptocompare.com/api/data/coinlist/";
 	https.get(url, res => {
-
 	 let body = "";
 	  res.on("data", data => {
 	    body += data;
@@ -98,21 +98,25 @@ exports.LoadCoinList = function(callback){
 	});
 }
 
+exports.LoadCoinList = LoadCoinList;
+
 
 exports.updateNews = function(coinnews, articles_limit,callback){
+	//console.log('triggering')
 	if (coinnews.length == articles_limit) {
-		coinApiHelper.loadNewsAsync(2,10).then(function(res){
+		loadNewsAsync(2,10).then(function(res){
 			var skip = 0;
 			while(coinnews[0].title != res[skip].title){
 				skip += 1;
 			}
 
 			if (skip != 0) {
-				console.log('updating with '+skip+' new articles');
+				//console.log('updating with '+skip+' new articles');
 				coinnews = res.slice(0,skip+1).concat(coinnews);
 				coinnews = coinnews.slice(0, articles_limit);
-				routingHelper.update_articles(coinnews);
+				callback(coinnews);
 			}
 		})
 	}
+	callback(coinnews);
 }

@@ -1,4 +1,4 @@
-app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$mdMedia,$location, dataSrv,$window,$document,$timeout) {
+app.controller('priceTickerCtrl', ['$scope', 'tickerSrv', '$state', '$transitions', 'userSrv', '$http','$rootScope','$mdSidenav','$mdMedia', 'dataSrv','$window','$timeout',function($scope, tickerSrv, $state, $transitions, userSrv, $http,$rootScope,$mdSidenav,$mdMedia, dataSrv,$window,$timeout) {
 	var up = "public/images/arrow_up.svg"
 	var drop = "public/images/arrow_drop.svg"
 	var same = "public/images/minus.svg"
@@ -120,14 +120,14 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	}
 
 	if (!$scope.isSmall()) {
-		tickerSrv.subscribe('BTC',btcCall);
-		tickerSrv.subscribe('ETH',ethCall);
+		tickerSrv.subscribe('BTC',btcCall,dataSrv.getCurrency());
+		tickerSrv.subscribe('ETH',ethCall,dataSrv.getCurrency());
 	}
 
 	$scope.$watch('screenSize', function(){
 		if (!$mdMedia('xs')) {
-			tickerSrv.subscribe('BTC',btcCall);
-			tickerSrv.subscribe('ETH',ethCall);
+			tickerSrv.subscribe('BTC',btcCall,dataSrv.getCurrency());
+			tickerSrv.subscribe('ETH',ethCall,dataSrv.getCurrency());
 		}
 
 		else{
@@ -151,4 +151,4 @@ app.controller('priceTickerCtrl', function($scope, tickerSrv, $state, $transitio
 	$timeout(adjustShit);
 
 	
-});
+}]);

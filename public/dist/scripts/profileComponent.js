@@ -1,0 +1,1 @@
+app.component("profile",{controller:["$scope","$state","$http",function(a,e,o){a.sendForm=function(){var t={avatarImage:a.croppedDataUrl,username:a.userName,email:a.clientEmail,password:a.password};o({method:"POST",url:"/user",data:t}).then(function(t){200==t.data.status&&e.go("login")})}}],templateUrl:"/public/dist/templates/profile.html"});

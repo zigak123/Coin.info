@@ -1,5 +1,5 @@
 app.component('userDetails', {
-	controller: function ($scope,$http,$state,userSrv,$timeout) {
+	controller: ['$scope','$http','$state','userSrv','$timeout',function ($scope,$http,$state,userSrv,$timeout) {
 		// body...
 		$scope.userId = $state.params.userId;
 		userSrv.authenticated({avatarImage: true, email: true, articles: true}).then(function(res){
@@ -9,5 +9,5 @@ app.component('userDetails', {
 			$scope.image = String.fromCharCode.apply(null, res[0].avatarImage.data);
 		})
 	
-	},
+	}],
 	templateUrl: 'public/templates/userDetails.html'})

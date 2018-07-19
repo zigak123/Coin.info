@@ -1,5 +1,5 @@
 app.component('news',{
-    controller: ["$scope", "$http", "scrollSrv", "$state", "userSrv", "$rootScope", "$timeout","$mdMedia","$location","$anchorScroll", function($scope, $http, scrollSrv, $state, userSrv, $rootScope, $timeout,$mdMedia,$location,$anchorScroll){
+    controller: ["$scope", "$http", "$state", "userSrv", "$rootScope", "$timeout","$mdMedia","$location","$anchorScroll", function($scope, $http, $state, userSrv, $rootScope, $timeout,$mdMedia,$location,$anchorScroll){
         $scope.showFAB = false;
         $scope.isbusy = true;
         $scope.page = 1;

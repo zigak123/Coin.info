@@ -1,4 +1,4 @@
-app.factory('userSrv',function($http, $q, $state){
+app.factory('userSrv',['$http','$q','$state', function($http, $q, $state){
 
 	var sendPost = function(sendData){
 		return $http({
@@ -55,4 +55,4 @@ app.factory('userSrv',function($http, $q, $state){
 		authenticated: isAthenticated,
 		signIn: signIn
 	}
-})
+}])

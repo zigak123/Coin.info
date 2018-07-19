@@ -1,8 +1,9 @@
-var app = angular.module("coinTicker", ['vs-repeat','ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
+
+var app = angular.module("coinTicker", ['ngMaterial','infinite-scroll','ui.router','ngAnimate','ngMessages','ngImgCrop','ngFileUpload']);
 app.value('THROTTLE_MILLISECONDS', 2000);
 
 
-app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider,$mdAriaProvider) {
+app.config(['$mdThemingProvider', '$stateProvider', '$urlRouterProvider', '$mdInkRippleProvider','$mdProgressCircularProvider','$mdAriaProvider',function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdInkRippleProvider,$mdProgressCircularProvider,$mdAriaProvider) {
 
   $mdProgressCircularProvider.configure({
     progressSize: 40
@@ -47,9 +48,9 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     url: '/user/{userId}',
     component: 'userDetails',
     resolve: {
-      userStatus: function(userSrv){
+      userStatus: ['userSrv',function(userSrv){
         return userSrv.authenticated({username: true, avatarImage: true});
-      }
+      }]
     }
   }
 
@@ -78,15 +79,6 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
     component: 'coinlist'
   }
 
-  var readArticleState = {
-    name: 'article',
-    url: '/news/article/{articleName}',
-    component:'article',
-    params:{
-      article: null
-    }
-  }
-
   var coinDetailsState = {
     name: 'coinDetails',
     url: '/{coinName}',
@@ -103,10 +95,9 @@ app.config(function($mdThemingProvider, $stateProvider, $urlRouterProvider, $mdI
   $stateProvider.state(aboutState);
   $stateProvider.state(newsState);
   $stateProvider.state(coinListState);
-  $stateProvider.state(readArticleState);
   $urlRouterProvider.otherwise('/');
 
-});
+}]);
 
 app.directive('priceChangeLabel',function(){
   function link(scope, el, attr){
@@ -150,10 +141,9 @@ app.directive('priceChangeLabel',function(){
   }
 })
 
-app.directive('sl', function($timeout,$window,dataSrv){
+app.directive('sl', ['$timeout','$window','dataSrv',function($timeout,$window,dataSrv){
   function link(scope, el, attr){
 
-        console.log(dataSrv.getCurrency())
         el = d3.select(el[0]);
         var svg = el;
         var data = scope.priceData;
@@ -164,7 +154,7 @@ app.directive('sl', function($timeout,$window,dataSrv){
         var m = r;
         var w = svg.node().clientWidth;
         w = 64; // fixed width becasue of firefox width issues
-        var h = getComputedStyle(el.node())['font-size'].replace('px','');
+        var h = 18;
         svg.attr({width: w, height: h});
         var x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
         var y = d3.scale.linear().domain([min, max]).range([h - m, m]);
@@ -180,10 +170,15 @@ app.directive('sl', function($timeout,$window,dataSrv){
       if (newValue == oldValue) {
         return;
       }
+      data = scope.priceData;
+      if (scope.coinSymbol == dataSrv.getCurrency()) {
+        data = Array.apply(null, Array(30)).map(Number.prototype.valueOf,0);
+      }
+
        svg.selectAll('circle').remove();
        svg.selectAll('path').remove();
        
-      data = scope.priceData;
+      
       min = attr.min !== undefined ? +attr.min : d3.min(data);
       max = attr.max !== undefined ? +attr.max : d3.max(data);
       x = d3.scale.linear().domain([0, data.length - 1]).range([m, w - m]);
@@ -207,9 +202,9 @@ app.directive('sl', function($timeout,$window,dataSrv){
         coinSymbol: '=symbol'
     }
   };
-});
+}]);
 
-app.directive('imageCheck', function($rootScope){
+app.directive('imageCheck', ['$rootScope',function($rootScope){
 
   function link(scope, el, attr){
     if (scope.article.image == null || jQuery.isEmptyObject(scope.article.image)) {
@@ -235,7 +230,7 @@ app.directive('imageCheck', function($rootScope){
     scope: false,
     link: link,
   }
-});
+}]);
 
 app.directive('titleClamp', function(){
   function link(scope, el, attr){
@@ -252,7 +247,7 @@ app.directive('userMenu', function(){
   }
 })
 
-app.directive('infiniteScrollFix', function($window) {
+app.directive('infiniteScrollFix', ['$window',function($window) {
   return {
     restrict: 'A',
     link: function($scope, $element) {
@@ -263,4 +258,4 @@ app.directive('infiniteScrollFix', function($window) {
 
     }
   };
-});
+}]);

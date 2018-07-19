@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<head>
+    <title>CoinStream</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+
+    
+    <link rel="icon" href="public/images/ic_equalizer_black_48dp_1x.png?">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.css">
+    <link rel="stylesheet" type="text/css" href="public/styles.css">
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src='public/scripts/third_party/jquery-3.3.1.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
+    <script src="public/scripts/third_party/angular-ui-router.min.js"></script>
+
+
+    <!-- imports -->
+    <script src="public/scripts/appModule.js"></script>
+    <script src="public/scripts/newsCtrl.js"></script>
+    <script src="public/scripts/coinListCtrl.js"></script>
+    <script src="public/scripts/priceTicker.js"></script>
+    <script src="public/scripts/third_party/ng-infinite-scroll.min.js"></script>
+    <script src="public/scripts/tickerService.js"></script>
+    <script src="public/scripts/third_party/ccc-streamer-utilities.js"></script>
+    <script src="public/scripts/articleComponent.js"></script>
+    <script src="public/scripts/coinDetailsComponent.js"></script>
+    <script src="public/scripts/profileComponent.js"></script>
+    <script src="public/scripts/userService.js"></script>
+    <script src="public/scripts/dataService.js"></script>
+    <script src="public/scripts/loginComponent.js"></script>
+    <script src="public/scripts/third_party/ng-img-crop.js"></script>
+    <script src="public/scripts/third_party/ng-file-upload.js"></script>
+    <script src="public/scripts/userDetails.js"></script>
+    <!-- clam.js-->
+    <script src="public/scripts/third_party/clamp.js"></script>
+
+    <!-- amCharts lib imports -->
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/amstock.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/dark.js"></script>
+
+    <script src="public/scripts/movingAverageGraph.js"></script>
+
+    <!-- numeral js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+    <script src="public/scripts/coinChart.js"></script>
+    <!-- d3 for sparkline -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="public/sparkline_styles.css">
+</head>
+
+<script>
+  var socket = io();
+</script>
+
+<body ng-app="coinTicker" ng-controller="priceTickerCtrl" md-theme="$root.currentTheme" md-theme-watch ng-cloak>
+
+
+       <md-sidenav
+        class="md-sidenav-left"
+        md-component-id="left"
+        md-whiteframe="4" style="position: fixed;" aria-label="sidenav">
+
+          <md-toolbar class="md-hue-2">
+            <h1 class="md-toolbar-tools">
+            <img src="/public/images/chart-line.png" style="width: 1em;"> Coin.stream</h1>
+          </md-toolbar>
+          <md-content layout="column" layout-padding>
+             <md-button ng-click="close('coinlist')" aria-label="sidenav1" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/coin.svg"></md-icon>
+              CoinList
+            </md-button>
+             <md-button ng-click="close('news')" aria-label="sidenav2" class="md-primary sidenavbutton">
+                <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/baseline-library_books-24px.svg"></md-icon>
+              News
+            </md-button>
+            <md-button ng-click="close('about')" aria-label="sidenav3" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/baseline-info-24px.svg"></md-icon>
+              About
+            </md-button>
+            <md-button ng-click="close('user')" aria-label="sidenav4" ng-show="tabName !== 'SIGN IN'" class="md-primary sidenavbutton">
+              <md-icon style="margin: 0px;margin-right: .5em" md-svg-src="/public/images/ic_account_box_black_48px.svg"></md-icon>
+              {{tabName}}
+            </md-button>       
+          </md-content>
+        </md-sidenav>
+
+
+      <div id="pageTop" hide-xs class="header" md-colors="{background: '{{$root.currentTheme}}-background'}"> 
+          <img ui-sref="coinlist" src="/public/images/chart-line.png" class="md-display-2" style="width: 1em; cursor: pointer;"> 
+          <span ui-sref="coinlist" class="md-display-2" md-colors="{{$root.currentTheme}} == 'darkDefault'  ? {'color':'grey-A200'} : {'color':'default-primary-800'}" style="cursor: pointer; line-height: 1em">CoinStream</span>   
+          <div hide-xs show-gt-xs class="ticker" layout="row">
+              <div layout="row" layout-align="start end">
+                <span style="font-weight: 500" md-colors="{color: 'default-primary-500'}" class="md-body-1">BTC</span>
+                <md-icon md-svg-src="{{btcInfo[1]}}"></md-icon>
+                <span class="md-title">{{btcInfo[0]}}</span>
+              </div>
+              <md-divider style="margin-left: 1em;margin-right: 1em"></md-divider>
+              <div layout="row" layout-align="start end">
+                  <span style="font-weight: 500" class="md-body-1" md-colors="{color: 'default-primary-500'}">ETH</span>
+                  <md-icon md-svg-src="{{ethInfo[1]}}"></md-icon>
+                  <span class="md-title">{{ethInfo[0]}}</span>
+              </div>
+          </div>
+      </div>
+
+
+
+      
+<md-nav-bar id="mobileTop" md-selected-nav-item="selectedItem" class="md-primary md-hue-2" nav-bar-aria-label="navigation links" md-no-ink-bar="isSmall()" md-no-ink>
+        <md-nav-item hide-xs class="navbutton" md-nav-sref="coinlist" name="coinlist">
+          Coin info
+        </md-nav-item>
+        <md-nav-item hide-xs class="navbutton" md-nav-sref="news" name="news">
+          News
+        </md-nav-item>
+        <md-nav-item hide-xs class="navbutton" hide-xs md-nav-sref="about" name="about">
+          About
+        </md-nav-item>
+
+        <md-nav-item id="hamburger" aria-label="openmenu" hide show-xs md-ink-bar="false" md-nav-click="toggleLeft()" name="logo">  
+          <md-icon style="fill:white;" md-svg-icon="public/images/baseline-menu-24px.svg"></md-icon>
+        </md-nav-item>
+
+        <md-nav-item id="mobileLogo" aria-label="menu button" hide show-xs md-ink-bar="false" md-nav-sref="coinlist" name="opennav" style="line-height: 1em;min-width: 0px;align-self: center;text-align: center;">  
+          <md-icon style="fill:white; min-width: 24px; position: relative;top: -2px" md-svg-icon="public/images/chart-line.svg"></md-icon> Coin.info  
+        </md-nav-item>
+ 
+        <user-menu style="margin-left: auto;"/>
+
+     </md-nav-bar>
+      <md-content id="pageContent" infinite-scroll-fix>
+        <ui-view/> 
+      </md-content>
+</body>
+</html>
