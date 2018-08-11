@@ -1,0 +1,1 @@
+app.component("article",{bindings:{article:"<"},templateUrl:"/public/dist/templates/article.html",controller:function(t,l){t.article=l.article}});
