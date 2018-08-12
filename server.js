@@ -106,6 +106,6 @@ app.post('/theme', function(req, res){
 //------------------------------------------------------------------------------
 var io = require('socket.io')(http);
 //-----------start server-------------------------------------------------------
-http.listen(config["port"],function(){
-	console.log("Listening on port "+config["port"])
+http.listen(process.env.port || 1337,function(){
+	console.log("Listening on port "+process.env.port)
 })
