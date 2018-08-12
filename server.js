@@ -10,13 +10,13 @@ var MongoStore = require('connect-mongo')(session);
 var bodyParser = require('body-parser')
 var routingHelper = require('./routing.js');
 const mongodbHelper = require('./mongo_helper.js');
-var mongoh = new mongodbHelper('mongodb://localhost:27017/','data');
+var mongoh = new mongodbHelper('mongodb://coininfo93mongo:dv8ES51LRoK11R86eiKSfmQXcHuJQZDFgBAXBttnoRmna709lY6sNOLXSrZu2RnKUw5thDy9Ep5cUUIxPXy4gQ%3D%3D@coininfo93mongo.documents.azure.com:10255/?ssl=true','data');
 const dataHelper = require('./coinLoader.js');
 const coinApiHelper = require('./coinApi.js');
 coinApiHelper.add_routing_handler(routingHelper);
 var coinlist, coinnews = [];
 // connect to mongoDB with mongoose
-mongoose.connect('mongodb://localhost:27017/data')
+mongoose.connect('mongodb://coininfo93mongo:dv8ES51LRoK11R86eiKSfmQXcHuJQZDFgBAXBttnoRmna709lY6sNOLXSrZu2RnKUw5thDy9Ep5cUUIxPXy4gQ%3D%3D@coininfo93mongo.documents.azure.com:10255/data?ssl=true')
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() { console.log("mongoose connected!")});
